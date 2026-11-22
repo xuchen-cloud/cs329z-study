@@ -125,21 +125,21 @@
         </section>
 
         <article id="article"><h1 id="斯坦福-stanford-cs329z-中文教程engineering-ai-agents">斯坦福 Stanford CS329Z 中文教程｜Engineering AI Agents</h1>
-<p>一套面向 Python 开发者的 AI 智能体（Agent）自学教程。围绕斯坦福大学 Stanford CS329Z 的公开材料，用中文讲解如何构建、评测和改进 Agent：从大语言模型、RAG、工具调用，到记忆、多 Agent 协作和安全防护。</p>
+<p>这是一套基于斯坦福 CS329Z 公开课程资料的中文自学教程，面向有 Python 基础的学习者。19 讲从模型如何调用工具、检索资料讲起，逐步讨论怎样构建、评测和改进一个 Agent 系统。</p>
 <p>Chinese study guide for Stanford CS329Z: Engineering AI Agents. Includes 19 lessons, 4 hands-on exercises, Markdown sources and an offline HTML reader.</p>
-<p>本互动学习版基于 wanghao-SunSky 整理的中文教程 <code>cs329z-chinese</code>。本版增加了分段阅读、情境题、三步图解、小节自测和学习笔记，并重新排版了公式。</p>
+<p>本互动学习版基于 wanghao-SunSky 整理的中文教程 <code>cs329z-chinese</code> 修订而成。为了降低自学门槛，本版新增了分段阅读、情境题、三步图解、小节自测和学习笔记，并对全部数学公式进行了重新排版。</p>
 <p><a href="https://cs329z.stanford.edu/" target="_blank" rel="noopener noreferrer">斯坦福官方课程</a> · <a href="https://xuchen-cloud.github.io/cs329z-study/" target="_blank" rel="noopener noreferrer">在线学习</a> · <a href="https://xuchen-cloud.github.io/cs329z-study/offline.html" target="_blank" rel="noopener noreferrer">单文件课程</a> · <a href="./lab25.html">课程目录与学习路径</a> · <a href="https://github.com/xuchen-cloud/cs329z-study/archive/refs/heads/main.zip" target="_blank" rel="noopener noreferrer">下载本版仓库</a></p>
-<p>第 1–9 讲可在各讲「开篇」观看课程视频，也可以直接打开由 UP 主「不做挖掘姬」整理上传的<a href="https://www.bilibili.com/video/BV1ARxc61Er2/" target="_blank" rel="noopener noreferrer">哔哩哔哩视频合集</a>。</p>
+<p>第 1–9 讲的「开篇」提供相应课程视频的入口。感谢 UP 主「不做挖掘姬」整理上传的<a href="https://www.bilibili.com/video/BV1ARxc61Er2/" target="_blank" rel="noopener noreferrer">哔哩哔哩视频合集</a>。</p>
 <h2 id="包含什么">包含什么</h2>
 <div class="table-scroll" tabindex="0"><table><thead><tr><th>内容</th><th>入口</th></tr></thead><tbody><tr><td>19 讲中文教程</td><td><a href="./lecture01.html">从第 1 讲开始</a></td></tr><tr><td>从零搭建 Agent、设计评测、课程项目、论文实践</td><td><a href="./lab25.html#%E5%AE%9E%E6%88%98%E4%BD%9C%E4%B8%9A%E4%B8%8E%E9%A1%B9%E7%9B%AE%E6%8C%87%E5%8D%97">实战练习</a></td></tr><tr><td>HW1 与第 5 讲配套代码的阅读指南</td><td><a href="./lab24.html">代码导读</a></td></tr><tr><td>支持搜索、目录、深浅主题的网页，以及单文件离线版</td><td><a href="./index.html">HTML 文件</a></td></tr></tbody></table></div>
-<p>适合会写 Python、了解基本 API 调用，希望系统学习 Agent 开发的读者。建议先读第 1–4 讲，再结合 HW1 动手实践；完整路线见课程目录。</p>
+<p>适合具备初级 Python 编程基础、了解基本 API 调用，希望扎实掌握 Agent 工程开发的读者（即使 AI 算法背景较少，也能跟着教程中的白话直觉循序渐进上手）。推荐先通读第 1–4 讲打好基础，再结合 HW1 动手实践；完整学习路线见上方的课程目录。</p>
 <h2 id="本地阅读与构建">本地阅读与构建</h2>
-<p>下载仓库后，直接用浏览器打开 <code>html/index.html</code>。只想保存一个文件，可以使用 <code>html/offline.html</code>。</p>
-<p>修改 Markdown 后，在仓库目录运行（需要 Node.js 18+ 和 Python 3）：</p>
+<p>如果想在本地阅读，下载仓库后直接用浏览器打开 <code>html/index.html</code> 即可；若只想保存一个便携的离线文件，可以使用 <code>html/offline.html</code>。</p>
+<p>修改 Markdown 内容后，在仓库目录运行以下命令即可重新构建网页并校验（需要 Node.js 18+ 和 Python 3）：</p>
 <div class="code-block"><div class="code-header"><span class="code-lang">BASH</span><button type="button" class="copy-btn" aria-label="复制代码">复制代码</button></div><pre><code>node tools/build_site.mjs
 python3 tools/verify_publication.py</code></pre></div>
 <h2 id="来源与修订">来源与修订</h2>
-<p>Stanford CS329Z 提供原课程材料，wanghao-SunSky 编写了原中文教程，xuchen-cloud 在其项目基础上整理了本互动学习版。课程、论文与配套代码的权利归各自作者。整理范围及待核对的内容见<a href="./lab26.html">阅读说明与版本来源</a>。本版问题可提交到<a href="https://github.com/xuchen-cloud/cs329z-study/issues" target="_blank" rel="noopener noreferrer">本仓库 Issues</a>。</p></article>
+<p>感谢斯坦福 CS329Z 教学团队公开课程材料，也感谢 wanghao-SunSky 整理原中文教程。xuchen-cloud 在该项目基础上修订了本互动学习版。课程、论文与配套代码的权利归各自作者。本版的整理范围及待核对内容见<a href="./lab26.html">阅读说明与版本来源</a>。若在学习过程中发现问题，欢迎提交到<a href="https://github.com/xuchen-cloud/cs329z-study/issues" target="_blank" rel="noopener noreferrer">本仓库 Issues</a>。</p></article>
         <nav id="chapter-footer" aria-label="章节翻页"><span></span><a href="./lecture01.html"><small>下一节 →</small>Agent 基础与全景</a></nav>
       </main>
 

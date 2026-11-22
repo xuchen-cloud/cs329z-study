@@ -1,5 +1,7 @@
 """Check published Markdown, prerendered chapters, metadata and offline parity."""
+import base64
 from pathlib import Path
+from html import unescape
 from html.parser import HTMLParser
 from urllib.parse import unquote, urlsplit
 import json
@@ -50,6 +52,16 @@ class Page(HTMLParser):
             self.article_text.append(data)
 
 
+def verify_math(html, expected_count, location):
+    formulas = re.findall(r'<math\b[^>]*>.*?</math>', html, re.S)
+    assert len(formulas) == expected_count, f'missing typeset formula: {location}'
+    for formula in formulas:
+        math = ET.fromstring(formula)
+        assert math.tag == '{http://www.w3.org/1998/Math/MathML}math'
+        assert not re.search(r'\\[A-Za-z]+', ''.join(math.itertext())), location
+    return len(formulas)
+
+
 data = json.loads((OUT / 'assets/course-data.js').read_text().removeprefix('window.COURSE_DATA = ').strip().removesuffix(';'))
 docs = data['docs']
 assert len(docs) == 27
@@ -74,31 +86,65 @@ for d in docs:
     if d['num']:
         assert all(cue['question'] and cue['bridge'] for cue in d['questions'].values()), d['id']
 
-quiz_sections = quiz_questions = 0
+quiz_sections = quiz_questions = choice_questions = quiz_formulas = 0
+section_sizes = {}
 for d in docs:
     if not d['num']:
         assert 'quizzes' not in d
         continue
     bank = d['quizzes']
-    core = {h['id'] for h in d['headings'] if h['depth'] == 3}
-    expected = core | {'study-intro', '学习目标', '原课程阅读清单与导读', '动手练习'}
-    assert set(bank) == expected, f'quiz section coverage: {d["id"]}'
+    authored_bank = json.loads((ROOT / 'tools/section-quizzes' / (d['id'] + '.json')).read_text())
+    expected = set()
+    in_explanation = False
+    for heading in d['headings']:
+        if heading['depth'] == 2:
+            in_explanation = heading['id'] == '知识讲解'
+        elif in_explanation and heading['depth'] == 3:
+            expected.add(heading['id'])
+    if d['id'] == 'lecture16':
+        # The guest-lecture placeholder describes the source, not a teaching topic.
+        expected.discard('1-已知范围与占位')
+    assert set(bank) == set(authored_bank) == expected, f'quiz section coverage: {d["id"]}'
     prompts = set()
     for anchor, questions in bank.items():
-        assert 3 <= len(questions) <= 5, (d['id'], anchor)
+        assert 2 <= len(questions) <= 5, (d['id'], anchor)
+        section_sizes[len(questions)] = section_sizes.get(len(questions), 0) + 1
         assert any('options' in q for q in questions) and any('answer' in q for q in questions)
-        for q in questions:
+        assert len({q['id'] for q in questions}) == len(questions), (d['id'], anchor)
+        assert len(questions) == len(authored_bank[anchor]), (d['id'], anchor)
+        for q, authored_q in zip(questions, authored_bank[anchor]):
+            assert {k: v for k, v in q.items() if k not in ('id', 'inlineHtml')} == authored_q, (d['id'], anchor)
             assert q['prompt'].strip() and q['prompt'] not in prompts, (d['id'], anchor)
             prompts.add(q['prompt'])
+            assert 'criteria' not in q, q['prompt']
             if 'options' in q:
-                assert len(set(q['options'])) == len(q['options']) >= 2
+                assert len(set(q['options'])) == len(q['options']) >= 3
                 assert all(option.strip() for option in q['options'])
                 assert type(q['correct']) is int and 0 <= q['correct'] < len(q['options'])
-                assert q['explanation'].strip()
-            else:
-                assert q['answer'].strip()
+                choice_questions += 1
+            solution = q['explanation'] if 'options' in q else q['answer']
+            paragraphs = [line.strip() for line in solution.splitlines() if line.strip()]
+            assert len(paragraphs) >= 2, f"missing structured solution: {q['prompt']}"
+            assert all(re.match(r'^[^：。？！，；\n]{1,20}：.+', line) for line in paragraphs), q['prompt']
+            fragments = [q['prompt'], *q.get('options', [])]
+            for paragraph in paragraphs:
+                label, _, body = paragraph.partition('：')
+                fragments.extend((label + '：', body))
+            inline = q.get('inlineHtml', {})
+            assert set(inline) <= set(fragments), q['prompt']
+            for source in fragments:
+                html = inline.get(source, '')
+                code_pattern = r'`([^`\n]+)`'
+                code = [unescape(text) for text in re.findall(r'<code>(.*?)</code>', html, re.S)]
+                assert code == re.findall(code_pattern, source), source
+                prose = re.sub(code_pattern, '', source)
+                math_pattern = r'\$[^\n$]+\$'
+                quiz_formulas += verify_math(html, len(re.findall(math_pattern, prose)), source)
+                prose = re.sub(math_pattern, '', prose)
+                assert html.count('<strong>') == len(re.findall(r'\*\*.+?\*\*', prose)), source
         quiz_questions += len(questions)
     quiz_sections += len(bank)
+assert len(section_sizes) > 1, 'adjust question counts to the concepts in each section'
 
 pages = {}
 titles = set()
@@ -142,20 +188,35 @@ for name, page in pages.items():
             assert unquote(url.fragment) in pages[p.name].ids, f'broken anchor: {name} -> {target}'
         links += 1
 
-formula_count = 0
+formula_count = figure_count = comparison_count = note_count = 0
 for doc in docs:
     text = (ROOT / doc['file']).read_text()
+    html = doc['html']
+    comparisons = len(re.findall(r'^> \[!NOTE\]\s*$', text, re.M))
+    notes = len(re.findall(r'^> \[!(?:TIP|IMPORTANT)\]\s*$', text, re.M))
+    assert html.count('<figure class="concept-comparison">') == comparisons, doc['file']
+    assert html.count('<div class="reading-note ') == notes, doc['file']
+    comparison_count += comparisons
+    note_count += notes
+    # Verify each delivered crop, its alt text and its linked source caption as a unit.
+    images = re.findall(r'^!\[([^\]]+)\]\((docs/figures/[\w-]+\.png)\)$', text, re.M)
+    figures = re.findall(r'<figure class="lecture-figure">(.*?)</figure>', html, re.S)
+    assert len(figures) == len(images), doc['file']
+    for (alt, filename), figure in zip(images, figures):
+        png = (ROOT / filename).read_bytes()
+        assert png.startswith(b'\x89PNG\r\n\x1a\n'), filename
+        uri = 'data:image/png;base64,' + base64.b64encode(png).decode('ascii')
+        rendered = Page(figure)
+        assert rendered.resources == [uri], f'missing embedded figure: {filename}'
+        rendered_alt = re.search(r' alt="([^"]+)"', figure)
+        assert rendered_alt and unescape(rendered_alt[1]) == alt, filename
+        assert '<figcaption>' in figure and any(link.startswith('https://') for link in rendered.links), filename
+        figure_count += 1
     # Count the authored math independently of the Markdown-to-HTML converter.
     prose = re.sub(r'^[ \t]*\x60{3}[^\x60\n]*\n.*?^[ \t]*\x60{3}[ \t]*$', '', text, flags=re.M | re.S)
     prose = re.sub(r'\x60[^\x60\n]*\x60', '', prose)
     authored = re.findall(r'\$\$.+?\$\$|\$[^\n$]+\$', prose, re.S)
-    formulas = re.findall(r'<math\b[^>]*>.*?</math>', doc['html'], re.S)
-    assert len(formulas) == len(authored), f'missing typeset formula: {doc["file"]}'
-    for formula in formulas:
-        math = ET.fromstring(formula)
-        assert math.tag == '{http://www.w3.org/1998/Math/MathML}math'
-        assert not re.search(r'\\[A-Za-z]+', ''.join(math.itertext())), doc['file']
-    formula_count += len(formulas)
+    formula_count += verify_math(html, len(authored), doc['file'])
     assert '/Users/' not in text
     for href in re.findall(r'\]\(([^\s)]+)\)', text):
         u = urlsplit(href)
@@ -183,4 +244,4 @@ sitemap = ET.parse(OUT / 'sitemap.xml')
 locations = {e.text for e in sitemap.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')}
 assert locations == canonicals
 assert f'Sitemap: {ORIGIN}/sitemap.xml' in (OUT / 'robots.txt').read_text()
-print(json.dumps({'status': 'PASS', 'chapters': 19, 'exercises': 4, 'static_pages': len(pages), 'study_cases': len(cases), 'quiz_sections': quiz_sections, 'quiz_questions': quiz_questions, 'guided_sections': sum(len(d.get('questions', {})) for d in docs), 'local_links_and_assets': links, 'sitemap_urls': len(locations), 'typeset_formulas': formula_count, 'offline_content_matches': True}, ensure_ascii=False))
+print(json.dumps({'status': 'PASS', 'chapters': 19, 'exercises': 4, 'static_pages': len(pages), 'study_cases': len(cases), 'quiz_sections': quiz_sections, 'quiz_questions': quiz_questions, 'choice_questions': choice_questions, 'open_questions': quiz_questions - choice_questions, 'section_size_distribution': section_sizes, 'guided_sections': sum(len(d.get('questions', {})) for d in docs), 'local_links_and_assets': links, 'sitemap_urls': len(locations), 'typeset_formulas': formula_count, 'quiz_formulas': quiz_formulas, 'figures': figure_count, 'comparisons': comparison_count, 'notes': note_count, 'offline_content_matches': True}, ensure_ascii=False))

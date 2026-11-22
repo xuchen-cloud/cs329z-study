@@ -2,11 +2,13 @@
 
 从单一的大语言模型（LLM）走向**复合 AI 系统（Compound AI Systems）**——将语言模型、检索器、外部工具、记忆模块、编排框架与优化器协同组合——正在重塑现代软件与人工智能应用的构建方式。
 
-本课程围绕 **系统（System）**、**数据（Data）** 与 **评测（Evals）** 三大支柱展开，带你跨越从基础模型调用、固定工作流（Workflows）到自主智能体（Autonomous Agents）的完整技术光谱。你将首先从零手写核心组件（检索增强生成、工具调用协议、Agent 主循环、上下文压缩与沙箱隔离），透彻理解底层运行机制；随后掌握 DSPy、LangGraph、Temporal 等工业级抽象框架，并深入多 Agent 协作、提示与权重优化、基准构建、安全防护及软件工程 Agent 等核心课题。
+本课程围绕 **系统（System）**、**数据（Data）** 与 **评测（Evals）** 三大支柱展开，带你完整走过从基础模型调用、固定工作流（Workflows）到自主智能体（Autonomous Agents）的技术演进路线。
+
+在学习方式上，课程坚持“先摸透底层，再掌握抽象”：你会先从零手写核心组件（检索增强生成、工具调用协议、Agent 主循环、上下文压缩与沙箱隔离），看清系统运转的每一处细节；随后再学习 DSPy、LangGraph、Temporal 等工业级框架，并逐步深入多 Agent 协作、提示与权重优化、基准构建、安全防护及软件工程 Agent 等核心课题。
 
 ## 在线阅读与构建
 
-本版基于 wanghao-SunSky 的 `cs329z-chinese` 项目整理修改，加入情境练习、图解、学习笔记及分段阅读。打开 [HTML 课程文档 (`html/index.html`)](html/index.html)，即可使用章节导航、全文检索（快捷键 `⌘K` / `Ctrl+K`）、页内目录、深浅阅读主题、字号调节与排版打印功能。
+本版基于 wanghao-SunSky 的 `cs329z-chinese` 项目整理修改，新增了情境练习、图解、学习笔记及分段阅读。直接打开 [HTML 课程文档 (`html/index.html`)](html/index.html)，即可使用章节导航、全文检索（快捷键 `⌘K` / `Ctrl+K`）、页内目录、深浅阅读主题、字号调节与排版打印功能。
 
 若对 Markdown 文档进行了修改，可在课程目录下运行以下命令重新生成并校验 HTML 文档：
 
@@ -17,7 +19,9 @@ python3 tools/verify_publication.py
 
 ## 先修要求与学习路径
 
-学习本课程需要具备扎实的 Python 编程能力，熟悉常见的 HTTP/API 调用，并掌握基础的概率统计、线性代数与自然语言处理概念（如词向量、交叉熵损失、训练/验证/测试集划分及基础的 Transformer 机制，相当于修读过 CS224N、CS336 或具备同等工程背景）。你无需事先掌握任何 Agent 开发框架。
+**原课程先修参考**：原斯坦福课程建议具备扎实的 Python 编程能力，熟悉常见的 HTTP/API 调用，并了解基础的概率统计、线性代数与自然语言处理概念（如词向量、交叉熵损失、训练/验证/测试集划分及基础的 Transformer 机制，相当于修读过 CS224N、CS336 或具备同等工程背景）。你无需事先掌握任何 Agent 开发框架。
+
+**给自学者的友好提示**：如果你目前只有初级 Python 编程基础、AI 算法背景较少，也未修读过 CS224N 或 CS336，依然可以放心跟着本教程学下去。课程在涉及数学公式和底层机制时，都配有白话直觉与分步拆解；遇到陌生的算法概念不必焦虑，按需随查随学即可，优先把系统搭建、数据流转与评测闭环跑通。
 
 全课程按四个模块循序渐进展开：
 
@@ -54,10 +58,10 @@ python3 tools/verify_publication.py
 
 ## 实战作业与项目指南
 
-理论知识只有落地为可运行的代码与可复现的实验才能真正内化。本教程配套四项核心工程实践与一份源码导读：
+理论知识只有落地为可运行的代码与可复现的实验，才能真正变成自己的工程能力。本教程配套四项核心工程实践与一份源码导读：
 
-- **[HW1：从零搭建 Agent Harness](exercises/HW1-从零搭建Agent-Harness.md)**：不依赖任何第三方 Agent 框架或原生 Function Calling 接口，使用纯 Python 从零构建企业内部助手 Cardinal Energy Agent。涵盖邮件分类、日报生成、BM25 倒排索引、多跳问答、自定义工具协议、Agent 循环、分页文档检索、终端沙箱执行、上下文压缩、跨会话记忆、用户审批与防注入护栏等 17 个递进模块。
+- **[HW1：从零搭建 Agent Harness](exercises/HW1-从零搭建Agent-Harness.md)**：不依赖任何第三方 Agent 框架或原生 Function Calling 接口，用纯 Python 从零构建企业内部助手 Cardinal Energy Agent。涵盖邮件分类、日报生成、BM25 倒排索引、多跳问答、自定义工具协议、Agent 循环、分页文档检索、终端沙箱执行、上下文压缩、跨会话记忆、用户审批与防注入护栏等 17 个递进模块。
 - **[HW2：构建 Agent 评测体系](exercises/HW2-评测Agent.md)**：针对给定 Agent 系统设计完整的自动化评测套件。基于四元组框架编写测试任务，结合确定性代码评分器（Code Graders）与大模型裁判（LLM-as-Judge），开展多轮稳定性统计（$\text{pass}@k$ 与 $\text{pass}^k$）及系统性错误归因分析。
 - **[课程项目：设计、构建与严格评测](exercises/学期项目-设计构建与评测.md)**：从问题定义与基线建立（Proposal）、原型搭建（Midpoint Prototype）到完整消融实验与失败模式分析（Final Report & Demo）的全周期工程指南。
-- **[论文精读与复现扩展（Paper Video）](exercises/Paper-Video-论文讲解与复现.md)**：选择前沿 Agent 研究论文，深入剖析其系统架构与实验假设，并通过动手复现或微型扩展实验检验论文的核心主张。
+- **[论文精读与复现扩展（Paper Video）](exercises/Paper-Video-论文讲解与复现.md)**：挑选前沿 Agent 研究论文，深入剖析其系统架构与实验假设，并通过动手复现或微型扩展实验检验论文的核心主张。
 - **[配套代码架构导读](code-guide.md)**：详细解析 HW1 代码库（`assignment1-harness`）的模块边界、类型契约与模拟评测框架，以及第 05 讲配套 Notebook（`lecture5-frameworks`）中 DSPy、LangGraph 与 Temporal 的实现细节。

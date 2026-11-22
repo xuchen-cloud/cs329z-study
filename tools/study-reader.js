@@ -210,11 +210,14 @@ function makeCase(doc) {
 }
 
 function makeSectionQuiz(doc, step, questions) {
-  const key = doc.id + '.quiz.' + step.anchor;
-  let saved;
-  try { saved = JSON.parse(studyStorage.read(key) || '{}'); } catch { saved = {}; }
-  const answers = questions.map((_, i) => ({ ...saved?.answers?.[i] }));
-  let index = Number.isInteger(saved?.index) && questions[saved.index] ? saved.index : 0;
+  const key = doc.id + '.quiz.' + step.anchor + '.';
+  const questionId = q => q.id || q.prompt;
+  function readAnswer(q) {
+    try { return JSON.parse(studyStorage.read(key + questionId(q)) || '{}') || {}; } catch { return {}; }
+  }
+  const answers = questions.map(readAnswer);
+  const lastQuestion = studyStorage.read(key + 'current');
+  let index = Math.max(0, questions.findIndex(q => questionId(q) === lastQuestion));
 
   const panel = studyElement('details', 'section-quiz');
   const summary = studyElement('summary');
@@ -224,15 +227,22 @@ function makeSectionQuiz(doc, step, questions) {
   panel.append(summary, content);
 
   function updateTally() {
-    const mastered = answers.filter(a => a.status === 'mastered').length;
-    const review = answers.filter(a => a.status === 'review').length;
-    tally.textContent = mastered + review
-      ? '已掌握 ' + mastered + ' / ' + questions.length + (review ? ' · 待复习 ' + review : '')
+    const seen = answers.filter(a => a.shown).length;
+    const wrong = answers.filter((a, i) => a.shown && questions[i].options && a.choice !== questions[i].correct).length;
+    tally.textContent = seen
+      ? '已核对 ' + seen + ' / ' + questions.length + (wrong ? ' · 单选错题 ' + wrong : '')
       : questions.length + ' 道题';
   }
   function save() {
-    studyStorage.write(key, JSON.stringify({ index, answers }));
+    studyStorage.write(key + questionId(questions[index]), JSON.stringify(answers[index]));
     updateTally();
+  }
+  function go(to) {
+    index = to;
+    answers[index] = readAnswer(questions[index]);
+    studyStorage.write(key + 'current', questionId(questions[index]));
+    updateTally();
+    render('title');
   }
   function button(label, action) {
     const el = studyElement('button', '', label);
@@ -247,23 +257,33 @@ function makeSectionQuiz(doc, step, questions) {
   function render(focusTarget) {
     const q = questions[index];
     const a = answers[index];
+    function authoredElement(tag, source) {
+      const el = document.createElement(tag);
+      // Only the course builder supplies markup. Drafts from storage stay in textarea.value.
+      if (q.inlineHtml && Object.hasOwn(q.inlineHtml, source)) el.innerHTML = q.inlineHtml[source];
+      else el.textContent = source;
+      return el;
+    }
+    function optionElement(tag, i) {
+      const el = authoredElement(tag, q.options[i]);
+      el.prepend(String.fromCharCode(65 + i) + '. ');
+      return el;
+    }
     const id = 'quiz-' + doc.id + '-' + step.anchor + '-' + index;
     const counter = studyElement('p', 'quiz-counter', '第 ' + (index + 1) + ' / ' + questions.length + ' 题 · ' + (q.options ? '单选' : '简答'));
     const fields = studyElement('fieldset', 'quiz-fields');
-    const title = studyElement('legend', '', q.prompt);
+    const title = authoredElement('legend', q.prompt);
     fields.append(title);
     const feedback = studyElement('div', 'quiz-feedback');
     const controls = studyElement('div', 'quiz-actions');
-    const status = a.status === 'mastered' ? '已掌握' : a.status === 'review' ? '待复习' : '';
     const check = button(q.options ? '核对选择' : '对照参考答案', () => {
       a.shown = true;
-      if (q.options) a.status = a.choice === q.correct ? 'mastered' : 'review';
       save();
       render('feedback');
     });
 
     if (q.options) {
-      q.options.forEach((option, i) => {
+      q.options.forEach((_, i) => {
         const row = studyElement('div', 'quiz-option');
         const input = studyElement('input');
         input.type = 'radio';
@@ -271,7 +291,7 @@ function makeSectionQuiz(doc, step, questions) {
         input.id = id + '-o' + i;
         input.checked = a.choice === i;
         input.disabled = Boolean(a.shown);
-        const label = studyElement('label', '', option);
+        const label = optionElement('label', i);
         label.htmlFor = input.id;
         input.onchange = () => { a.choice = i; check.disabled = false; save(); };
         row.append(input, label);
@@ -279,7 +299,7 @@ function makeSectionQuiz(doc, step, questions) {
       });
       check.disabled = !Number.isInteger(a.choice);
     } else {
-      const label = studyElement('label', 'quiz-answer-label', '用自己的话回答');
+      const label = studyElement('label', 'quiz-answer-label', '先说出或写下你的判断和依据');
       const input = studyElement('textarea');
       input.id = id + '-text';
       label.htmlFor = input.id;
@@ -291,31 +311,35 @@ function makeSectionQuiz(doc, step, questions) {
     }
     if (!a.shown) controls.append(check);
     else {
-      const caption = q.options ? (a.choice === q.correct ? '答对了' : '再看一眼') : '参考要点';
+      const caption = q.options ? (a.choice === q.correct ? '答对了' : '再看一眼') : '一种参考解法';
       feedback.append(studyElement('strong', '', caption));
-      if (q.options && a.choice !== q.correct) feedback.append(studyElement('p', '', '正确选项：' + q.options[q.correct]));
-      feedback.append(studyElement('p', '', q.explanation || q.answer));
-      if (!q.options) {
-        if (status) feedback.append(studyElement('small', '', '我的标记 · ' + status));
-        for (const [label, value] of [['我掌握了', 'mastered'], ['还要再练', 'review']]) {
-          const mark = button(label, () => {
-            a.status = value; save(); render('feedback');
-          });
-          mark.setAttribute('aria-pressed', String(a.status === value));
-          controls.append(mark);
+      if (q.options && a.choice !== q.correct) {
+        const correct = studyElement('p', '', '正确选项：');
+        correct.append(optionElement('span', q.correct));
+        feedback.append(correct);
+      }
+      for (const line of (q.explanation || q.answer).split(/\n+/).filter(Boolean)) {
+        const paragraph = studyElement('p', 'solution-paragraph');
+        const lead = line.match(/^([^：。？！，；\n]{1,20})：/u);
+        if (lead) {
+          const label = authoredElement('strong', lead[0]);
+          label.className = 'solution-label';
+          paragraph.append(label, authoredElement('span', line.slice(lead[0].length)));
+        } else {
+          paragraph.append(authoredElement('span', line));
         }
+        feedback.append(paragraph);
       }
       controls.append(button(q.options ? '重做这题' : '重新作答', () => {
         delete a.choice;
-        delete a.status;
         delete a.shown;
         save();
         render('input');
       }));
     }
     const nav = studyElement('div', 'quiz-nav');
-    const previous = button('← 上一题', () => { index--; save(); render('title'); });
-    const next = button('下一题 →', () => { index++; save(); render('title'); });
+    const previous = button('← 上一题', () => go(index - 1));
+    const next = button('下一题 →', () => go(index + 1));
     previous.disabled = index === 0;
     next.disabled = index === questions.length - 1;
     const reread = button('回看本节', () => {
@@ -343,7 +367,76 @@ const commonReadingQuestions = {
   '动手练习': '离开讲解，我能把哪个概念用在一道题上？',
 };
 
+function makeReliabilityDemo() {
+  const demo = studyElement('fieldset', 'reliability-demo');
+  demo.append(studyElement('legend', '', '试算多步任务的成功率'));
+  const description = studyElement('p', '', '假设每一步相互独立，成功率都是 95%，而且所有步骤都要一次成功。把步数从 1 调到 20，看看会发生什么。');
+  const label = studyElement('label', '', '任务步数');
+  const slider = studyElement('input');
+  slider.type = 'range';
+  slider.min = '1';
+  slider.max = '40';
+  slider.value = '1';
+  label.append(slider);
+  const result = studyElement('output');
+  function update() {
+    const steps = slider.valueAsNumber;
+    const percent = (100 * 0.95 ** steps).toLocaleString('zh-CN', { maximumFractionDigits: 1 });
+    slider.setAttribute('aria-valuetext', steps + ' 步');
+    result.value = steps + ' 步全部成功的概率约为 ' + percent + '%';
+  }
+  slider.oninput = update;
+  update();
+  demo.append(description, label, result, studyElement('small', '', '实际系统可能重试，也可能连续犯同一种错。这个数值只描述上面的假设。'));
+  return demo;
+}
+
+function enableFigureZoom(figure) {
+  const image = figure.querySelector('img');
+  const trigger = studyElement('button', 'figure-trigger');
+  trigger.type = 'button';
+  trigger.setAttribute('aria-label', '放大图片。' + image.alt);
+  trigger.setAttribute('aria-haspopup', 'dialog');
+  image.replaceWith(trigger);
+  trigger.append(image);
+  trigger.onclick = () => {
+    const dialog = studyElement('dialog', 'figure-lightbox');
+    dialog.setAttribute('aria-label', '课件原图');
+    dialog.setAttribute('closedby', 'any');
+    const header = studyElement('div', 'lightbox-head');
+    const close = studyElement('button', '', '关闭');
+    close.type = 'button';
+    close.autofocus = true;
+    close.onclick = () => dialog.close();
+    header.append(studyElement('strong', '', '课件原图'), close);
+    const viewport = studyElement('div', 'lightbox-viewport');
+    viewport.tabIndex = 0;
+    viewport.setAttribute('role', 'region');
+    viewport.setAttribute('aria-label', '原图细节，可滚动查看');
+    const full = image.cloneNode();
+    full.loading = 'eager';
+    full.onclick = () => dialog.close();
+    viewport.append(full);
+    dialog.append(header, viewport);
+    if (!('closedBy' in dialog)) {
+      dialog.onclick = event => {
+        if (event.target !== dialog) return;
+        const box = dialog.getBoundingClientRect();
+        if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close();
+      };
+    }
+    document.body.append(dialog);
+    dialog.addEventListener('close', () => {
+      dialog.remove();
+      if (trigger.isConnected) trigger.focus({ preventScroll: true });
+    }, { once: true });
+    dialog.showModal();
+  };
+}
+
 function collectStudySteps(doc, article) {
+  article.querySelectorAll('.lecture-figure').forEach(enableFigureZoom);
+  if (doc.id === 'lecture01') article.querySelector('#可靠性与训练难度')?.after(makeReliabilityDemo());
   const steps = [];
   if (doc.study) {
     steps.push({ anchor: 'study-case', label: '情境练习', question: doc.study.question, el: makeCase(doc) });
@@ -512,12 +605,12 @@ function mountStudyReader(doc, article, nextDoc, makeRoute) {
     trackScroll() {
       if (mode !== 'full' || this.previousMode || !displayed) return;
       const line = Math.min(innerHeight / 3, 200);
-      let visible = 0;
+      let visible = -1;
       for (const [i, step] of steps.entries()) {
         if (step.el.getBoundingClientRect().top > line) break;
         visible = i;
       }
-      if (visible === index) return;
+      if (visible < 0 || visible === index) return;
       index = visible;
       picker.value = String(index);
       remember();

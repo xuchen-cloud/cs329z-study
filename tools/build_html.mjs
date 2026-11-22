@@ -4,6 +4,7 @@
  * Run: node tools/build_html.mjs
  */
 import fs from 'node:fs';
+import { createHash } from 'node:crypto';
 import { renderCourseNavigation } from './course-navigation.mjs';
 import katex from './vendor/katex/katex-0.19.1.min.cjs';
 import { studyCases } from './study-cases.mjs';
@@ -83,10 +84,7 @@ function renderMath(tex, displayMode, file) {
 /**
  * Self-contained GFM + LaTeX Markdown parser tailored for CS329Z course documents.
  */
-function parseMarkdownDocument(rawMd, currentFile) {
-  const headings = [];
-  const usedIds = new Set();
-
+function createInlineParser(currentFile) {
   function resolveLink(href) {
     let url = href.trim();
     if (!/^[a-z][a-z\d+.-]*:/i.test(url)) {
@@ -105,7 +103,7 @@ function parseMarkdownDocument(rawMd, currentFile) {
     return url;
   }
 
-  function parseInline(text) {
+  return function parseInline(text) {
     const slots = [];
     const saveSlot = (html) => {
       const i = slots.push(html) - 1;
@@ -149,8 +147,12 @@ function parseMarkdownDocument(rawMd, currentFile) {
       s = s.replace(/\u0000SLOT_(\d+)\u0000/g, (_, i) => slots[Number(i)]);
     }
     return s;
-  }
+  };
+}
 
+function parseMarkdownDocument(rawMd, currentFile, parseInline = createInlineParser(currentFile)) {
+  const headings = [];
+  const usedIds = new Set();
   const lines = rawMd.replace(/\r\n/g, '\n').split('\n');
   const outHtml = [];
   let i = 0;
@@ -161,6 +163,19 @@ function parseMarkdownDocument(rawMd, currentFile) {
     // Blank line
     if (!line.trim()) {
       i++;
+      continue;
+    }
+
+    // Course figures travel with the single-file reader. The following 图注 line
+    // carries the reading cue and a deep link to the source slide.
+    const figure = line.trim().match(/^!\[([^\]]+)\]\((docs\/figures\/[\w-]+\.png)\)$/);
+    if (figure) {
+      const png = fs.readFileSync(path.join(root, figure[2]));
+      const caption = lines[i + 1]?.match(/^图注：\s*(.+)$/);
+      const image = `<img src="data:image/png;base64,${png.toString('base64')}" alt="${esc(figure[1])}" width="${png.readUInt32BE(16)}" height="${png.readUInt32BE(20)}" loading="lazy">`;
+      const credit = caption ? parseInline(caption[1]) : '';
+      outHtml.push(`<figure class="lecture-figure">${image}<figcaption>${credit}</figcaption></figure>`);
+      i += caption ? 2 : 1;
       continue;
     }
 
@@ -281,6 +296,27 @@ function parseMarkdownDocument(rawMd, currentFile) {
         quoteLines.push(lines[i].replace(/^\s*>\s?/, ''));
         i++;
       }
+      const [marker, ...linesOfBody] = quoteLines;
+      const body = linesOfBody.map(s => s.trim()).filter(Boolean);
+      if (marker.trim() === '[!NOTE]') {
+        const [title, ...entries] = body;
+        const caption = title?.match(/^\*\*(.+)\*\*$/);
+        const items = entries.map(entry => entry.match(/^- \*\*(.+?)\*\*[：:]\s*(.+)$/));
+        if (!caption || items.length < 2 || items.length > 4 || items.some(item => !item)) {
+          throw new Error(`Malformed comparison in ${currentFile} near line ${i}`);
+        }
+        const cards = items.map(([, term, meaning]) =>
+          `<div><dt>${parseInline(term)}</dt><dd>${parseInline(meaning)}</dd></div>`
+        ).join('');
+        outHtml.push(`<figure class="concept-comparison"><figcaption>${parseInline(caption[1])}</figcaption><dl>${cards}</dl></figure>`);
+        continue;
+      }
+      if (['[!TIP]', '[!IMPORTANT]'].includes(marker.trim())) {
+        const kind = marker.trim() === '[!TIP]' ? 'tip' : 'distinction';
+        if (!body.length) throw new Error(`Empty reading note in ${currentFile} near line ${i}`);
+        outHtml.push(`<div class="reading-note ${kind}" role="note"><p>${parseInline(body.join(' '))}</p></div>`);
+        continue;
+      }
       const paragraphs = quoteLines
         .join('\n')
         .split(/\n{2,}/)
@@ -373,11 +409,38 @@ function getCategoryMeta(file, num) {
 
 const readingQuestions = JSON.parse(fs.readFileSync(path.join(root, 'tools/reading-questions.json'), 'utf8'));
 
+function loadQuizzes(id, parseInline) {
+  const bank = JSON.parse(fs.readFileSync(path.join(root, 'tools/section-quizzes', id + '.json'), 'utf8'));
+  for (const section of Object.values(bank)) {
+    for (const q of section) {
+      // Keep progress on a reordered question, and start fresh when its content changes.
+      const content = [q.prompt, q.options, q.correct, q.explanation, q.answer];
+      q.id = createHash('sha256').update(JSON.stringify(content)).digest('hex').slice(0, 24);
+
+      // Plain fragments use textContent. Store compiled HTML only for authored markup.
+      const fragments = [q.prompt, ...(q.options || [])];
+      for (const line of (q.explanation || q.answer).split(/\n+/).filter(Boolean)) {
+        const lead = line.match(/^([^：。？！，；\n]{1,20}：)/u);
+        if (lead) fragments.push(lead[0], line.slice(lead[0].length));
+        else fragments.push(line);
+      }
+      const inlineHtml = Object.create(null);
+      for (const fragment of fragments) {
+        const html = parseInline(fragment);
+        if (html !== esc(fragment)) inlineHtml[fragment] = html;
+      }
+      if (Object.keys(inlineHtml).length) q.inlineHtml = inlineHtml;
+    }
+  }
+  return bank;
+}
+
 const sources = {};
 const docs = files.map((file) => {
   const rawMd = fs.readFileSync(path.join(root, file), 'utf8');
   sources[ids[file]] = rawMd;
-  const { html, headings } = parseMarkdownDocument(rawMd, file);
+  const parseInline = createInlineParser(file);
+  const { html, headings } = parseMarkdownDocument(rawMd, file, parseInline);
 
   const title = headings[0]?.label || file;
   const num = /^\d\d/.exec(file)?.[0] || null;
@@ -404,7 +467,7 @@ const docs = files.map((file) => {
     file,
     study: studyCases[ids[file]],
     questions: readingQuestions[ids[file]],
-    quizzes: num ? JSON.parse(fs.readFileSync(path.join(root, 'tools/section-quizzes', ids[file] + '.json'), 'utf8')) : undefined,
+    quizzes: num ? loadQuizzes(ids[file], parseInline) : undefined,
     title,
     label,
     num,

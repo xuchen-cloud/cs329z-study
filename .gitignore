@@ -6,3 +6,6 @@ __pycache__/
 .env
 .env.*
 .openai/
+
+# Local archive of full Stanford decks. Chapter pages embed selected figures.
+/references/stanford-slides/
