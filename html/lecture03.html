@@ -99,6 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -126,6 +127,7 @@
         <article id="article"><h1 id="第-03-讲检索增强生成rag">第 03 讲｜检索增强生成（RAG）</h1>
 <p>如果直接向一个大语言模型提问：“本周哪一节助教答疑（Office Hour）排队的人最少？”没有任何外部信息源的模型只能根据训练语料中的统计常识编造一个看似合理的建议：“试试周三下午吧，通常周中人最少。”而如果系统能够先检索课程过去三周的排队日志，查出“周二下午 4 点平均排队 14 人，周四上午 9 点平均排队 3 人”，模型就能给出精准、可核查的回答：“周四上午 9 点——前面大约只有 3 名同学。”</p>
 <p>大语言模型的参数记忆是静态且不透明的：它既不知道训练截止日期之后的实时动态，也无法访问企业的私有文档，更无法为自己凭记忆生成的数字提供可靠的原始出处。<strong>检索增强生成（Retrieval-Augmented Generation, RAG）</strong> 正是通过在推理时将外部检索器与语言模型结合，把“死记硬背”转化为“开卷查阅”。本讲将系统拆解端到端 RAG 流水线：从潜变量概率建模、文档切块与上下文增强索引，到稀疏检索（BM25）、稠密检索（DPR）、混合排序（RRF）、晚期交互重排（ColBERT），再到模型自主控制检索循环的 Agentic RAG 与三层故障诊断。</p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/psLc-46GqY0" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=3" target="_blank" rel="noopener noreferrer">哔哩哔哩第 3 讲 · UP 主「不做挖掘姬」整理上传</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li>理解检索增强生成的概率建模基础（RAG-Sequence 与 RAG-Token）以及从 DrQA、REALM、DPR 到现代 RAG 的演进脉络。</li><li>掌握文档切块（Chunking）、上下文增强检索（Contextual Retrieval）、晚期切块（Late Chunking）、层次化树索引（RAPTOR）与图索引（GraphRAG）的设计取舍。</li><li>深入理解 HNSW 近似最近邻搜索、BM25 词频饱和公式、DPR 双编码器对比学习、RRF 混合检索以及 ColBERT 晚期交互（MaxSim）重排机制，熟练运用 Hit@<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow></semantics></math></span></span>、Recall@<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow></semantics></math></span></span>、MRR 与 nDCG 评估检索质量。</li><li>掌握 Agentic RAG（Self-RAG、CRAG、Search-R1）的闭环决策机制，并能从检索端、阅读端与循环控制端系统诊断 RAG 故障。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>
@@ -254,6 +256,7 @@
     </div>
 
     <footer class="page-footer">
+      <a href="https://cs329z.stanford.edu/">斯坦福官方课程</a>
       <a href="./lab26.html">阅读说明与版本来源</a>
       <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>

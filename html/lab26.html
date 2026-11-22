@@ -99,6 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -126,9 +127,12 @@
         <article id="article"><h1 id="阅读说明与版本来源">阅读说明与版本来源</h1>
 <p>本互动学习版由 xuchen-cloud 在 wanghao-SunSky 的 <code>cs329z-chinese</code> 项目基础上整理修改。原中文教程依据 2026 年 10 月 28 日获取的 Stanford CS329Z 公开材料，编写了 19 讲中文讲解和 4 项实践。原课程由 Stanford 开设，中文教程和本版学习活动属于独立整理的自学资料。</p>
 <h2 id="怎样使用本版">怎样使用本版</h2>
-<ul><li><strong>想学一小节</strong>，从首页进入一讲，先给情境题选一个答案，查看反馈，再展开三步图解。你也可以写下自己的解释，之后回来修改。</li><li><strong>想安静读正文</strong>，可以收起整个课程目录。点左上角的「目录」可再次打开，点分组标题可单独展开或收起各组。</li><li><strong>想离线读全书</strong>，保存单文件版，在浏览器打开后选择「全书连读」。学习位置和笔记保存在使用的浏览器里。</li></ul>
+<ul><li><strong>想学一小节</strong>，从首页进入一讲，先给情境题选一个答案，查看反馈，再展开三步图解。你也可以写下自己的解释，之后回来修改。</li><li><strong>想检验理解</strong>，在小节末尾展开「小节自测」。选择题提交后会解释答案，简答题可以先自己写，再对照参考要点标记掌握情况。</li><li><strong>想安静读正文</strong>，可以收起整个课程目录。点左上角的「目录」可再次打开，点分组标题可单独展开或收起各组。</li><li><strong>想离线读全书</strong>，保存单文件版，在浏览器打开后选择「全书连读」。学习位置和笔记保存在使用的浏览器里。</li></ul>
 <h2 id="本版做了哪些修改">本版做了哪些修改</h2>
 <p>本版沿用原项目的课程顺序、中文正文、实践指南和代码导读，增加了小节引导问题、情境练习、交互图解和笔记，并将公式转换为支持离线阅读的 MathML。网站和单文件课程来自同一份内容。<a href="https://github.com/xuchen-cloud/cs329z-study" target="_blank" rel="noopener noreferrer">本版代码与修订记录</a></p>
+<h2 id="致谢">致谢</h2>
+<p>感谢 wanghao-SunSky 整理 19 讲中文教程与实践材料，本互动版的正文和学习顺序沿用了这份成果。<a href="https://github.com/wanghao-SunSky/cs329z-chinese" target="_blank" rel="noopener noreferrer">原中文项目 cs329z-chinese</a></p>
+<p>感谢哔哩哔哩 UP 主「不做挖掘姬」整理上传第 1–9 讲视频，让学习者可以按讲次对照观看。<a href="https://www.bilibili.com/video/BV1ARxc61Er2/" target="_blank" rel="noopener noreferrer">视频合集 cs329z-ai-agents</a></p>
 <h2 id="原始材料">原始材料</h2>
 <ul><li><a href="https://cs329z.stanford.edu/" target="_blank" rel="noopener noreferrer">Stanford CS329Z 课程主页</a></li><li><a href="https://web.stanford.edu/class/cs329z/logistics.html" target="_blank" rel="noopener noreferrer">课程安排与作业要求</a></li><li><a href="https://github.com/cs329z/assignment1-harness" target="_blank" rel="noopener noreferrer">HW1：Agent Harness 配套代码</a></li><li><a href="https://github.com/cs329z/lecture5-frameworks" target="_blank" rel="noopener noreferrer">第 5 讲：框架演示代码</a></li><li><a href="https://web.stanford.edu/class/cs329z/assignments/paper_video.pdf" target="_blank" rel="noopener noreferrer">Paper Video 作业说明</a></li></ul>
 <p>课程中的论文链接指向各篇原文。原始课件、论文与配套代码的版权和许可归各自权利人。</p>
@@ -144,13 +148,14 @@
       <aside class="toc" aria-label="本节大纲">
         <div class="toc-card">
           <div class="toc-label">本讲目录</div>
-          <nav id="toc-links"><a class="depth-2" href="./lab26.html#%E6%80%8E%E6%A0%B7%E4%BD%BF%E7%94%A8%E6%9C%AC%E7%89%88" data-anchor="怎样使用本版">怎样使用本版</a><a class="depth-2" href="./lab26.html#%E6%9C%AC%E7%89%88%E5%81%9A%E4%BA%86%E5%93%AA%E4%BA%9B%E4%BF%AE%E6%94%B9" data-anchor="本版做了哪些修改">本版做了哪些修改</a><a class="depth-2" href="./lab26.html#%E5%8E%9F%E5%A7%8B%E6%9D%90%E6%96%99" data-anchor="原始材料">原始材料</a><a class="depth-2" href="./lab26.html#%E5%86%85%E5%AE%B9%E8%8C%83%E5%9B%B4" data-anchor="内容范围">内容范围</a><a class="depth-2" href="./lab26.html#%E5%BD%93%E5%89%8D%E5%BE%85%E4%BF%AE%E8%AE%A2%E9%97%AE%E9%A2%98" data-anchor="当前待修订问题">当前待修订问题</a></nav>
+          <nav id="toc-links"><a class="depth-2" href="./lab26.html#%E6%80%8E%E6%A0%B7%E4%BD%BF%E7%94%A8%E6%9C%AC%E7%89%88" data-anchor="怎样使用本版">怎样使用本版</a><a class="depth-2" href="./lab26.html#%E6%9C%AC%E7%89%88%E5%81%9A%E4%BA%86%E5%93%AA%E4%BA%9B%E4%BF%AE%E6%94%B9" data-anchor="本版做了哪些修改">本版做了哪些修改</a><a class="depth-2" href="./lab26.html#%E8%87%B4%E8%B0%A2" data-anchor="致谢">致谢</a><a class="depth-2" href="./lab26.html#%E5%8E%9F%E5%A7%8B%E6%9D%90%E6%96%99" data-anchor="原始材料">原始材料</a><a class="depth-2" href="./lab26.html#%E5%86%85%E5%AE%B9%E8%8C%83%E5%9B%B4" data-anchor="内容范围">内容范围</a><a class="depth-2" href="./lab26.html#%E5%BD%93%E5%89%8D%E5%BE%85%E4%BF%AE%E8%AE%A2%E9%97%AE%E9%A2%98" data-anchor="当前待修订问题">当前待修订问题</a></nav>
           <a class="source-link" id="source-link" href="https://github.com/xuchen-cloud/cs329z-study/blob/main/docs/editorial-notes.md">查看 Markdown 源文件 ↗</a>
         </div>
       </aside>
     </div>
 
     <footer class="page-footer">
+      <a href="https://cs329z.stanford.edu/">斯坦福官方课程</a>
       <a href="./lab26.html">阅读说明与版本来源</a>
       <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>

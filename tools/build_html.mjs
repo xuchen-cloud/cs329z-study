@@ -404,6 +404,7 @@ const docs = files.map((file) => {
     file,
     study: studyCases[ids[file]],
     questions: readingQuestions[ids[file]],
+    quizzes: num ? JSON.parse(fs.readFileSync(path.join(root, 'tools/section-quizzes', ids[file] + '.json'), 'utf8')) : undefined,
     title,
     label,
     num,
@@ -488,6 +489,7 @@ const html = `<!DOCTYPE html>
               <a class="home-guide" href="#/lab25">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -526,6 +528,7 @@ const html = `<!DOCTYPE html>
     </div>
 
     <footer class="page-footer">
+      <a href="https://cs329z.stanford.edu/">斯坦福官方课程</a>
       <a href="#/lab26">阅读说明与版本来源</a>
       <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>

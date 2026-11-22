@@ -209,6 +209,134 @@ function makeCase(doc) {
   return panel;
 }
 
+function makeSectionQuiz(doc, step, questions) {
+  const key = doc.id + '.quiz.' + step.anchor;
+  let saved;
+  try { saved = JSON.parse(studyStorage.read(key) || '{}'); } catch { saved = {}; }
+  const answers = questions.map((_, i) => ({ ...saved?.answers?.[i] }));
+  let index = Number.isInteger(saved?.index) && questions[saved.index] ? saved.index : 0;
+
+  const panel = studyElement('details', 'section-quiz');
+  const summary = studyElement('summary');
+  const tally = studyElement('span', 'quiz-tally');
+  const content = studyElement('div', 'quiz-content');
+  summary.append(studyElement('strong', '', '小节自测'), tally);
+  panel.append(summary, content);
+
+  function updateTally() {
+    const mastered = answers.filter(a => a.status === 'mastered').length;
+    const review = answers.filter(a => a.status === 'review').length;
+    tally.textContent = mastered + review
+      ? '已掌握 ' + mastered + ' / ' + questions.length + (review ? ' · 待复习 ' + review : '')
+      : questions.length + ' 道题';
+  }
+  function save() {
+    studyStorage.write(key, JSON.stringify({ index, answers }));
+    updateTally();
+  }
+  function button(label, action) {
+    const el = studyElement('button', '', label);
+    el.type = 'button';
+    el.onclick = action;
+    return el;
+  }
+  function focusOn(el) {
+    el.tabIndex = -1;
+    el.focus();
+  }
+  function render(focusTarget) {
+    const q = questions[index];
+    const a = answers[index];
+    const id = 'quiz-' + doc.id + '-' + step.anchor + '-' + index;
+    const counter = studyElement('p', 'quiz-counter', '第 ' + (index + 1) + ' / ' + questions.length + ' 题 · ' + (q.options ? '单选' : '简答'));
+    const fields = studyElement('fieldset', 'quiz-fields');
+    const title = studyElement('legend', '', q.prompt);
+    fields.append(title);
+    const feedback = studyElement('div', 'quiz-feedback');
+    const controls = studyElement('div', 'quiz-actions');
+    const status = a.status === 'mastered' ? '已掌握' : a.status === 'review' ? '待复习' : '';
+    const check = button(q.options ? '核对选择' : '对照参考答案', () => {
+      a.shown = true;
+      if (q.options) a.status = a.choice === q.correct ? 'mastered' : 'review';
+      save();
+      render('feedback');
+    });
+
+    if (q.options) {
+      q.options.forEach((option, i) => {
+        const row = studyElement('div', 'quiz-option');
+        const input = studyElement('input');
+        input.type = 'radio';
+        input.name = id;
+        input.id = id + '-o' + i;
+        input.checked = a.choice === i;
+        input.disabled = Boolean(a.shown);
+        const label = studyElement('label', '', option);
+        label.htmlFor = input.id;
+        input.onchange = () => { a.choice = i; check.disabled = false; save(); };
+        row.append(input, label);
+        fields.append(row);
+      });
+      check.disabled = !Number.isInteger(a.choice);
+    } else {
+      const label = studyElement('label', 'quiz-answer-label', '用自己的话回答');
+      const input = studyElement('textarea');
+      input.id = id + '-text';
+      label.htmlFor = input.id;
+      input.rows = 3;
+      input.value = a.text || '';
+      input.readOnly = Boolean(a.shown);
+      input.oninput = () => { a.text = input.value; save(); };
+      fields.append(label, input);
+    }
+    if (!a.shown) controls.append(check);
+    else {
+      const caption = q.options ? (a.choice === q.correct ? '答对了' : '再看一眼') : '参考要点';
+      feedback.append(studyElement('strong', '', caption));
+      if (q.options && a.choice !== q.correct) feedback.append(studyElement('p', '', '正确选项：' + q.options[q.correct]));
+      feedback.append(studyElement('p', '', q.explanation || q.answer));
+      if (!q.options) {
+        if (status) feedback.append(studyElement('small', '', '我的标记 · ' + status));
+        for (const [label, value] of [['我掌握了', 'mastered'], ['还要再练', 'review']]) {
+          const mark = button(label, () => {
+            a.status = value; save(); render('feedback');
+          });
+          mark.setAttribute('aria-pressed', String(a.status === value));
+          controls.append(mark);
+        }
+      }
+      controls.append(button(q.options ? '重做这题' : '重新作答', () => {
+        delete a.choice;
+        delete a.status;
+        delete a.shown;
+        save();
+        render('input');
+      }));
+    }
+    const nav = studyElement('div', 'quiz-nav');
+    const previous = button('← 上一题', () => { index--; save(); render('title'); });
+    const next = button('下一题 →', () => { index++; save(); render('title'); });
+    previous.disabled = index === 0;
+    next.disabled = index === questions.length - 1;
+    const reread = button('回看本节', () => {
+      panel.open = false;
+      const heading = step.heading || step.el.querySelector('h2');
+      focusOn(heading);
+      heading.scrollIntoView({ block: 'start' });
+    });
+    nav.append(previous, reread, next);
+    content.replaceChildren(counter, fields);
+    if (a.shown) content.append(feedback);
+    content.append(controls, nav);
+    if (focusTarget === 'feedback') focusOn(feedback);
+    if (focusTarget === 'title') focusOn(title);
+    if (focusTarget === 'input') fields.querySelector('input,textarea').focus();
+  }
+  updateTally();
+  panel.addEventListener('toggle', () => { if (panel.open && !content.childElementCount) render(); });
+  return panel;
+}
+
 const commonReadingQuestions = {
   '学习目标': '读完这一讲，我应该能独立做哪几件事？',
   '原课程阅读清单与导读': '想核对前面的解释，可以追到哪篇原文？',
@@ -270,6 +398,10 @@ function collectStudySteps(doc, article) {
         subtopic.append(node);
       }
     }
+  }
+  for (const step of steps) {
+    const questions = doc.quizzes?.[step.anchor];
+    if (questions) step.el.append(makeSectionQuiz(doc, step, questions));
   }
   return steps;
 }

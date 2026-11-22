@@ -4,6 +4,8 @@
 
 大语言模型的参数记忆是静态且不透明的：它既不知道训练截止日期之后的实时动态，也无法访问企业的私有文档，更无法为自己凭记忆生成的数字提供可靠的原始出处。**检索增强生成（Retrieval-Augmented Generation, RAG）** 正是通过在推理时将外部检索器与语言模型结合，把“死记硬背”转化为“开卷查阅”。本讲将系统拆解端到端 RAG 流水线：从潜变量概率建模、文档切块与上下文增强索引，到稀疏检索（BM25）、稠密检索（DPR）、混合排序（RRF）、晚期交互重排（ColBERT），再到模型自主控制检索循环的 Agentic RAG 与三层故障诊断。
 
+**本讲视频**　[斯坦福课程视频](https://youtu.be/psLc-46GqY0) · [哔哩哔哩第 3 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=3)
+
 ## 学习目标
 
 - 理解检索增强生成的概率建模基础（RAG-Sequence 与 RAG-Token）以及从 DrQA、REALM、DPR 到现代 RAG 的演进脉络。

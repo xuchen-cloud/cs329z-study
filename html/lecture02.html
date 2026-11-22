@@ -99,6 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -126,6 +127,7 @@
         <article id="article"><h1 id="第-02-讲面向构建者的大语言模型">第 02 讲｜面向构建者的大语言模型</h1>
 <p>构建 AI Agent 的工程师处于整个大模型技术栈的最顶层，但这并不意味着我们可以把底层的语言模型当成一个无所不能的“魔法黑盒”。在实际工程中，为什么你的 Agent 会在长对话后突然遗忘早期的系统指令？为什么工具调用的参数偶尔会漏掉右括号？为什么首次响应延迟（TTFT）和流式生成速度会有数量级的差异？为什么有些模型擅长长文档大海捞针，有些模型却更擅长多步工具调用？</p>
 <p>要回答并解决这些工程问题，构建者必须透彻理解现代大语言模型（LLMs）的内部工作机制。本讲将从自回归概率解码出发，深入拆解 Decoder-only Transformer 的计算数据流、注意力机制的复杂度瓶颈与线性化变体、从预训练到强化学习的完整训练管线，以及推理加速、结构化输出约束与上下文工程（Context Engineering）的核心方法。</p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/Vr1NzH8bT44" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=2" target="_blank" rel="noopener noreferrer">哔哩哔哩第 2 讲 · UP 主「不做挖掘姬」整理上传</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li>从条件概率链式法则理解自回归语言模型，掌握 Greedy、Top-<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow></semantics></math></span></span>、Top-<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow></semantics></math></span></span>、Temperature 缩放与 Beam Search 等解码策略的任务权衡。</li><li>完整推导 Decoder-only Transformer 的内部数据流，对比标准全注意力（Full Attention）、线性注意力（Linear Attention）与混合注意力（Hybrid Attention）在训练并行度与推理状态空间上的差异。</li><li>理解从预训练（Pretraining）、中期训练（Mid-training）、指令微调（SFT）到偏好对齐（RLHF）与可验证奖励强化学习（RLVR）的模型演进脉络。</li><li>掌握 GPU 算力与显存带宽瓶颈、KV Cache 复用、投机解码（Speculative Decoding）、测试时计算扩展（Test-time Scaling）、受限解码（Constrained Decoding）以及长上下文工程的实践原则。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>
@@ -274,6 +276,7 @@
     </div>
 
     <footer class="page-footer">
+      <a href="https://cs329z.stanford.edu/">斯坦福官方课程</a>
       <a href="./lab26.html">阅读说明与版本来源</a>
       <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>

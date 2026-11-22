@@ -99,6 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -126,6 +127,7 @@
         <article id="article"><h1 id="第-04-讲工具使用与函数调用">第 04 讲｜工具使用与函数调用</h1>
 <p>在上一讲中，我们看到检索增强生成（RAG）能够为大语言模型补充外部静态或动态文档。但如果用户问的是：“<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>17</mn><mo separator="true">,</mo><mn>423</mn><mo>×</mo><mn>892</mn></mrow></semantics></math></span></span> 等于多少？”或者“帮我查一下斯坦福现在的实时气温，并在我的日历上把今天下午 3 点的会议推迟半小时”，光靠检索文档就无能为力了。</p>
 <p>大语言模型本质上是基于统计关联的序列预测器：它在多位数算术、长链条符号逻辑推导与动态规划问题上准确率随规模急剧下跌；它无法获知此时此刻的股票价格或传感器读数；它更无法仅凭输出一段文字就自动修改外部数据库或操作物理世界。<strong>工具使用与函数调用（Tool Use &amp; Function Calling）</strong> 正是赋予语言模型“双手”的关键桥梁。本讲将在收尾 RAG 长上下文与引用局限的基础上，系统探讨模型如何通过自监督与指令微调学会使用成千上万个工具（Toolformer、ToolkenGPT、ToolLLM、Gorilla），剖析从 REST API、Function Calling 到模型上下文协议（MCP）的三代接口标准，并掌握 BFCL、ToolBench 与 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi></mrow></semantics></math></span></span>-bench 等工具评测方法。</p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/s0S38lz6O7M" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=4" target="_blank" rel="noopener noreferrer">哔哩哔哩第 4 讲 · UP 主「不做挖掘姬」整理上传</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li>理解长上下文 RAG 的性能饱和现象、中间迷失效应与引用幻觉（Citation Hallucination）诊断指标，明确引入外部工具的三大核心动因。</li><li>掌握让语言模型学会调用工具的四种代表性训练范式：Toolformer 的自监督损失过滤、ToolkenGPT 的专用词元嵌入、ToolLLM 的大规模 API 检索微调，以及 Gorilla 的检索感知训练与 AST 幻觉评测。</li><li>深入理解三代工具接口标准（REST API、JSON Schema Function Calling、MCP 协议）的架构演进，掌握 MCP 的能力发现（<code>tools/list</code>）、调用执行（<code>tools/call</code>）与双向鉴权边界。</li><li>掌握工具调用系统的评测维度（BFCL、ToolBench、<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi></mrow></semantics></math></span></span>-bench）与可靠性指标（<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>pass</mtext><mi mathvariant="normal">@</mi><mi>k</mi></mrow></semantics></math></span></span> 与 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mtext>pass</mtext><mi>k</mi></msup></mrow></semantics></math></span></span>），能够系统识别并防御单步、多步与交互层面的工具故障。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>
@@ -250,6 +252,7 @@ mcp = FastMCP.from_openapi(
     </div>
 
     <footer class="page-footer">
+      <a href="https://cs329z.stanford.edu/">斯坦福官方课程</a>
       <a href="./lab26.html">阅读说明与版本来源</a>
       <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>

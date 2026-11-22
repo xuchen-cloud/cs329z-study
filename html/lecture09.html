@@ -99,6 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -128,6 +129,7 @@
 <ul><li>提示 A：<code>Let's think step by step.</code> <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> <strong>71.8%</strong></li><li>提示 B：<code>Take a deep breath and work on this problem step-by-step.</code> <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> <strong>80.2%</strong></li><li>提示 C：<code>Let's combine our numerical command and clear thinking to quickly and accurately decipher the answer.</code> <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> <strong>74.5%</strong></li></ul>
 <p>相差将近 9 个百分点！但工程师显然不可能把宝贵的时间都耗在像炼丹一样凭直觉猜“到底是让模型深呼吸还是喝杯咖啡更好”上。当一个复合 AI 系统包含了五六个串联的模块、复杂的工具协议和成千上万行代码时，手工拼凑提示词很快就走到了尽头。</p>
 <p><strong>系统优化（Optimization）</strong> 的核心思想，正是让我们不再靠手工试探，而是<strong>通过数据（Data）与评测指标（Evals/Metrics）明确表达系统意图，用算法自动搜寻最优的上下文提示（Context/Prompts）、模型权重（Weights）乃至系统架构（Harness）</strong>。本讲将系统拆解从少样本示范自举（STaR、DSPy Bootstrap）、反思式与贝叶斯提示演化（OPRO、MIPROv2、TextGrad、GEPA），到 Agent 轨迹上的权重训练（SFT、PPO、GRPO 与在线策略蒸馏 On-Policy Distillation），再到自我演化代码的智能体（Darwin Gödel Machine、Meta-Harness、Autoresearch），并给出在工程实践中“何时优化提示词、何时优化模型权重”的决策准则。</p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/e_m99aR7_3Q" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=9" target="_blank" rel="noopener noreferrer">哔哩哔哩第 9 讲 · UP 主「不做挖掘姬」整理上传</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li>理解优化 AI 系统的三大前提（领域数据、可优化系统参数、可靠的评测指标），明确优化在“最后一公里（Last-mile Adaptation）”中的核心价值。</li><li>掌握上下文与提示词优化算法：理解 Few-shot 排序熵准则、推理轨迹拒绝采样自举（STaR / DSPy Bootstrapping）、OPRO、MIPROv2（三阶段贝叶斯组合搜索）、TextGrad（文本反馈反向传播）与 GEPA（帕累托遗传提示演化）。</li><li>深入掌握面向 Agent 的模型权重优化算法：对比基于轨迹的监督微调（SFT）、近端策略优化（PPO 的四模型架构与裁剪目标）、组相对策略优化（GRPO 的无 Critic 组内归一化优势估计）以及在线策略蒸馏（On-Policy Distillation）。</li><li>了解将 Agent 本身作为优化器的前沿探索（Darwin Gödel Machine、Meta-Harness、Autoresearch），并掌握权衡提示优化、权重微调与交替联合优化（BetterTogether）的工程路线图。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>
@@ -237,6 +239,7 @@
     </div>
 
     <footer class="page-footer">
+      <a href="https://cs329z.stanford.edu/">斯坦福官方课程</a>
       <a href="./lab26.html">阅读说明与版本来源</a>
       <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>

@@ -74,6 +74,32 @@ for d in docs:
     if d['num']:
         assert all(cue['question'] and cue['bridge'] for cue in d['questions'].values()), d['id']
 
+quiz_sections = quiz_questions = 0
+for d in docs:
+    if not d['num']:
+        assert 'quizzes' not in d
+        continue
+    bank = d['quizzes']
+    core = {h['id'] for h in d['headings'] if h['depth'] == 3}
+    expected = core | {'study-case', 'study-intro', '学习目标', '原课程阅读清单与导读', '动手练习'}
+    assert set(bank) == expected, f'quiz section coverage: {d["id"]}'
+    prompts = set()
+    for anchor, questions in bank.items():
+        assert 3 <= len(questions) <= 5, (d['id'], anchor)
+        assert any('options' in q for q in questions) and any('answer' in q for q in questions)
+        for q in questions:
+            assert q['prompt'].strip() and q['prompt'] not in prompts, (d['id'], anchor)
+            prompts.add(q['prompt'])
+            if 'options' in q:
+                assert len(set(q['options'])) == len(q['options']) >= 2
+                assert all(option.strip() for option in q['options'])
+                assert type(q['correct']) is int and 0 <= q['correct'] < len(q['options'])
+                assert q['explanation'].strip()
+            else:
+                assert q['answer'].strip()
+        quiz_questions += len(questions)
+    quiz_sections += len(bank)
+
 pages = {}
 titles = set()
 canonicals = set()
@@ -82,6 +108,11 @@ for d in docs:
     html = (OUT / name).read_text()
     page = Page(html)
     pages[name] = page
+    assert 'https://cs329z.stanford.edu/' in page.links, name
+    if d['num'] and int(d['num']) <= 9:
+        source_links = Page(d['html']).links
+        assert any(link.startswith('https://youtu.be/') for link in source_links), name
+        assert f'https://www.bilibili.com/video/BV1ARxc61Er2/?p={int(d["num"])}' in source_links, name
     assert page.article_text, f'empty server-rendered content: {name}'
     assert Page(d['html']).ids <= page.ids, f'missing headings: {name}'
     assert d['html'] in (OUT / 'offline.html').read_text() or d['id'] != 'overview'
@@ -152,4 +183,4 @@ sitemap = ET.parse(OUT / 'sitemap.xml')
 locations = {e.text for e in sitemap.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')}
 assert locations == canonicals
 assert f'Sitemap: {ORIGIN}/sitemap.xml' in (OUT / 'robots.txt').read_text()
-print(json.dumps({'status': 'PASS', 'chapters': 19, 'exercises': 4, 'static_pages': len(pages), 'study_cases': len(cases), 'guided_sections': sum(len(d.get('questions', {})) for d in docs), 'local_links_and_assets': links, 'sitemap_urls': len(locations), 'typeset_formulas': formula_count, 'offline_content_matches': True}, ensure_ascii=False))
+print(json.dumps({'status': 'PASS', 'chapters': 19, 'exercises': 4, 'static_pages': len(pages), 'study_cases': len(cases), 'quiz_sections': quiz_sections, 'quiz_questions': quiz_questions, 'guided_sections': sum(len(d.get('questions', {})) for d in docs), 'local_links_and_assets': links, 'sitemap_urls': len(locations), 'typeset_formulas': formula_count, 'offline_content_matches': True}, ensure_ascii=False))

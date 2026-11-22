@@ -99,6 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -126,6 +127,7 @@
         <article id="article"><h1 id="第-08-讲多-agent-系统">第 08 讲｜多 Agent 系统</h1>
 <p>当单个 Agent 在面对复杂庞大的工程任务（比如同时维护一个大型代码仓库的前端、后端与测试套件，或者从零编写一个完整的 C 语言编译器）感到力不从心时，一个自然的想法是：<strong>“三个臭皮匠，顶个诸葛亮”——能不能让多个不同角色的 Agent 组成团队协同作战？</strong></p>
 <p>近年来，多智能体系统（Multi-Agent Systems, MAS）频频登上技术头条，但也伴随着大量盲目堆砌角色的噱头。在实际工程中，把一个任务拆给 5 个 Agent 互相聊天，往往不仅使 Token 成本暴增数倍，还可能因为沟通断层、目标冲突或相互带偏，导致最终表现还不如一个配置得当的单 Agent！本讲将用严谨的工程视角拆解多 Agent 系统：何时应当坚持单 Agent 基线、何时值得引入多 Agent；如何设计编排拓扑（Independent、Centralized、Decentralized Swarm、Hybrid 与动态组队 DyLAN）、通信通道（AutoGen 会话、Handoff 与 Agent-as-Tool、共享信息板与 Google A2A 协议）以及协调基础设施（任务账本 Task Ledger、G-Memory 与 Git Worktree 隔离）；最后结合 Cemri et al.（2025）与 CooperBench 的实证研究，深入剖析多 Agent 系统为什么会失败。</p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/TlX_ft_PQIM" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=8" target="_blank" rel="noopener noreferrer">哔哩哔哩第 8 讲 · UP 主「不做挖掘姬」整理上传</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li>理解单智能体系统（SAS）与多智能体系统（MAS）的收益与代价边界，掌握“先建立强单 Agent 基线，再按需引入多 Agent”的工程原则。</li><li>掌握四种核心多 Agent 编排拓扑（独立聚合、中心化编排器、去中心化蜂群、混合架构）及动态团队选择算法（DyLAN）的机制与成本规律。</li><li>严格区分<strong>通信（Communication，如何交换信息）</strong>与<strong>协调（Coordination，如何管理相互依赖的工作）</strong>，掌握 Handoff 与 Agent-as-Tool 的控制权差异及 Google Agent2Agent（A2A）协议。</li><li>掌握三大协调基础设施（任务账本 Task Ledger、多智能体共享图记忆 G-Memory、Git Worktree 工作区隔离）与三种协作模式（角色分工、资源划分、计划协商）。</li><li>能够运用 MAST 三层失效分类法诊断多 Agent 故障，理解“协调诅咒（Curse of Coordination）”、群体趋同（Conformity）及大规模去中心化协作的成功要素。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>
@@ -227,6 +229,7 @@
     </div>
 
     <footer class="page-footer">
+      <a href="https://cs329z.stanford.edu/">斯坦福官方课程</a>
       <a href="./lab26.html">阅读说明与版本来源</a>
       <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>

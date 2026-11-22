@@ -4,6 +4,8 @@
 
 很多初学者在接触 Agent 开发时，容易走向两个极端：要么不管什么任务都套一个无限自由的 ReAct 循环，结果在简单任务上既慢又贵还不稳定；要么把所有历史对话和成百上千行工具输出原封不动地往上下文里塞，导致几轮之后上下文膨胀腐化（Context Rot）、模型彻底迷失方向。本讲将系统梳理经过工业界验证的三大类设计模式：**五大可组合的工作流模式（Workflow Design Patterns）**、**推理与行动模式（Reasoning & Acting Patterns：ReAct、Reflexion、CRITIC、CodeAct、ReWOO、LLMCompiler）**，以及**长程上下文管理模式（Context Management Patterns：持久化事件日志、记忆卸载、上下文压缩、观测屏蔽、上下文隔离与渐进式披露）**，并通过极简编码底座 **Pi** 的案例剖析这些模式如何在生产系统中协同运作。
 
+**本讲视频**　[斯坦福课程视频](https://youtu.be/JC_pLC5EX_w) · [哔哩哔哩第 6 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=6)
+
 ## 学习目标
 
 - 熟练掌握五种基础工作流设计模式（Prompt Chaining、Routing、Parallelization、Orchestrator-Workers、Evaluator-Optimizer）及其组合方式（如 STORM 与 Archon）。

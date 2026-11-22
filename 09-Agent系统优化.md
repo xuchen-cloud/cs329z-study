@@ -9,6 +9,8 @@
 
 **系统优化（Optimization）** 的核心思想，正是让我们不再靠手工试探，而是**通过数据（Data）与评测指标（Evals/Metrics）明确表达系统意图，用算法自动搜寻最优的上下文提示（Context/Prompts）、模型权重（Weights）乃至系统架构（Harness）**。本讲将系统拆解从少样本示范自举（STaR、DSPy Bootstrap）、反思式与贝叶斯提示演化（OPRO、MIPROv2、TextGrad、GEPA），到 Agent 轨迹上的权重训练（SFT、PPO、GRPO 与在线策略蒸馏 On-Policy Distillation），再到自我演化代码的智能体（Darwin Gödel Machine、Meta-Harness、Autoresearch），并给出在工程实践中“何时优化提示词、何时优化模型权重”的决策准则。
 
+**本讲视频**　[斯坦福课程视频](https://youtu.be/e_m99aR7_3Q) · [哔哩哔哩第 9 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=9)
+
 ## 学习目标
 
 - 理解优化 AI 系统的三大前提（领域数据、可优化系统参数、可靠的评测指标），明确优化在“最后一公里（Last-mile Adaptation）”中的核心价值。

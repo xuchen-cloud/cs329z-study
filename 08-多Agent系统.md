@@ -4,6 +4,8 @@
 
 近年来，多智能体系统（Multi-Agent Systems, MAS）频频登上技术头条，但也伴随着大量盲目堆砌角色的噱头。在实际工程中，把一个任务拆给 5 个 Agent 互相聊天，往往不仅使 Token 成本暴增数倍，还可能因为沟通断层、目标冲突或相互带偏，导致最终表现还不如一个配置得当的单 Agent！本讲将用严谨的工程视角拆解多 Agent 系统：何时应当坚持单 Agent 基线、何时值得引入多 Agent；如何设计编排拓扑（Independent、Centralized、Decentralized Swarm、Hybrid 与动态组队 DyLAN）、通信通道（AutoGen 会话、Handoff 与 Agent-as-Tool、共享信息板与 Google A2A 协议）以及协调基础设施（任务账本 Task Ledger、G-Memory 与 Git Worktree 隔离）；最后结合 Cemri et al.（2025）与 CooperBench 的实证研究，深入剖析多 Agent 系统为什么会失败。
 
+**本讲视频**　[斯坦福课程视频](https://youtu.be/TlX_ft_PQIM) · [哔哩哔哩第 8 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=8)
+
 ## 学习目标
 
 - 理解单智能体系统（SAS）与多智能体系统（MAS）的收益与代价边界，掌握“先建立强单 Agent 基线，再按需引入多 Agent”的工程原则。

@@ -4,6 +4,8 @@
 
 这门课程的核心主题，正是如何完成从**“调用单个语言模型”**向**“构建复合 AI 系统与自主智能体（Agentic Systems）”**的工程跨越。作为全课程的开篇，本讲将梳理 Agent 概念的演进脉络，拆解现代 AI Agent 的五大核心组件，辨析固定工作流与自主 Agent 的设计边界，并探讨可靠性、安全与评测等关键挑战。
 
+**本讲视频**　[斯坦福课程视频](https://youtu.be/DGI4vucR71w) · [哔哩哔哩第 1 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=1)
+
 ## 学习目标
 
 - 掌握 Agent 的基本解剖结构，理解大语言模型核心（LLM Core）、规划与推理（Planning & Reasoning）、记忆（Memory）、工具（Tools）与环境（Environment）之间的闭环反馈机制。
