@@ -99,7 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
-            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传<a href="https://www.bilibili.com/video/BV1JgyWzfEhg/">第 1–10 讲中英字幕视频</a>。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -131,7 +131,7 @@
 <p>更现实的挑战在于：当一个复合 AI 系统包含五六个串联模块、复杂的工具协议和成千上万行代码时，模块之间会相互影响。此时靠人工凭感觉拼凑提示词，很快就会走到尽头。</p>
 <p><strong>系统优化（Optimization）</strong> 的核心思想，正是让我们告别手工试探：<strong>通过数据（Data）与评测指标（Evals/Metrics）明确表达系统意图，再用算法自动搜寻最优的上下文提示（Context/Prompts）、模型权重（Weights）乃至系统架构（Harness）</strong>。</p>
 <p>本讲将沿着“从轻到重”的优化谱系层层展开：先从少样本示范自举（STaR、DSPy Bootstrap）以及反思式、贝叶斯提示演化（OPRO、MIPROv2、TextGrad、GEPA）讲起；再深入到基于 Agent 轨迹的模型权重训练（SFT、PPO、GRPO 与在线策略蒸馏 On-Policy Distillation）；接着探讨能够自我演化代码的智能体（Darwin Gödel Machine、Meta-Harness、Autoresearch）；最后给出一套清晰的工程决策准则，帮你判断“何时优化提示词、何时优化模型权重”。</p>
-<p><strong>本讲视频</strong>　<a href="https://youtu.be/e_m99aR7_3Q" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=9" target="_blank" rel="noopener noreferrer">哔哩哔哩第 9 讲 · UP 主「不做挖掘姬」整理上传</a></p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/e_m99aR7_3Q" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1JgyWzfEhg/?p=9" target="_blank" rel="noopener noreferrer">哔哩哔哩第 9 讲 · 中英字幕</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li>理解优化 AI 系统的三大前提（领域数据、可优化系统参数、可靠的评测指标），明确优化在“最后一公里（Last-mile Adaptation）”中的核心价值。</li><li>掌握上下文与提示词优化算法：理解 Few-shot 排序熵准则、推理轨迹拒绝采样自举（STaR / DSPy Bootstrapping）、OPRO、MIPROv2（三阶段贝叶斯组合搜索）、TextGrad（文本反馈反向传播）与 GEPA（帕累托遗传提示演化）。</li><li>深入掌握面向 Agent 的模型权重优化算法：对比基于轨迹的监督微调（SFT）、近端策略优化（PPO 的四模型架构与裁剪目标）、组相对策略优化（GRPO 的无 Critic 组内归一化优势估计）以及在线策略蒸馏（On-Policy Distillation）。</li><li>了解将 Agent 本身作为优化器的前沿探索（Darwin Gödel Machine、Meta-Harness、Autoresearch），并掌握权衡提示优化、权重微调与交替联合优化（BetterTogether）的工程路线图。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>

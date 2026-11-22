@@ -99,7 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
-            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传<a href="https://www.bilibili.com/video/BV1JgyWzfEhg/">第 1–10 讲中英字幕视频</a>。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -128,6 +128,7 @@
 <p>回顾计算机软件工程八十年的演进史，程序员与机器对话的方式一直在不断“变抽象”：20 世纪 40 年代，程序员必须直接用十六进制机器码（如 <code>48 83 C0 05</code>）向 CPU 下达指令；50 年代初演进到汇编语言（<code>add rax, 5</code>）；50 年代末 FORTRAN 等高级语言诞生（<code>x += 5</code>），终于把人类从繁琐的底层寄存器管理中解放出来。图灵奖得主 Tony Hoare 在 1969 年曾精辟地总结道：传统计算机编程是一门<strong>演绎科学（Deductive Science）</strong>——人类亲手编写确定性的规则（Code），程序把这套规则作用在输入上，从而推导出唯一确定的输出（<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>Rules</mtext><mo>+</mo><mtext>Inputs</mtext><mo>→</mo><mtext>Outputs</mtext></mrow></semantics></math></span></span>）。在这个世界里，代码本身就是唯一的真相之源（Source of Truth）。</p>
 <p>然而，随着机器学习（ML）、大语言模型（LLMs）以及自主智能体（Agents）的兴起，整个软件开发正在经历一场底层范式的翻转——从<strong>演绎式（Deductive）</strong>全面转向<strong>归纳式（Inductive）</strong>：人类不再逐行手写死规则，而是提供输入与期望的结果评判标准（<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>Inputs</mtext><mo>+</mo><mtext>Outputs</mtext><mo>→</mo><mtext>Rules</mtext></mrow></semantics></math></span></span>），由模型从数据与反馈中习得策略，再由 Agent 自动生成或操作软件。在这个新世界里，<strong>代码不再是唯一的真相之源，评测（Evaluations / Evals）成为了新的真相之源；软件工程师的核心职责也正演变为“规格定义者与评测构建者（Specifier &amp; Evaluator）”</strong>。</p>
 <p>本讲由 Terminal-Bench 与 Harbor 框架的联合创建者 Ryan Marten 和 Alex Shaw（Laude Institute）主讲。他们将带你从零梳理一套扎实的评测工程体系：为什么命令行终端（Terminal / Bash）是检验通用 Agent 最理想的试金石？如何借助 <strong>Terminal-Bench</strong> 与 <strong>Harbor</strong> 设计防作弊的真实评测任务？如何搭建隔离的验证基础设施、执行多层级任务质量审查（Task QA），并用 CI/CD 与语义化版本控制维护一个长期演进的基准测试？</p>
+<p><strong>本讲视频</strong>　<a href="https://www.bilibili.com/video/BV1JgyWzfEhg/?p=10" target="_blank" rel="noopener noreferrer">哔哩哔哩第 10 讲 · 中英字幕</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li>从演绎式编程（Deductive）向归纳式开发（Inductive）的范式转移出发，理解“规格即评测（Specification <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> Evaluation）”的核心思想。</li><li>理解为什么 Bash 终端是训练与评测真实世界 Agent 的通用接口，掌握 Task、Trial、Benchmark、Verifier（Grader）、Trajectory、Agent Harness 与 Evaluation Harness 这七个标准定义。</li><li>掌握 Terminal-Bench / Harbor 任务目录的五元组结构（<code>instruction.md</code>、<code>task.toml</code>、<code>environment/</code>、<code>solution/</code>、<code>tests/</code>），学会编写指令与验证器严密对齐、防止奖励篡改（Reward Hacking）的高质量任务。</li><li>掌握评测环境的构建取舍、四分类混淆矩阵（TP/TN/FP/FN）验证器分析、信任域隔离架构以及六层任务质量保障（Task QA）流水线。</li><li>掌握基准测试的持续集成（CI/CD）、三段式版本管理法则（Major <code>x+1</code> 重跑、Minor <code>y+1</code> 重评、Patch <code>z+1</code> 复用）以及完整结果存证（Full Receipts）规范。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>

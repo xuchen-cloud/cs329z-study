@@ -99,7 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
-            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传<a href="https://www.bilibili.com/video/BV1JgyWzfEhg/">第 1–10 讲中英字幕视频</a>。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -130,7 +130,7 @@
 <p>本讲将系统梳理经过工业界验证的三大类设计模式：</p>
 <ul><li><strong>五大可组合的工作流模式（Workflow Design Patterns）</strong>：解决“什么时候该用固定代码流程，而不是放任模型自由发挥”；</li><li><strong>推理与行动模式（Reasoning &amp; Acting Patterns）</strong>：涵盖 ReAct、Reflexion、CRITIC、CodeAct、ReWOO 与 LLMCompiler，解决“模型如何更可靠、更高效地思考、试错并调用工具”；</li><li><strong>长程上下文管理模式（Context Management Patterns）</strong>：涵盖持久化事件日志、记忆卸载、上下文压缩、观测屏蔽、上下文隔离与渐进式披露，解决“多轮长任务下如何管好有限的上下文窗口”。</li></ul>
 <p>最后，我们将通过开源极简编码底座 <strong>Pi</strong> 的真实案例，看看这些模式如何在生产系统中协同运作、互相取舍。</p>
-<p><strong>本讲视频</strong>　<a href="https://youtu.be/JC_pLC5EX_w" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=6" target="_blank" rel="noopener noreferrer">哔哩哔哩第 6 讲 · UP 主「不做挖掘姬」整理上传</a></p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/JC_pLC5EX_w" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1JgyWzfEhg/?p=6" target="_blank" rel="noopener noreferrer">哔哩哔哩第 6 讲 · 中英字幕</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li>熟练掌握五种基础工作流设计模式（Prompt Chaining、Routing、Parallelization、Orchestrator-Workers、Evaluator-Optimizer）及其组合方式（如 STORM 与 Archon），能准确判断不同任务该交给确定性代码还是交给自主 Agent。</li><li>深入对比 Agent 推理与行动模式：理解 ReAct、Reflexion 与 CRITIC（工具辅助验证）的适用边界，掌握 CodeAct（以可执行代码作为动作空间）以及 ReWOO / LLMCompiler（规划与并行执行分离）的运行机制与工程权衡。</li><li>掌握上下文工程的两大核心原则（保持聚焦 Focus 与维持连续性 Continuity），能够组合运用五种上下文管理模式与渐进式披露，稳健控制长任务的 Token 窗口。</li><li>通过 Pi Agent Harness 的真实架构案例，分析极简工具集、树形上下文、技能渐进披露与安全边界背后的工程取舍。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>

@@ -8,7 +8,7 @@ Chinese study guide for Stanford CS329Z: Engineering AI Agents. Includes 19 less
 
 [斯坦福官方课程](https://cs329z.stanford.edu/) · [在线学习](https://xuchen-cloud.github.io/cs329z-study/) · [单文件课程](https://xuchen-cloud.github.io/cs329z-study/offline.html) · [课程目录与学习路径](course-guide.md) · [下载本版仓库](https://github.com/xuchen-cloud/cs329z-study/archive/refs/heads/main.zip)
 
-第 1–9 讲的「开篇」提供相应课程视频的入口。感谢 UP 主「不做挖掘姬」整理上传的[哔哩哔哩视频合集](https://www.bilibili.com/video/BV1ARxc61Er2/)。
+第 1–10 讲的「开篇」可以直接打开对应的中英字幕视频。感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传这套[斯坦福 CS329Z 课程视频](https://www.bilibili.com/video/BV1JgyWzfEhg/)。
 
 ## 包含什么
 

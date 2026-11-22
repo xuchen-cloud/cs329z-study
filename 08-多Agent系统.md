@@ -6,7 +6,7 @@
 
 本讲将用严谨的工程视角拆解多 Agent 系统：何时应当坚持单 Agent 基线、何时值得引入多 Agent；如何设计编排拓扑（Independent、Centralized、Decentralized Swarm、Hybrid 与动态组队 DyLAN）、通信通道（AutoGen 会话、Handoff 与 Agent-as-Tool、共享信息板与 Google A2A 协议）以及协调基础设施（任务账本 Task Ledger、G-Memory 与 Git Worktree 隔离）；最后结合 Cemri et al.（2025）与 CooperBench 的实证研究，深入剖析多 Agent 系统为什么会失败，以及真正跑通的工程案例做对了什么。
 
-**本讲视频**　[斯坦福课程视频](https://youtu.be/TlX_ft_PQIM) · [哔哩哔哩第 8 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=8)
+**本讲视频**　[斯坦福课程视频](https://youtu.be/TlX_ft_PQIM) · [哔哩哔哩第 8 讲 · 中英字幕](https://www.bilibili.com/video/BV1JgyWzfEhg/?p=8)
 
 ## 学习目标
 

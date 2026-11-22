@@ -99,7 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
-            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传<a href="https://www.bilibili.com/video/BV1JgyWzfEhg/">第 1–10 讲中英字幕视频</a>。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -127,7 +127,7 @@
         <article id="article"><h1 id="第-02-讲面向构建者的大语言模型">第 02 讲｜面向构建者的大语言模型</h1>
 <p>写 AI Agent 的工程师站在整个大模型技术栈的最顶层，但这绝不意味着可以把底层的语言模型当成一个黑盒“魔法”。只要真正上手做系统，你很快就会撞上一连串具体问题：为什么对话一长，助手就忘了最开头立下的规矩？为什么工具调用的 JSON 参数偶尔会少一个右括号？为什么等第一个字蹦出来要两秒，后面却刷刷地飞快吐字？为什么有的模型擅长在十万字长文里大海捞针，有的模型却更适合短上下文多步调工具？</p>
 <p>这些问题光靠猜提示词是解决不了的，必须打开引擎盖看清大语言模型（LLMs）到底怎么工作。本讲站在“构建者”而非纯算法研究者的视角，带你沿一条完整链路走下来：从逐词预测与解码策略出发，拆解 Decoder-only Transformer 的内部数据流、注意力复杂度瓶颈与线性化变体，理清从预训练到强化学习的训练管线，最后落到推理加速、结构化输出约束与上下文工程（Context Engineering）的实战原则。</p>
-<p><strong>本讲视频</strong>　<a href="https://youtu.be/Vr1NzH8bT44" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=2" target="_blank" rel="noopener noreferrer">哔哩哔哩第 2 讲 · UP 主「不做挖掘姬」整理上传</a></p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/Vr1NzH8bT44" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1JgyWzfEhg/?p=2" target="_blank" rel="noopener noreferrer">哔哩哔哩第 2 讲 · 中英字幕</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li><strong>看懂文本是怎么一个词一个词生成的</strong>：从条件概率链式法则理解自回归语言模型，掌握贪心（Greedy）、Top-<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow></semantics></math></span></span>、Top-<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow></semantics></math></span></span>、温度（Temperature）缩放与束搜索（Beam Search）的机制差异与任务取舍。</li><li><strong>看清 Transformer 内部与长上下文瓶颈</strong>：走通 Decoder-only Transformer 的核心数据流，对比标准全注意力（Full Attention）、线性注意力（Linear Attention）与混合注意力（Hybrid Attention）在并行训练、显存状态和精确回溯上的利弊。</li><li><strong>理清模型能力是怎么“炼”出来的</strong>：串联预训练（Pretraining）、中期训练（Mid-training）、监督微调（SFT）、偏好对齐（RLHF / DPO）与可验证奖励强化学习（RLVR）各自解决什么问题。</li><li><strong>掌握落地最常用的系统优化与控制手段</strong>：理解 GPU 算力与显存带宽瓶颈、KV Cache 复用、投机解码（Speculative Decoding）、测试时计算扩展（Test-time Scaling）、受限解码（Constrained Decoding）以及长上下文工程的实战原则。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>

@@ -18,7 +18,7 @@
 
 感谢 wanghao-SunSky 整理 19 讲中文教程与实践材料，本互动版的正文和学习顺序沿用了这份成果。[原中文项目 cs329z-chinese](https://github.com/wanghao-SunSky/cs329z-chinese)
 
-感谢哔哩哔哩 UP 主「不做挖掘姬」整理上传第 1–9 讲视频，让学习者可以按讲次对照观看。[视频合集 cs329z-ai-agents](https://www.bilibili.com/video/BV1ARxc61Er2/)
+感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传斯坦福 CS329Z 的英文原声、中英字幕视频。本教程第 1–10 讲的「开篇」均有对应分集入口。[观看哔哩哔哩视频系列](https://www.bilibili.com/video/BV1JgyWzfEhg/)
 
 ## 原始材料
 

@@ -11,7 +11,7 @@
 
 最后，我们将通过开源极简编码底座 **Pi** 的真实案例，看看这些模式如何在生产系统中协同运作、互相取舍。
 
-**本讲视频**　[斯坦福课程视频](https://youtu.be/JC_pLC5EX_w) · [哔哩哔哩第 6 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=6)
+**本讲视频**　[斯坦福课程视频](https://youtu.be/JC_pLC5EX_w) · [哔哩哔哩第 6 讲 · 中英字幕](https://www.bilibili.com/video/BV1JgyWzfEhg/?p=6)
 
 ## 学习目标
 

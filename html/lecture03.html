@@ -99,7 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
-            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传<a href="https://www.bilibili.com/video/BV1JgyWzfEhg/">第 1–10 讲中英字幕视频</a>。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -127,7 +127,7 @@
         <article id="article"><h1 id="第-03-讲检索增强生成rag">第 03 讲｜检索增强生成（RAG）</h1>
 <p>直接问一个大语言模型：“本周哪一节助教答疑（Office Hour）排队的人最少？”没有任何外部资料可查的模型，只能凭训练语料里的统计常识硬猜一句听起来很合理的建议：“试试周三下午吧，通常周中人最少。”但如果系统先去翻一下课程过去三周的排队日志，查出“周二下午 4 点平均排队 14 人，周四上午 9 点平均排队 3 人”，模型就能给出精准、可核查的回答：“周四上午 9 点——前面大约只有 3 名同学。”</p>
 <p>大语言模型写在权重参数里的记忆是静态且不透明的：它既不知道训练截止日期之后的新动态，也读不到企业的私有文档，更没法为随口说出的数字附上原始出处。<strong>检索增强生成（Retrieval-Augmented Generation, RAG）</strong> 做的事情很直白——把推理时的“闭卷死记硬背”变成“开卷按需查阅”。本讲带你沿整条端到端 RAG 流水线走一遍：从潜变量概率建模、文档切块与上下文增强索引，到稀疏检索（BM25）、稠密检索（DPR）、混合排序（RRF）、晚期交互重排（ColBERT），最后走到让模型自己决定何时查、怎么查的 Agentic RAG 与三层故障排查。</p>
-<p><strong>本讲视频</strong>　<a href="https://youtu.be/psLc-46GqY0" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=3" target="_blank" rel="noopener noreferrer">哔哩哔哩第 3 讲 · UP 主「不做挖掘姬」整理上传</a></p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/psLc-46GqY0" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1JgyWzfEhg/?p=3" target="_blank" rel="noopener noreferrer">哔哩哔哩第 3 讲 · 中英字幕</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li><strong>看懂 RAG 的概率骨架与演进脉络</strong>：理解原始 RAG（RAG-Sequence 与 RAG-Token）把文档当作潜变量的建模思路，理清从 DrQA、REALM、DPR 到现代 RAG 的演进。</li><li><strong>掌握文档切块与索引组织取舍</strong>：理解固定/语义切块（Chunking）、上下文增强检索（Contextual Retrieval）、晚期切块（Late Chunking）、层次化树索引（RAPTOR）与图索引（GraphRAG）各自解决什么信息割裂问题。</li><li><strong>吃透主流检索、融合与重排算法</strong>：掌握 HNSW 近似最近邻搜索、BM25 词频饱和与长度归一化公式、DPR 双编码器对比学习、RRF 混合检索及 ColBERT 晚期交互（MaxSim）重排，能用 Hit@<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow></semantics></math></span></span>、Recall@<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow></semantics></math></span></span>、MRR 与 nDCG 客观评测检索器。</li><li><strong>会搭也会修 Agentic RAG</strong>：理解 Self-RAG、CRAG、Search-R1 如何把检索决策交还给模型，并能沿检索端、阅读端、循环端三层精准定位一次错答的根因。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>

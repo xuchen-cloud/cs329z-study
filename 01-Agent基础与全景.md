@@ -6,7 +6,7 @@
 
 这门课要带你完成的，正是从**“调用单个语言模型”**向**“构建复合 AI 系统与自主智能体（Agentic Systems）”**的工程跨越。作为全课程的开篇，本讲会先帮你建立一套看懂 AI Agent 的全局坐标系：梳理 Agent 概念是怎么一路演进到今天的，拆解现代 Agent 的五大核心组件，分清固定工作流与自主 Agent 的设计边界，并提前看清可靠性、安全与评测上最容易踩的坑。
 
-**本讲视频**　[斯坦福课程视频](https://youtu.be/DGI4vucR71w) · [哔哩哔哩第 1 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=1)
+**本讲视频**　[斯坦福课程视频](https://youtu.be/DGI4vucR71w) · [哔哩哔哩第 1 讲 · 中英字幕](https://www.bilibili.com/video/BV1JgyWzfEhg/?p=1)
 
 ## 学习目标
 

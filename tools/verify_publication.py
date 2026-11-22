@@ -155,10 +155,13 @@ for d in docs:
     page = Page(html)
     pages[name] = page
     assert 'https://cs329z.stanford.edu/' in page.links, name
-    if d['num'] and int(d['num']) <= 9:
+    if d['num'] and int(d['num']) <= 10:
+        lecture = int(d['num'])
         source_links = Page(d['html']).links
-        assert any(link.startswith('https://youtu.be/') for link in source_links), name
-        assert f'https://www.bilibili.com/video/BV1ARxc61Er2/?p={int(d["num"])}' in source_links, name
+        if lecture <= 9:
+            assert any(link.startswith('https://youtu.be/') for link in source_links), name
+        video_link = f'https://www.bilibili.com/video/BV1JgyWzfEhg/?p={lecture}'
+        assert video_link in source_links and video_link in page.links, name
     assert page.article_text, f'empty server-rendered content: {name}'
     assert Page(d['html']).ids <= page.ids, f'missing headings: {name}'
     assert d['html'] in (OUT / 'offline.html').read_text() or d['id'] != 'overview'

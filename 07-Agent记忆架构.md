@@ -6,7 +6,7 @@
 
 本讲将沿着“分类 $\to$ 设计 $\to$ 架构 $\to$ 评测 $\to$ 风险”的脉络展开：我们先从 CoALA 认知架构的记忆分类出发，剖析记忆系统的三大设计维度（存什么、何时存、怎么存）与四种主流架构模式（经验技能复用、分层存储管理、反思整合、后台维护与冲突消解），最后结合 LoCoMo、PersonaMem、LongMemEval-v2 与 MemoryArena 四大基准探讨记忆评测与安全挑战。
 
-**本讲视频**　[斯坦福课程视频](https://youtu.be/qh5tP6PBZ6U) · [哔哩哔哩第 7 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=7)
+**本讲视频**　[斯坦福课程视频](https://youtu.be/qh5tP6PBZ6U) · [哔哩哔哩第 7 讲 · 中英字幕](https://www.bilibili.com/video/BV1JgyWzfEhg/?p=7)
 
 ## 学习目标
 

@@ -13,7 +13,7 @@
 
 本讲将沿着“从轻到重”的优化谱系层层展开：先从少样本示范自举（STaR、DSPy Bootstrap）以及反思式、贝叶斯提示演化（OPRO、MIPROv2、TextGrad、GEPA）讲起；再深入到基于 Agent 轨迹的模型权重训练（SFT、PPO、GRPO 与在线策略蒸馏 On-Policy Distillation）；接着探讨能够自我演化代码的智能体（Darwin Gödel Machine、Meta-Harness、Autoresearch）；最后给出一套清晰的工程决策准则，帮你判断“何时优化提示词、何时优化模型权重”。
 
-**本讲视频**　[斯坦福课程视频](https://youtu.be/e_m99aR7_3Q) · [哔哩哔哩第 9 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=9)
+**本讲视频**　[斯坦福课程视频](https://youtu.be/e_m99aR7_3Q) · [哔哩哔哩第 9 讲 · 中英字幕](https://www.bilibili.com/video/BV1JgyWzfEhg/?p=9)
 
 ## 学习目标
 

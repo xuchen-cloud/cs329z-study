@@ -99,7 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
-            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传<a href="https://www.bilibili.com/video/BV1JgyWzfEhg/">第 1–10 讲中英字幕视频</a>。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -127,7 +127,7 @@
         <article id="article"><h1 id="第-04-讲工具使用与函数调用">第 04 讲｜工具使用与函数调用</h1>
 <p>上一讲我们用 RAG 给大语言模型配上了“开卷查资料”的眼睛。但如果用户问的是：“<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>17</mn><mo separator="true">,</mo><mn>423</mn><mo>×</mo><mn>892</mn></mrow></semantics></math></span></span> 等于多少？”或者“帮我查一下斯坦福此刻的气温，再把今天下午 3 点的会议推迟半小时”，光靠翻静态文档就彻底束手无策了。</p>
 <p>归根结底，大语言模型是靠统计规律逐词续写的序列预测器：一遇到多位数乘法、长链符号推理或动态规划，问题规模稍大准确率就会断崖式跌落；它看不到此时此刻的实时股价或传感器读数；更不可能只靠吐出一段文字就去改动真实数据库或日历。<strong>工具使用与函数调用（Tool Use &amp; Function Calling）</strong> 正是给大脑装上“双手”的桥梁。本讲先收尾 RAG 在长上下文和引用上的局限，再讲清模型怎样学会使用成千上万个工具（Toolformer、ToolkenGPT、ToolLLM、Gorilla），拆解从 REST API、Function Calling 到模型上下文协议（MCP）的三代接口演进与鉴权边界，最后落到 BFCL、ToolBench、<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi></mrow></semantics></math></span></span>-bench 与 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>pass</mtext><mi mathvariant="normal">@</mi><mi>k</mi><mi mathvariant="normal">/</mi><msup><mtext>pass</mtext><mi>k</mi></msup></mrow></semantics></math></span></span> 评测及故障排查。</p>
-<p><strong>本讲视频</strong>　<a href="https://youtu.be/s0S38lz6O7M" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=4" target="_blank" rel="noopener noreferrer">哔哩哔哩第 4 讲 · UP 主「不做挖掘姬」整理上传</a></p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/s0S38lz6O7M" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1JgyWzfEhg/?p=4" target="_blank" rel="noopener noreferrer">哔哩哔哩第 4 讲 · 中英字幕</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li><strong>认清 RAG 边界与工具动因</strong>：理解长上下文 RAG 的召回饱和、中间迷失效应与引用精确率/召回率，明确引入外部工具弥补的三大固有短板。</li><li><strong>掌握四代工具学习范式</strong>：看懂 Toolformer 的自监督损失过滤、ToolkenGPT 的专用工具词元嵌入、ToolLLM 的大规模 API 检索微调，以及 Gorilla 的检索感知训练（RAT）与 AST 幻觉评测。</li><li><strong>吃透三代接口与 MCP 安全边界</strong>：理清 REST API、JSON Schema Function Calling 到 MCP 协议的演进，掌握 <code>tools/list</code> 能力发现、<code>tools/call</code> 执行以及入站/出站双向鉴权隔离。</li><li><strong>会测也会修工具 Agent</strong>：掌握 BFCL、ToolBench、<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi></mrow></semantics></math></span></span>-bench 与 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>pass</mtext><mi mathvariant="normal">@</mi><mi>k</mi><mi mathvariant="normal">/</mi><msup><mtext>pass</mtext><mi>k</mi></msup></mrow></semantics></math></span></span> 的适用场景，能系统排查单步、多步链路和对话策略三层故障。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>

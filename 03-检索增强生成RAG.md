@@ -4,7 +4,7 @@
 
 大语言模型写在权重参数里的记忆是静态且不透明的：它既不知道训练截止日期之后的新动态，也读不到企业的私有文档，更没法为随口说出的数字附上原始出处。**检索增强生成（Retrieval-Augmented Generation, RAG）** 做的事情很直白——把推理时的“闭卷死记硬背”变成“开卷按需查阅”。本讲带你沿整条端到端 RAG 流水线走一遍：从潜变量概率建模、文档切块与上下文增强索引，到稀疏检索（BM25）、稠密检索（DPR）、混合排序（RRF）、晚期交互重排（ColBERT），最后走到让模型自己决定何时查、怎么查的 Agentic RAG 与三层故障排查。
 
-**本讲视频**　[斯坦福课程视频](https://youtu.be/psLc-46GqY0) · [哔哩哔哩第 3 讲 · UP 主「不做挖掘姬」整理上传](https://www.bilibili.com/video/BV1ARxc61Er2/?p=3)
+**本讲视频**　[斯坦福课程视频](https://youtu.be/psLc-46GqY0) · [哔哩哔哩第 3 讲 · 中英字幕](https://www.bilibili.com/video/BV1JgyWzfEhg/?p=3)
 
 ## 学习目标
 

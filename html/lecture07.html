@@ -99,7 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
-            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传<a href="https://www.bilibili.com/video/BV1JgyWzfEhg/">第 1–10 讲中英字幕视频</a>。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -128,7 +128,7 @@
 <p>试想你雇了一位人类助理，但他每天早上走进办公室时都会彻底失去前一天之前的所有记忆：你必须每天重新教他一遍公司报销系统的操作流程（丢失程序性技能），每天重新告诉他一遍你的座位偏好和团队成员名单（丢失语义事实）；每当一个复杂项目进行到一半中断时，第二天他完全不记得昨天已经查到了哪一步（丢失任务进度与状态）。</p>
 <p>这正是没有记忆架构的裸语言模型在跨会话（Multi-session，多次打开新对话窗口）和长周期（Long-running，持续数小时乃至数天）任务下面临的真实困境。第 06 讲讨论的上下文管理解决的是“单次会话内部如何聚焦窗口”，而本讲聚焦的 <strong>Agent 记忆架构（Agent Memory Architectures）</strong> 则要进一步解决<strong>如何让 Agent 跨越会话边界实现个性化、从过往经验中持续学习，并保持长期状态连续性</strong>。</p>
 <p>本讲将沿着“分类 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 设计 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 架构 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 评测 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 风险”的脉络展开：我们先从 CoALA 认知架构的记忆分类出发，剖析记忆系统的三大设计维度（存什么、何时存、怎么存）与四种主流架构模式（经验技能复用、分层存储管理、反思整合、后台维护与冲突消解），最后结合 LoCoMo、PersonaMem、LongMemEval-v2 与 MemoryArena 四大基准探讨记忆评测与安全挑战。</p>
-<p><strong>本讲视频</strong>　<a href="https://youtu.be/qh5tP6PBZ6U" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=7" target="_blank" rel="noopener noreferrer">哔哩哔哩第 7 讲 · UP 主「不做挖掘姬」整理上传</a></p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/qh5tP6PBZ6U" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1JgyWzfEhg/?p=7" target="_blank" rel="noopener noreferrer">哔哩哔哩第 7 讲 · 中英字幕</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li>理解无记忆 Agent 的三大痛点（流程丢失、知识丢失、进度丢失）与记忆带来的三大收益（个性化、经验学习、跨会话状态保持），掌握 CoALA 框架下工作记忆、情景记忆、语义记忆、程序性记忆及参数记忆的划分。</li><li>掌握记忆系统设计的“What、When、How”三维决策框架，能够对比文件系统、数据库（Vector / SQLite / BM25）与知识图谱（如 Zep）三类底层存储介质的适用场景。</li><li>深入掌握四种经典记忆架构模式：从经验中学习技能（Voyager、AWM、Skill Files）、分层记忆层次结构（MemGPT、MemoryOS）、反思性记忆整合（Reflexion、Generative Agents）以及记忆维护与更新（Sleep-time Compute、A-Mem、Mem0）。</li><li>掌握评测 Agent 记忆的四项黄金标准（真实性、长上下文、挑战性、可验证性），理解四大代表性记忆基准的设计演进，并能识别遗忘两难、记忆投毒（Memory Poisoning）、隐私泄露与过度个性化风险。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>

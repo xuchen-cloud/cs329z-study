@@ -6,6 +6,8 @@
 
 本讲由 Terminal-Bench 与 Harbor 框架的联合创建者 Ryan Marten 和 Alex Shaw（Laude Institute）主讲。他们将带你从零梳理一套扎实的评测工程体系：为什么命令行终端（Terminal / Bash）是检验通用 Agent 最理想的试金石？如何借助 **Terminal-Bench** 与 **Harbor** 设计防作弊的真实评测任务？如何搭建隔离的验证基础设施、执行多层级任务质量审查（Task QA），并用 CI/CD 与语义化版本控制维护一个长期演进的基准测试？
 
+**本讲视频**　[哔哩哔哩第 10 讲 · 中英字幕](https://www.bilibili.com/video/BV1JgyWzfEhg/?p=10)
+
 ## 学习目标
 
 - 从演绎式编程（Deductive）向归纳式开发（Inductive）的范式转移出发，理解“规格即评测（Specification $\to$ Evaluation）”的核心思想。

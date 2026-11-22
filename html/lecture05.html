@@ -99,7 +99,7 @@
               <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
             <p id="resume-caption" class="resume-caption" hidden></p>
-            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢 <a href="https://www.bilibili.com/video/BV1ARxc61Er2/">不做挖掘姬</a> 整理上传第 1–9 讲视频。</p>
+            <p class="home-credits">感谢 <a href="https://github.com/wanghao-SunSky/cs329z-chinese">wanghao-SunSky</a> 整理中文教程，感谢哔哩哔哩 UP 主「AI中英文字幕课程」整理上传<a href="https://www.bilibili.com/video/BV1JgyWzfEhg/">第 1–10 讲中英字幕视频</a>。</p>
           </div>
           <figure class="home-figure">
             <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
@@ -127,7 +127,7 @@
         <article id="article"><h1 id="第-05-讲框架与持久编排">第 05 讲｜框架与持久编排</h1>
 <p>早期做深度学习，研究者得用 NumPy 一行行手推反向传播梯度；直到 PyTorch 和 JAX 把自动微分、张量运算与硬件调度抽象成简洁原语，搭复杂网络才变得既高效又不容易写错。</p>
 <p>AI Agent 的工程化正在走完全一样的路。前四讲和 HW1 带你用原生 Python 亲手写检索器、工具协议和 <code>while</code> 循环，目的是把底层每一颗螺丝摸清；可一旦进了真实生产环境，反复手写提示模板、JSON 校验重试、分支状态流、崩溃恢复和全链路日志既累人又极易出 Bug。本讲围绕“从邮件提取日程并写入日历”这同一个实战任务，横向拆解四类核心工程基础设施：<strong>DSPy</strong>（声明式签名、组合与自动优化）、<strong>LangGraph</strong>（基于共享状态的显式有向图）、主流开源 <strong>Agent Harnesses</strong>（mini-SWE-agent、OpenHands、Pi、OpenClaw）的设计取舍，以及 <strong>Temporal</strong>（跨进程崩溃也能续跑的持久执行引擎）和生产级可观测性体系。</p>
-<p><strong>本讲视频</strong>　<a href="https://youtu.be/q0Q-Hy8TTps" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1ARxc61Er2/?p=5" target="_blank" rel="noopener noreferrer">哔哩哔哩第 5 讲 · UP 主「不做挖掘姬」整理上传</a></p>
+<p><strong>本讲视频</strong>　<a href="https://youtu.be/q0Q-Hy8TTps" target="_blank" rel="noopener noreferrer">斯坦福课程视频</a> · <a href="https://www.bilibili.com/video/BV1JgyWzfEhg/?p=5" target="_blank" rel="noopener noreferrer">哔哩哔哩第 5 讲 · 中英字幕</a></p>
 <h2 id="学习目标">学习目标</h2>
 <ul><li><strong>认清框架抽象的价值与控制权光谱</strong>：围绕“数据、系统、评测”三大支柱，分清单次调用、预设工作流和自主 Agent 各自适合什么任务。</li><li><strong>掌握 DSPy 三大原语</strong>：理解 <strong>Signatures（声明要什么）</strong>、<strong>Modules（定义怎么算）</strong> 和 <strong>Optimizers（拿数据与指标自动优化）</strong> 如何取代手工硬改提示词。</li><li><strong>掌握 LangGraph 显式状态流</strong>：看懂 <strong>State（共享状态）</strong>、<strong>Nodes（节点函数）</strong> 与 <strong>Edges / Conditional Edges（固定边与条件路由边）</strong> 如何清晰编排复杂分支与澄清回路。</li><li><strong>看懂开源 Agent 底座的设计权衡</strong>：横向对比 mini-SWE-agent、OpenHands、Pi、OpenClaw 的工具、历史与持久化取舍，理解 HarnessTax 与 Meta-Harness。</li><li><strong>掌握 Temporal 持久执行与幂等边界</strong>：分清 Workflow 与 Activity 的职责，吃透确定性重放（Replay）、活动重试、耐久计时器以及外部写入的幂等键防护。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>
