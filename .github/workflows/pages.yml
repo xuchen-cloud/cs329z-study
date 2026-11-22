@@ -21,7 +21,7 @@ jobs:
         run: |
           node tools/build_site.mjs
           python3 tools/verify_publication.py
-      - uses: actions/upload-pages-artifact@v4
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: html
 
@@ -36,4 +36,4 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
