@@ -81,7 +81,7 @@ for d in docs:
         continue
     bank = d['quizzes']
     core = {h['id'] for h in d['headings'] if h['depth'] == 3}
-    expected = core | {'study-case', 'study-intro', '学习目标', '原课程阅读清单与导读', '动手练习'}
+    expected = core | {'study-intro', '学习目标', '原课程阅读清单与导读', '动手练习'}
     assert set(bank) == expected, f'quiz section coverage: {d["id"]}'
     prompts = set()
     for anchor, questions in bank.items():

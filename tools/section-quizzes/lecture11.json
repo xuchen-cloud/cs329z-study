@@ -1,23 +1,4 @@
 {
-  "study-case": [
-    {
-      "prompt": "老师示范了一条正确路线，属于哪类数据？",
-      "options": [
-        "Demonstration",
-        "用户反馈"
-      ],
-      "correct": 0,
-      "explanation": "示范描述希望系统学会的行为。"
-    },
-    {
-      "prompt": "仅有“不满意”能定位是日期还是地点错了吗？",
-      "answer": "不能确定。需结合实际轨迹、任务约束与更具体的反馈定位。"
-    },
-    {
-      "prompt": "从一次失败查询中，各写一项 trace 和 feedback。",
-      "answer": "trace 可记录实际查询了旧公告，feedback 可说明应使用本学期有效的公告。"
-    }
-  ],
   "study-intro": [
     {
       "prompt": "为什么只收集成功答案会限制诊断？",
