@@ -1,4 +1,6 @@
-# 发布进度
+# 原中文项目的发布记录
+
+以下为 wanghao-SunSky 原项目的历史记录。本版发布信息见[阅读说明与版本来源](editorial-notes.md)。
 
 ## 2026-10-29 — 发布内容整理
 
@@ -34,7 +36,7 @@ flowchart TD
 
 ## 2026-10-29 — 验证与发布完成
 
-已做：完整 Markdown、HTML 和简洁 README 已发布到公开仓库 https://github.com/wanghao-SunSky/cs329z-chinese ，默认分支为 main。About 包含课程中英文名称、内容介绍及在线入口；设置了 15 个与内容相符的 Topics。在线教程已更新至 https://cs329z-course-review-20261029.wanghao162263.chatgpt.site 。
+已做：完整 Markdown、HTML 和简洁 README 已发布到原公开仓库 `wanghao-SunSky/cs329z-chinese`，默认分支为 main。About 包含课程中英文名称、内容介绍及在线入口；设置了 15 个与内容相符的 Topics。在线教程已更新至 https://cs329z-course-review-20261029.wanghao162263.chatgpt.site 。
 
 为什么：分别做好仓库和网页的检索入口，让找课程的人能发现仓库，也能直接阅读各讲。公开访问检查发现托管平台会去掉章节地址末尾的 .html，因此已让页面标准地址和网站地图采用最终网址，本地 HTML 仍可直接打开。
 

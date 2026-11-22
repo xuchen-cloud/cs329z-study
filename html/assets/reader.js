@@ -8,30 +8,124 @@ const escapeHTML = (s) =>
 const route = (id, anchor) => staticMode
   ? './' + (id === 'overview' ? 'index' : id) + '.html' + (anchor ? '#' + encodeURIComponent(anchor) : '')
   : '#/' + id + (anchor ? '/' + encodeURIComponent(anchor) : '');
-const pageLinks = (html) => staticMode ? html.replaceAll('href="../html/index.html"', 'href="./index.html"').replaceAll('href="../html/"', 'href="https://github.com/wanghao-SunSky/cs329z-chinese/tree/main/html"').replaceAll('href="../exercises/"', 'href="./lab20.html"').replace(/href="#\/([^/"]+)(?:\/([^"]*))?"/g, (_, id, anchor) => `href="${route(id, anchor ? decodeURIComponent(anchor) : '')}"`) : html;
+const pageLinks = (html) => staticMode ? html.replace(/href="#\/([^/"]+)(?:\/([^"]*))?"/g, (_, id, anchor) => `href="${route(id, anchor ? decodeURIComponent(anchor) : '')}"`) : html;
+
+const sources = staticMode ? null : JSON.parse($('course-sources').textContent);
+const book = {
+  id: 'book', label: '全书连读', unit: 'CS329Z',
+  headings: docs.map(d => ({ id: d.id, label: d.title, depth: 2 })),
+};
+const bookAnchor = (id, anchor) => anchor ? id + '--' + anchor : id;
+
+function mountBook(article) {
+  article.dataset.mode = 'full';
+  const chapters = document.createDocumentFragment();
+  for (const d of docs) {
+    const chapter = document.createElement('section');
+    chapter.className = 'book-chapter';
+    chapter.innerHTML = d.html;
+    if (d.id !== 'overview') {
+      for (const step of collectStudySteps(d, chapter)) chapter.append(step.el);
+      chapter.querySelectorAll('.subtopic').forEach(detail => { detail.open = true; });
+    }
+    for (const el of chapter.querySelectorAll('[id]')) el.id = bookAnchor(d.id, el.id);
+    for (const label of chapter.querySelectorAll('label[for]')) label.htmlFor = bookAnchor(d.id, label.htmlFor);
+    for (const link of chapter.querySelectorAll('a[href^="#/"]')) {
+      const [id, heading] = link.hash.slice(2).split('/');
+      link.href = route('book', bookAnchor(id, heading && decodeURIComponent(heading)));
+    }
+    chapter.id = d.id;
+    const returnLink = document.createElement('a');
+    returnLink.className = 'book-study-link';
+    returnLink.href = route(d.id);
+    returnLink.textContent = d.study ? '单独学习这一篇 →' : '单独阅读这一篇 →';
+    chapter.querySelector('h1').after(returnLink);
+    chapters.append(chapter);
+  }
+  article.replaceChildren(chapters);
+}
 
 let activeId;
 let observer;
+let study;
 
-// Render sidebar navigation
-$('course-nav').innerHTML = groups
-  .map(
-    (g) =>
-      `<div class="nav-group"><p class="nav-label">${escapeHTML(g.label)}</p>${g.ids
-        .map((id) => {
-          const d = byId.get(id);
-          return `<a class="nav-item" data-doc="${id}" href="${route(id)}">${
-            d.num ? `<span class="num">${d.num}</span>` : ''
-          }<span>${escapeHTML(d.label)}</span></a>`;
-        })
-        .join('')}</div>`
-  )
-  .join('');
-
-function closeMenu() {
-  document.body.classList.remove('nav-open');
-  $('menu').setAttribute('aria-expanded', 'false');
+// The same pre-rendered course directory serves static pages and the offline book.
+const navGroups = [...$('course-nav').querySelectorAll('.nav-group')];
+const groupKey = group => 'nav.group.' + group.dataset.group;
+function groupPreference(group) {
+  const saved = studyStorage.read(groupKey(group));
+  return saved == null ? group.classList.contains('contains-current') : saved === 'open';
 }
+function updateGroupButton() {
+  const allOpen = navGroups.every(group => group.open);
+  $('toggle-groups').setAttribute('aria-expanded', String(allOpen));
+  $('toggle-groups').textContent = allOpen ? '全部收起' : '全部展开';
+}
+for (const group of navGroups) {
+  // Save the user's choice before the native toggle event, which can run after navigation.
+  group.querySelector('summary').addEventListener('click', () => {
+    studyStorage.write(groupKey(group), group.open ? 'closed' : 'open');
+  });
+  group.addEventListener('toggle', updateGroupButton);
+}
+$('toggle-groups').hidden = false;
+$('toggle-groups').onclick = () => {
+  const open = !navGroups.every(group => group.open);
+  for (const group of navGroups) {
+    studyStorage.write(groupKey(group), open ? 'open' : 'closed');
+    group.open = open;
+  }
+  updateGroupButton();
+};
+function syncCourseNav(id, inBook) {
+  for (const group of navGroups) {
+    for (const link of group.querySelectorAll('[data-doc]')) {
+      const target = link.dataset.doc;
+      link.href = inBook ? route('book', target) : route(target);
+      if (target === id) link.setAttribute('aria-current', inBook ? 'location' : 'page');
+      else link.removeAttribute('aria-current');
+    }
+    group.classList.toggle('contains-current', Boolean(group.querySelector('[aria-current]')));
+    group.open = groupPreference(group);
+  }
+  updateGroupButton();
+}
+
+const narrowMenu = matchMedia('(max-width: 760px)');
+let desktopMenuOpen = studyStorage.read('nav.sidebar') !== 'closed';
+let mobileMenuOpen = false;
+function layoutMenu() {
+  const drawer = narrowMenu.matches && mobileMenuOpen;
+  const open = narrowMenu.matches ? mobileMenuOpen : desktopMenuOpen;
+  document.body.classList.toggle('nav-open', drawer);
+  document.body.classList.toggle('nav-collapsed', !narrowMenu.matches && !open);
+  document.querySelector('.workspace').inert = drawer;
+  $('sidebar').hidden = !open;
+  $('menu').hidden = open;
+  $('menu').setAttribute('aria-expanded', String(open));
+  $('menu-close').hidden = !open;
+  $('menu-close').setAttribute('aria-expanded', String(open));
+}
+function setMenu(open, focusTarget) {
+  if (narrowMenu.matches) mobileMenuOpen = open;
+  else {
+    desktopMenuOpen = open;
+    studyStorage.write('nav.sidebar', open ? 'open' : 'closed');
+  }
+  layoutMenu();
+  (focusTarget || $(open ? 'menu-close' : 'menu')).focus({ preventScroll: true });
+}
+$('menu').onclick = () => setMenu(true);
+$('menu-close').onclick = () => setMenu(false);
+$('shade').onclick = () => setMenu(false);
+narrowMenu.addEventListener('change', () => {
+  mobileMenuOpen = false;
+  const focusWasInSidebar = $('sidebar').contains(document.activeElement);
+  layoutMenu();
+  if ($('sidebar').hidden && focusWasInSidebar) $('menu').focus();
+});
+document.body.classList.add('reader-ready');
+layoutMenu();
 
 function bindCopyButtons() {
   $('article')
@@ -53,15 +147,15 @@ function bindCopyButtons() {
 
 function render() {
   if (location.hash === '#main') {
-    $('main').focus();
-    return;
+    if (activeId) { $('main').focus(); return; }
   }
   const parts = location.hash.replace(/^#\/?/, '').split('/');
   if (staticMode && location.hash.startsWith('#/') && byId.has(parts[0])) {
     location.replace(route(parts[0], decodeURIComponent(parts.slice(1).join('/'))));
     return;
   }
-  const d = byId.get(staticMode ? document.body.dataset.initialDoc : parts[0]) || docs[0];
+  const inBook = !staticMode && parts[0] === 'book';
+  const d = inBook ? book : byId.get(staticMode ? document.body.dataset.initialDoc : parts[0]) || docs[0];
   let anchor = '';
   try {
     anchor = decodeURIComponent(staticMode ? location.hash.slice(1) : parts.slice(1).join('/'));
@@ -71,15 +165,23 @@ function render() {
   if (changed) {
     activeId = d.id;
     document.body.dataset.doc = d.id;
-    $('marginroom-referral').hidden = !['lecture01', 'lecture04', 'lecture07'].includes(d.id);
-    $('marginroom-referral-link').href = 'https://marginroom.app/?utm_source=cs329z&utm_medium=tutorial&utm_campaign=marginroom_v1&utm_content=' + encodeURIComponent(d.id + '_end');
-    $('article').innerHTML = pageLinks(d.html);
+    const article = $('article');
+    delete document.body.dataset.reading;
+    delete article.dataset.mode;
+    if (inBook) {
+      study = null;
+      mountBook(article);
+    } else {
+      article.innerHTML = pageLinks(d.html);
+      study = mountStudyReader(d, article, docs[docs.indexOf(d) + 1], route);
+      if (d.id === 'overview') setupStudyHome(byId, route);
+    }
     bindCopyButtons();
 
     $('home-intro').hidden = d.id !== 'overview';
     $('breadcrumb').textContent = d.num ? `${d.unit}  /  第 ${d.num} 讲 · ${d.label}` : `${d.unit}  /  ${d.label}`;
     $('chapter-meta').innerHTML =
-      d.id === 'overview'
+      d.id === 'overview' || inBook
         ? ''
         : `<span class="badge">${escapeHTML(d.badge)}</span><span class="unit-name">${escapeHTML(
             d.unit
@@ -87,17 +189,7 @@ function render() {
 
     if (!staticMode) document.title = `${d.label} · CS329Z AI Agent 系统工程`;
 
-    document.querySelectorAll('.nav-item').forEach((a) => {
-      const current = a.dataset.doc === d.id;
-      a.classList.toggle('active', current);
-      if (current) {
-        a.setAttribute('aria-current', 'page');
-        a.scrollIntoView({ block: 'nearest' });
-      } else {
-        a.removeAttribute('aria-current');
-      }
-    });
-
+    document.querySelector('.toc-label').textContent = inBook ? '全书目录' : '本讲目录';
     $('toc-links').innerHTML = d.headings
       .filter((h) => h.depth === 2 || h.depth === 3)
       .map(
@@ -108,7 +200,13 @@ function render() {
       )
       .join('');
 
-    $('source-link').href = staticMode ? 'https://github.com/wanghao-SunSky/cs329z-chinese/blob/main/' + d.file : '../' + d.file;
+    const sourceLink = $('source-link');
+    sourceLink.hidden = inBook;
+    if (!staticMode && !inBook) {
+      sourceLink.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(sources[d.id]);
+      sourceLink.download = d.file.split('/').pop();
+    }
+    $('chapter-footer').hidden = inBook;
 
     const index = docs.indexOf(d);
     const prev = docs[index - 1];
@@ -139,15 +237,21 @@ function render() {
       { rootMargin: '-80px 0px -65% 0px' }
     );
     $('article')
-      .querySelectorAll('h2, h3')
+      .querySelectorAll(inBook ? '.book-chapter' : 'h2, h3')
       .forEach((h) => observer.observe(h));
   }
 
-  closeMenu();
+  const chapter = inBook ? anchor.split('--')[0] || 'overview' : d.id;
+  syncCourseNav(chapter, inBook);
+  if (mobileMenuOpen) setMenu(false, $('main'));
+  study?.reveal(anchor);
   requestAnimationFrame(() => {
-    const target = anchor && document.getElementById(anchor);
-    if (target) target.scrollIntoView();
-    else window.scrollTo(0, 0);
+    if (study && (anchor || study.resumed)) study.reveal(anchor, true);
+    else {
+      const target = anchor && document.getElementById(anchor);
+      if (target) target.scrollIntoView();
+      else window.scrollTo({ top: 0, behavior: 'instant' });
+    }
     updateProgress();
   });
 }
@@ -158,16 +262,22 @@ function updateProgress() {
 }
 
 window.addEventListener('hashchange', render);
-window.addEventListener('scroll', updateProgress, { passive: true });
-
-$('menu').onclick = () => {
-  const open = document.body.classList.toggle('nav-open');
-  $('menu').setAttribute('aria-expanded', String(open));
-};
-$('shade').onclick = closeMenu;
+window.addEventListener('pageshow', () => { if (activeId === 'overview') setupStudyHome(byId, route); });
+window.addEventListener('beforeprint', () => study?.beforePrint());
+window.addEventListener('afterprint', () => study?.afterPrint());
+let scrollFrame;
+window.addEventListener('scroll', () => {
+  if (scrollFrame) return;
+  scrollFrame = requestAnimationFrame(() => {
+    scrollFrame = 0;
+    updateProgress();
+    study?.trackScroll?.();
+  });
+}, { passive: true });
 
 // Theme toggle (Light / Dark)
-const savedTheme = localStorage.getItem('cs329z_theme');
+let savedTheme;
+try { savedTheme = localStorage.getItem('cs329z_theme'); } catch {}
 if (savedTheme === 'dark') {
   document.body.dataset.theme = 'dark';
   $('theme-toggle').textContent = '浅色模式';
@@ -182,11 +292,16 @@ $('theme-toggle').onclick = () => {
 };
 
 // Font size toggle
+function setLargeType(large) {
+  document.body.dataset.large = String(large);
+  $('font-size').textContent = large ? '字号 A−' : '字号 A+';
+  $('font-size').setAttribute('aria-pressed', String(large));
+}
+setLargeType(studyStorage.read('large-type') === 'true');
 $('font-size').onclick = () => {
   const large = document.body.dataset.large !== 'true';
-  document.body.dataset.large = String(large);
-  document.documentElement.style.setProperty('--body-size', large ? '18.5px' : '16.5px');
-  $('font-size').textContent = large ? '字号 A−' : '字号 A+';
+  setLargeType(large);
+  studyStorage.write('large-type', String(large));
 };
 
 $('print').onclick = () => window.print();
@@ -196,6 +311,7 @@ const dialog = $('search-dialog');
 const input = $('search-input');
 
 function openSearch() {
+  if (input.value) input.dispatchEvent(new Event('input'));
   if (!dialog.open) dialog.showModal();
   input.focus();
   input.select();
@@ -209,7 +325,7 @@ document.addEventListener('keydown', (e) => {
     e.preventDefault();
     openSearch();
   }
-  if (e.key === 'Escape') closeMenu();
+  if (e.key === 'Escape' && mobileMenuOpen && !dialog.open) setMenu(false);
 });
 
 dialog.addEventListener('click', (e) => {
@@ -234,6 +350,11 @@ const searchIndex = docs.flatMap((d) => {
       section.text += ' ' + element.textContent;
     }
   }
+  for (const entry of sections) {
+    const cue = d.questions?.[entry.id];
+    if (cue) entry.text += ' ' + (typeof cue === 'string' ? cue : cue.question + ' ' + cue.bridge);
+  }
+  if (d.study) sections.push({ doc: d, id: 'study-case', title: d.study.question, text: d.study.scene + ' ' + d.study.recall });
   return sections;
 });
 
@@ -257,7 +378,7 @@ input.addEventListener('input', () => {
         const safe = escapeHTML(text);
         const escapedQ = escapeHTML(q).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const snippet = safe.replace(new RegExp(escapedQ, 'gi'), (m) => '<mark>' + m + '</mark>');
-        return `<a class="search-result" href="${route(s.doc.id, s.id)}"><strong>${escapeHTML(
+        return `<a class="search-result" href="${activeId === book.id ? route(book.id, bookAnchor(s.doc.id, s.id)) : route(s.doc.id, s.id)}"><strong>${escapeHTML(
           s.title
         )}</strong><span>${escapeHTML(s.doc.label)} · ${start ? '…' : ''}${snippet}</span></a>`;
       })
@@ -273,7 +394,14 @@ $('search-results').addEventListener('click', (e) => {
 
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a');
-  if (a?.getAttribute('href') === location.hash && location.hash.startsWith('#/')) {
+  if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button) return;
+  if (a.getAttribute('href') === '#main') {
+    e.preventDefault();
+    $('main').focus();
+    $('main').scrollIntoView();
+    return;
+  }
+  if (a.hash && a.href === location.href) {
     e.preventDefault();
     render();
   }

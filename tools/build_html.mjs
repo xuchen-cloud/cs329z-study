@@ -1,9 +1,12 @@
 /**
  * Build the standalone publication-grade HTML course documentation from Markdown files.
- * Zero external runtime or npm dependencies required (uses built-in GFM + LaTeX math parser).
+ * Math is typeset at build time using the bundled KaTeX distribution.
  * Run: node tools/build_html.mjs
  */
 import fs from 'node:fs';
+import { renderCourseNavigation } from './course-navigation.mjs';
+import katex from './vendor/katex/katex-0.19.1.min.cjs';
+import { studyCases } from './study-cases.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -66,107 +69,15 @@ const slug = (s) =>
     .replace(/[^\p{L}\p{N}\p{M}\-_ ]/gu, '')
     .replaceAll(' ', '-');
 
-/**
- * Lightweight, dependency-free LaTeX math to semantic HTML converter for offline textbook rendering.
- */
-function renderLatexToHtml(tex) {
-  let s = esc(tex.trim());
-
-  s = s.replace(/\\\{/g, '&#123;').replace(/\\\}/g, '&#125;');
-  s = s.replace(/\\(?:left|right|big|Big|bigg|Bigg)\b/g, '');
-  s = s.replace(/\\,/g, '&thinsp;').replace(/\\;/g, '&ensp;').replace(/\\quad/g, '&emsp;');
-
-  for (let pass = 0; pass < 4; pass++) {
-    s = s.replace(/\\text\{([^{}]*)\}/g, '<span class="m-text">$1</span>');
-    s = s.replace(/\\(?:mathbf|boldsymbol)\{([^{}]*)\}/g, '<strong>$1</strong>');
-    s = s.replace(/\\mathcal\{([^{}]*)\}/g, '<span class="m-cal">$1</span>');
-    s = s.replace(/\\mathbb\{1\}/g, '&#120793;');
-    s = s.replace(/\\mathbb\{E\}/g, '&#120124;');
-    s = s.replace(/\\mathbb\{D\}/g, '&#120123;');
-    s = s.replace(/\\mathbb\{R\}/g, '&#8477;');
-    s = s.replace(/\\hat\{([^{}]*)\}/g, '$1&#770;');
-    s = s.replace(/\\sqrt\{([^{}]*)\}/g, '&radic;<span class="m-sqrt">$1</span>');
+// Keep only the presentation tree. Chapter titles and search snippets use textContent,
+// which otherwise includes the hidden TeX annotation a second time.
+function renderMath(tex, displayMode, file) {
+  try {
+    const result = katex.renderToString(tex.trim(), { output: 'mathml', displayMode, throwOnError: true });
+    return result.replace(/<annotation encoding="application\/x-tex">[\s\S]*?<\/annotation>/g, '');
+  } catch (error) {
+    throw new Error(`Invalid formula in ${file}: ${tex}`, { cause: error });
   }
-
-  for (let pass = 0; pass < 4; pass++) {
-    s = s.replace(
-      /\\binom\{([^{}]*)\}\{([^{}]*)\}/g,
-      '<span class="m-binom">(<span class="m-frac"><span class="m-num">$1</span><span class="m-den">$2</span></span>)</span>'
-    );
-    s = s.replace(
-      /\\frac\{([^{}]*)\}\{([^{}]*)\}/g,
-      '<span class="m-frac"><span class="m-num">$1</span><span class="m-den">$2</span></span>'
-    );
-  }
-
-  const symbols = {
-    '\\alpha': '&alpha;',
-    '\\beta': '&beta;',
-    '\\gamma': '&gamma;',
-    '\\delta': '&delta;',
-    '\\epsilon': '&epsilon;',
-    '\\varepsilon': '&varepsilon;',
-    '\\eta': '&eta;',
-    '\\theta': '&theta;',
-    '\\kappa': '&kappa;',
-    '\\lambda': '&lambda;',
-    '\\mu': '&mu;',
-    '\\pi': '&pi;',
-    '\\rho': '&rho;',
-    '\\sigma': '&sigma;',
-    '\\tau': '&tau;',
-    '\\phi': '&phi;',
-    '\\psi': '&psi;',
-    '\\omega': '&omega;',
-    '\\Delta': '&Delta;',
-    '\\Sigma': '&Sigma;',
-    '\\sum': '<span class="m-op">&sum;</span>',
-    '\\prod': '<span class="m-op">&prod;</span>',
-    '\\top': '&#8868;',
-    '\\infty': '&infin;',
-    '\\approx': '&approx;',
-    '\\propto': '&prop;',
-    '\\neq': '&ne;',
-    '\\le': '&le;',
-    '\\leq': '&le;',
-    '\\ge': '&ge;',
-    '\\geq': '&ge;',
-    '\\to': '&rarr;',
-    '\\rightarrow': '&rarr;',
-    '\\leftarrow': '&larr;',
-    '\\leftrightarrow': '&harr;',
-    '\\in': '&isin;',
-    '\\notin': '&notin;',
-    '\\cap': '&cap;',
-    '\\cup': '&cup;',
-    '\\emptyset': '&empty;',
-    '\\cdot': '&middot;',
-    '\\times': '&times;',
-    '\\parallel': '&#8741;',
-    '\\dots': '&hellip;',
-    '\\ldots': '&hellip;',
-    '\\cdots': '&ctdot;',
-    '\\ln': '<span class="m-fn">ln</span>',
-    '\\log': '<span class="m-fn">log</span>',
-    '\\exp': '<span class="m-fn">exp</span>',
-    '\\max': '<span class="m-fn">max</span>',
-    '\\min': '<span class="m-fn">min</span>',
-    '\\%': '%',
-    '\\_': '_',
-  };
-
-  for (const [k, v] of Object.entries(symbols)) {
-    s = s.replaceAll(k, v);
-  }
-
-  for (let pass = 0; pass < 3; pass++) {
-    s = s.replace(/_\{([^{}]*)\}/g, '<sub>$1</sub>');
-    s = s.replace(/\^\{([^{}]*)\}/g, '<sup>$1</sup>');
-    s = s.replace(/_([a-zA-Z0-9+\-])/g, '<sub>$1</sub>');
-    s = s.replace(/\^([a-zA-Z0-9+\-])/g, '<sup>$1</sup>');
-  }
-
-  return s;
 }
 
 /**
@@ -183,6 +94,8 @@ function parseMarkdownDocument(rawMd, currentFile) {
       const target = path.posix.normalize(
         path.posix.join(path.posix.dirname(currentFile), decodeURIComponent(p || path.posix.basename(currentFile)))
       );
+      if (target === 'html/' || target === 'html/index.html') return '#/overview';
+      if (target === 'exercises/') return '#/lab25/' + encodeURIComponent('实战作业与项目指南');
       if (ids[target]) {
         url = '#/' + ids[target] + (fragment ? '/' + encodeURIComponent(decodeURIComponent(fragment)) : '');
       } else {
@@ -203,10 +116,9 @@ function parseMarkdownDocument(rawMd, currentFile) {
     let s = text.replace(/`([^`\n]+)`/g, (_, code) => saveSlot(`<code>${esc(code)}</code>`));
 
     // 2. Inline math $...$
-    s = s.replace(/\$([^\n$]+?)\$/g, (full, tex) => {
-      if (/^\d/.test(tex.trim()) && !/[\\_^=<>+\-]/.test(tex)) return full;
-      return saveSlot(`<span class="math-inline">${renderLatexToHtml(tex)}</span>`);
-    });
+    s = s.replace(/\$([^\n$]+?)\$/g, (_, tex) =>
+      saveSlot(`<span class="math-inline">${renderMath(tex, false, currentFile)}</span>`)
+    );
 
     // 3. Explicit <br> tags used inside table cells
     s = s.replace(/<br\s*\/?>/gi, () => saveSlot('<br>'));
@@ -292,7 +204,7 @@ function parseMarkdownDocument(rawMd, currentFile) {
         }
         tex = mathLines.join('\n');
       }
-      outHtml.push(`<div class="math-block">${renderLatexToHtml(tex)}</div>`);
+      outHtml.push(`<div class="math-block">${renderMath(tex, true, currentFile)}</div>`);
       continue;
     }
 
@@ -454,12 +366,17 @@ function getCategoryMeta(file, num) {
     if (n <= 14) return { unit: '三 · 数据飞轮与评测工程', badge: `LECTURE ${num}` };
     return { unit: '四 · 安全防护与前沿应用', badge: `LECTURE ${num}` };
   }
+  if (file === 'docs/editorial-notes.md' || file === 'course-guide.md') return { unit: '阅读说明', badge: 'READING GUIDE' };
   if (file.startsWith('exercises/')) return { unit: '工程实践指南', badge: 'ENGINEERING LAB' };
   return { unit: '配套代码架构', badge: 'CODE ARCHITECTURE' };
 }
 
+const readingQuestions = JSON.parse(fs.readFileSync(path.join(root, 'tools/reading-questions.json'), 'utf8'));
+
+const sources = {};
 const docs = files.map((file) => {
   const rawMd = fs.readFileSync(path.join(root, file), 'utf8');
+  sources[ids[file]] = rawMd;
   const { html, headings } = parseMarkdownDocument(rawMd, file);
 
   const title = headings[0]?.label || file;
@@ -475,7 +392,7 @@ const docs = files.map((file) => {
   if (file.includes('Paper-Video')) label = '论文精读与复现扩展';
   if (file === 'code-guide.md') label = '配套代码架构导读';
   if (file === 'course-guide.md') label = '课程目录与学习路径';
-  if (file === 'docs/editorial-notes.md') label = '编写说明与待修订问题';
+  if (file === 'docs/editorial-notes.md') label = '阅读说明与版本来源';
 
   const { unit, badge } = getCategoryMeta(file, num);
   const plainText = plain(html);
@@ -485,6 +402,8 @@ const docs = files.map((file) => {
   return {
     id: ids[file],
     file,
+    study: studyCases[ids[file]],
+    questions: readingQuestions[ids[file]],
     title,
     label,
     num,
@@ -498,14 +417,9 @@ const docs = files.map((file) => {
 });
 
 const css = fs.readFileSync(path.join(root, 'tools/reader.css'), 'utf8');
-const js = fs.readFileSync(path.join(root, 'tools/reader.js'), 'utf8');
-const data = JSON.stringify({
-  docs,
-  groups: groups.map(([label, groupFiles]) => ({
-    label,
-    ids: groupFiles.map((f) => ids[f]),
-  })),
-}).replaceAll('<', '\\u003c');
+const js = ['study-reader.js', 'reader.js'].map(file => fs.readFileSync(path.join(root, 'tools', file), 'utf8')).join('\n');
+const courseGroups = groups.map(([label, groupFiles]) => ({ label, ids: groupFiles.map(file => ids[file]) }));
+const data = JSON.stringify({ docs, groups: courseGroups }).replaceAll('<', '\\u003c');
 
 const html = `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -520,22 +434,23 @@ const html = `<!DOCTYPE html>
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <a class="brand" href="#/overview">
-        <span class="brand-code">CS329Z<span class="brand-dot">.</span></span>
-        <span class="brand-sub">ENGINEERING AI AGENTS</span>
-      </a>
-      <p class="edition">AI Agent 系统工程教程 <span>中文学习资料</span></p>
+      <div class="sidebar-masthead">
+        <a class="brand" href="#/overview">
+          <span class="brand-code">CS329Z <span>中文互动学习版</span></span>
+          <span class="brand-title" lang="zh-CN">AI Agent 系统工程</span>
+        </a>
+        <button id="menu-close" class="rail-control" type="button" aria-label="收起课程目录" title="收起课程目录" aria-controls="sidebar" aria-expanded="true" hidden><span class="panel-icon" aria-hidden="true"></span>收起</button>
+      </div>
       <button type="button" class="search-trigger" id="open-search">
         <span class="search-trigger-text">搜索课程、概念与算法…</span>
         <kbd>⌘K</kbd>
       </button>
     </div>
-    <nav id="course-nav" aria-label="课程章节导航"></nav>
-    <div class="sidebar-foot">
-      <a class="marginroom-mobile" href="https://marginroom.app/?utm_source=cs329z&amp;utm_medium=tutorial&amp;utm_campaign=marginroom_v1&amp;utm_content=sidebar" target="_blank" rel="noopener">在阅间边读边问 ↗</a>
-      <span>CS329Z · Engineering AI Agents</span>
-      <span>System · Data · Evals</span>
+    <div class="nav-caption">
+      <h2 id="nav-title">课程目录</h2>
+      <button id="toggle-groups" type="button" aria-expanded="false" aria-controls="course-nav" hidden>全部展开</button>
     </div>
+    <nav id="course-nav" aria-labelledby="nav-title">${renderCourseNavigation(courseGroups, docs, 'overview', esc)}</nav>
   </aside>
 
   <div class="shade" id="shade"></div>
@@ -543,11 +458,10 @@ const html = `<!DOCTYPE html>
   <div class="workspace">
     <header class="topbar">
       <div class="topbar-left">
-        <button type="button" id="menu" class="mobile-only" aria-label="打开课程目录" aria-expanded="false" aria-controls="sidebar">目录</button>
+        <button type="button" id="menu" class="rail-control" hidden aria-label="打开课程目录" aria-expanded="false" aria-controls="sidebar"><span class="panel-icon" aria-hidden="true"></span>目录</button>
         <div id="breadcrumb" class="breadcrumb">课程总览</div>
       </div>
       <div class="reading-tools">
-        <a class="marginroom-top" href="https://marginroom.app/?utm_source=cs329z&amp;utm_medium=tutorial&amp;utm_campaign=marginroom_v1&amp;utm_content=topbar" target="_blank" rel="noopener">在阅间边读边问 ↗</a>
         <button type="button" id="mobile-search" class="mobile-only" aria-label="打开搜索">搜索</button>
         <button type="button" id="theme-toggle" aria-label="切换深浅色主题">深色模式</button>
         <button type="button" id="font-size" aria-label="切换阅读字号">字号 A+</button>
@@ -564,29 +478,41 @@ const html = `<!DOCTYPE html>
         <div class="chapter-meta" id="chapter-meta"></div>
 
         <section class="home-intro" id="home-intro">
-          <p class="eyebrow">CS329Z 中文教程 · ENGINEERING AI AGENTS</p>
-          <h1>从理解语言模型，<br>到构建可靠的 <em>AI Agent</em> 系统。</h1>
-          <p class="hero-lead">面向 Python 开发者的中文自学教程，包含 19 讲、4 项实践和配套代码导读。从 RAG、工具调用开始，逐步学习记忆、协作、评测与安全。</p>
-          <div class="hero-bottom">
-            <div class="hero-stats">
-              <span><strong>19</strong> 讲核心课程</span>
-              <span><strong>4</strong> 项工程实践</span>
-              <span><strong>2</strong> 套配套源码解析</span>
-            </div>
+          <div class="home-copy">
+            <p class="eyebrow">CS329Z <span>／</span> 智能体工程</p>
+            <h1>从一个决定，<br>读懂 <em>AI Agent</em>。</h1>
+            <p class="hero-lead">先替助手做一个选择，再拆开它的工作过程。19 讲课程与 4 项实践，每次可以只学一小节。</p>
             <div class="hero-actions">
-              <a class="start-link" href="#/lecture01">开始第 01 讲 <span>→</span></a>
-              <a class="secondary-link" href="#/lab20">进入 HW1 实战</a>
+              <a class="start-link" id="start-study" href="#/lecture01">开始第 01 讲 →</a>
+              <a class="home-guide" id="book-link" href="#/book">全书连读</a>
+              <a class="home-guide" href="#/lab25">查看学习路线</a>
             </div>
+            <p id="resume-caption" class="resume-caption" hidden></p>
           </div>
+          <figure class="home-figure">
+            <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
+              <title id="planner-title">日程示意图。周四 14:00 有课，助手根据反馈寻找另一个空档。</title>
+              <defs><pattern id="planner-grid" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#8fa99d"/></pattern></defs>
+              <rect x="0" y="0" width="304" height="196" rx="16" fill="#dae9dd"/>
+              <rect x="0" y="0" width="304" height="196" rx="16" fill="url(#planner-grid)" opacity=".5"/>
+              <g transform="rotate(-5 140 100)">
+                <rect x="38" y="35" width="197" height="130" rx="10" fill="#a3bbad"/>
+                <rect x="33" y="30" width="197" height="130" rx="10" fill="#fffcf1" stroke="#245647" stroke-width="2"/>
+                <path d="M34 61h195" stroke="#245647" stroke-width="2"/>
+                <path d="M55 22v18m19-18v18m115-18v18m19-18v18" stroke="#245647" stroke-width="4" stroke-linecap="round"/>
+                <text x="48" y="53" font-size="13" font-weight="700" fill="#245647">周四 · 我的日历</text>
+                <text x="47" y="88" fill="#39594d" font-size="13">14:00</text><rect x="96" y="72" width="109" height="24" rx="5" fill="#f3d19f"/><text x="106" y="89" font-size="13" fill="#563b20">课程</text>
+                <path d="M47 106h163" stroke="#d8ded1"/>
+                <text x="47" y="131" fill="#39594d" font-size="13">15:00</text><rect x="96" y="115" width="109" height="24" rx="5" fill="none" stroke="#467862" stroke-width="1.5" stroke-dasharray="4 3"/>
+              </g>
+              <path d="M255 109q14 31-38 26m7-7-9 7 8 7" fill="none" stroke="#285a48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+              <g transform="rotate(6 243 89)"><rect x="204" y="72" width="89" height="34" rx="8" fill="#235a49"/><text x="248" y="94" text-anchor="middle" font-size="13" fill="white">再查一格</text></g>
+            </svg>
+            <figcaption>第 01 讲 <span>／</span> 让日程助手根据反馈行动</figcaption>
+          </figure>
         </section>
 
         <article id="article">${docs[0].html}</article>
-        <section id="marginroom-referral" class="marginroom-referral" hidden aria-label="阅间阅读伙伴">
-          <h2>这一讲有读不懂的地方？</h2>
-          <p>我做了一个 AI 阅读伙伴「阅间」，已内置这套课，读不懂的地方可以结合原文直接提问。</p>
-          <a id="marginroom-referral-link" href="https://marginroom.app/" target="_blank" rel="noopener">在阅间边读边问 →</a>
-          <p class="marginroom-allowance">注册后，每天可免费提问 50 次。</p>
-        </section>
         <nav id="chapter-footer" aria-label="章节翻页"></nav>
       </main>
 
@@ -594,18 +520,18 @@ const html = `<!DOCTYPE html>
         <div class="toc-card">
           <div class="toc-label">本讲目录</div>
           <nav id="toc-links"></nav>
-          <a class="source-link" id="source-link" href="../README.md">查看 Markdown 源文件 ↗</a>
+          <a class="source-link" id="source-link" href="#/overview">保存本章 Markdown</a>
         </div>
       </aside>
     </div>
 
     <footer class="page-footer">
-      <span>CS329Z · AI Agent 系统工程（Engineering AI Agents）</span>
-      <a href="https://github.com/wanghao-SunSky/cs329z-chinese">GitHub · Markdown 与 HTML</a>
+      <a href="#/lab26">阅读说明与版本来源</a>
+      <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>
   </div>
 
-  <dialog id="search-dialog">
+  <dialog id="search-dialog" aria-label="搜索课程">
     <form method="dialog" class="search-head">
       <label for="search-input">搜索</label>
       <input id="search-input" type="search" placeholder="输入概念、算法、论文或练习关键词（如 ReAct, BM25, GRPO, MCP）…" autocomplete="off">
@@ -616,6 +542,7 @@ const html = `<!DOCTYPE html>
   </dialog>
 
   <noscript><p>请启用 JavaScript 以使用交互式章节导航与全文检索。</p></noscript>
+  <script id="course-sources" type="application/json">${JSON.stringify(sources).replaceAll('<', '\\u003c')}</script>
   <script id="course-data" type="application/json">${data}</script>
   <script>${js}</script>
 </body>

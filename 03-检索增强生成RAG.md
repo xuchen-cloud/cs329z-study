@@ -30,7 +30,7 @@
 #### DrQA、REALM 与 DPR 的脉络
 
 现代 RAG 并非凭空诞生，而是脱胎于开放域问答（Open-Domain QA）的经典 **“检索器—阅读器（Retriever-Reader）”** 框架：
-- **DrQA（Chen et al., 2017）**：面对“1933 年华沙有多少居民讲波兰语？”这类问题，先用传统的稀疏词频检索模型（TF-IDF）从维基百科全集中快速召回前 $K$ 篇候选文档（$f(\mathcal{D}, Q) \to P_1, \dots, P_K$），再用在 SQuAD 阅读理解数据集上训练的双向 RNN 阅读器从文档中抽取答案片段（`$833,500$`）。
+- **DrQA（Chen et al., 2017）**：面对“1933 年华沙有多少居民讲波兰语？”这类问题，先用传统的稀疏词频检索模型（TF-IDF）从维基百科全集中快速召回前 $K$ 篇候选文档（$f(\mathcal{D}, Q) \to P_1, \dots, P_K$），再用在 SQuAD 阅读理解数据集上训练的双向 RNN 阅读器从文档中抽取答案片段（$833{,}500$）。
 - **REALM（Guu et al., 2020）与 DPR（Karpukhin et al., 2020）**：将检索步骤从固定的 TF-IDF 升级为基于 BERT 的可学习稠密向量检索（Dense Passage Retrieval），实现了语义层面的高效匹配。
 - **RAG（Lewis et al., 2020）**：将稠密检索器 DPR 与序列到序列生成模型 BART 端到端结合，正式确立了“检索增强生成”这一范式。
 

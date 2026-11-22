@@ -6,18 +6,17 @@
   <title>Agent 设计模式与上下文管理 | CS329Z 中文教程</title>
 <meta name="description" content="学习 Agent 工作流、推理与行动、计划与执行分离等设计模式，理解长任务的上下文管理，并通过 Pi 案例分析工程取舍。">
   <meta name="robots" content="index,follow">
-  
-  <link rel="canonical" href="https://cs329z-course-review-20261029.wanghao162263.chatgpt.site/lecture06">
+  <link rel="canonical" href="https://xuchen-cloud.github.io/cs329z-study/lecture06.html">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:site_name" content="CS329Z 中文教程">
   <meta property="og:title" content="Agent 设计模式与上下文管理 | CS329Z 中文教程">
   <meta property="og:description" content="学习 Agent 工作流、推理与行动、计划与执行分离等设计模式，理解长任务的上下文管理，并通过 Pi 案例分析工程取舍。">
-  <meta property="og:url" content="https://cs329z-course-review-20261029.wanghao162263.chatgpt.site/lecture06">
+  <meta property="og:url" content="https://xuchen-cloud.github.io/cs329z-study/lecture06.html">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Agent 设计模式与上下文管理 | CS329Z 中文教程">
   <meta name="twitter:description" content="学习 Agent 工作流、推理与行动、计划与执行分离等设计模式，理解长任务的上下文管理，并通过 Pi 案例分析工程取舍。">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Agent 设计模式与上下文管理 | CS329Z 中文教程","description":"学习 Agent 工作流、推理与行动、计划与执行分离等设计模式，理解长任务的上下文管理，并通过 Pi 案例分析工程取舍。","inLanguage":"zh-CN","url":"https://cs329z-course-review-20261029.wanghao162263.chatgpt.site/lecture06","mainEntityOfPage":"https://cs329z-course-review-20261029.wanghao162263.chatgpt.site/lecture06","isAccessibleForFree":true,"isBasedOn":"https://cs329z.stanford.edu/","about":["AI Agent","人工智能体","Stanford CS329Z","大语言模型","Agent 设计模式与上下文管理"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Agent 设计模式与上下文管理 | CS329Z 中文教程","description":"学习 Agent 工作流、推理与行动、计划与执行分离等设计模式，理解长任务的上下文管理，并通过 Pi 案例分析工程取舍。","inLanguage":"zh-CN","url":"https://xuchen-cloud.github.io/cs329z-study/lecture06.html","mainEntityOfPage":"https://xuchen-cloud.github.io/cs329z-study/lecture06.html","isAccessibleForFree":true,"isBasedOn":"https://cs329z.stanford.edu/","about":["AI Agent","人工智能体","Stanford CS329Z","大语言模型","Agent 设计模式与上下文管理"]}</script>
   <link rel="stylesheet" href="./assets/reader.css">
 </head>
 <body data-static="true" data-initial-doc="lecture06" data-doc="lecture06">
@@ -25,22 +24,44 @@
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <a class="brand" href="./index.html">
-        <span class="brand-code">CS329Z<span class="brand-dot">.</span></span>
-        <span class="brand-sub">ENGINEERING AI AGENTS</span>
-      </a>
-      <p class="edition">AI Agent 系统工程教程 <span>中文学习资料</span></p>
+      <div class="sidebar-masthead">
+        <a class="brand" href="./index.html">
+          <span class="brand-code">CS329Z <span>中文互动学习版</span></span>
+          <span class="brand-title" lang="zh-CN">AI Agent 系统工程</span>
+        </a>
+        <button id="menu-close" class="rail-control" type="button" aria-label="收起课程目录" title="收起课程目录" aria-controls="sidebar" aria-expanded="true" hidden><span class="panel-icon" aria-hidden="true"></span>收起</button>
+      </div>
       <button type="button" class="search-trigger" id="open-search">
         <span class="search-trigger-text">搜索课程、概念与算法…</span>
         <kbd>⌘K</kbd>
       </button>
     </div>
-    <nav id="course-nav" aria-label="课程章节导航"><div class="nav-group"><p class="nav-label">课程导览</p><a class="nav-item" data-doc="overview" href="./index.html"><span>课程总览与学习路径</span></a></div><div class="nav-group"><p class="nav-label">一 · 基础与核心组件</p><a class="nav-item" data-doc="lecture01" href="./lecture01.html"><span class="num">01</span><span>Agent 基础与全景</span></a><a class="nav-item" data-doc="lecture02" href="./lecture02.html"><span class="num">02</span><span>面向构建者的大语言模型</span></a><a class="nav-item" data-doc="lecture03" href="./lecture03.html"><span class="num">03</span><span>检索增强生成（RAG）</span></a><a class="nav-item" data-doc="lecture04" href="./lecture04.html"><span class="num">04</span><span>工具使用与函数调用</span></a></div><div class="nav-group"><p class="nav-label">二 · 架构、记忆与优化</p><a class="nav-item" data-doc="lecture05" href="./lecture05.html"><span class="num">05</span><span>框架与持久编排</span></a><a class="nav-item active" data-doc="lecture06" href="./lecture06.html" aria-current="page"><span class="num">06</span><span>Agent 设计模式与上下文管理</span></a><a class="nav-item" data-doc="lecture07" href="./lecture07.html"><span class="num">07</span><span>Agent 记忆架构</span></a><a class="nav-item" data-doc="lecture08" href="./lecture08.html"><span class="num">08</span><span>多 Agent 系统</span></a><a class="nav-item" data-doc="lecture09" href="./lecture09.html"><span class="num">09</span><span>Agent 系统优化</span></a></div><div class="nav-group"><p class="nav-label">三 · 数据飞轮与评测工程</p><a class="nav-item" data-doc="lecture10" href="./lecture10.html"><span class="num">10</span><span>Terminal-Bench 与评测工程</span></a><a class="nav-item" data-doc="lecture11" href="./lecture11.html"><span class="num">11</span><span>Agent 需要什么数据</span></a><a class="nav-item" data-doc="lecture12" href="./lecture12.html"><span class="num">12</span><span>数据选择与质量</span></a><a class="nav-item" data-doc="lecture13" href="./lecture13.html"><span class="num">13</span><span>评测基础与基准设计</span></a><a class="nav-item" data-doc="lecture14" href="./lecture14.html"><span class="num">14</span><span>LLM 裁判与评测基础设施</span></a></div><div class="nav-group"><p class="nav-label">四 · 安全防护与前沿应用</p><a class="nav-item" data-doc="lecture15" href="./lecture15.html"><span class="num">15</span><span>Agent 安全与防护</span></a><a class="nav-item" data-doc="lecture16" href="./lecture16.html"><span class="num">16</span><span>专题研讨：复合 Agent 系统架构复盘</span></a><a class="nav-item" data-doc="lecture17" href="./lecture17.html"><span class="num">17</span><span>编程与软件 Agent</span></a><a class="nav-item" data-doc="lecture18" href="./lecture18.html"><span class="num">18</span><span>主动式 Agent</span></a><a class="nav-item" data-doc="lecture19" href="./lecture19.html"><span class="num">19</span><span>前沿与开放问题</span></a></div><div class="nav-group"><p class="nav-label">工程实践与代码指南</p><a class="nav-item" data-doc="lab20" href="./lab20.html"><span>HW1：从零搭建 Agent Harness</span></a><a class="nav-item" data-doc="lab21" href="./lab21.html"><span>HW2：构建 Agent 评测体系</span></a><a class="nav-item" data-doc="lab22" href="./lab22.html"><span>学期项目：设计、构建与评测</span></a><a class="nav-item" data-doc="lab23" href="./lab23.html"><span>论文精读与复现扩展</span></a><a class="nav-item" data-doc="lab24" href="./lab24.html"><span>配套代码架构导读</span></a></div><div class="nav-group"><p class="nav-label">阅读说明</p><a class="nav-item" data-doc="lab25" href="./lab25.html"><span>课程目录与学习路径</span></a><a class="nav-item" data-doc="lab26" href="./lab26.html"><span>编写说明与待修订问题</span></a></div></nav>
-    <div class="sidebar-foot">
-      <a class="marginroom-mobile" href="https://marginroom.app/?utm_source=cs329z&amp;utm_medium=tutorial&amp;utm_campaign=marginroom_v1&amp;utm_content=sidebar" target="_blank" rel="noopener">在阅间边读边问 ↗</a>
-      <span>CS329Z · Engineering AI Agents</span>
-      <span>System · Data · Evals</span>
+    <div class="nav-caption">
+      <h2 id="nav-title">课程目录</h2>
+      <button id="toggle-groups" type="button" aria-expanded="false" aria-controls="course-nav" hidden>全部展开</button>
     </div>
+    <nav id="course-nav" aria-labelledby="nav-title"><details class="nav-group" data-group="overview">
+      <summary class="nav-label"><span>课程导览</span></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="overview" href="./index.html"><span>课程总览与学习路径</span></a></li></ul>
+    </details><details class="nav-group" data-group="lecture01">
+      <summary class="nav-label"><span>基础与核心组件</span><small class="nav-range">01–04</small></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lecture01" href="./lecture01.html"><span class="num">01</span><span>Agent 基础与全景</span></a></li><li><a class="nav-item" data-doc="lecture02" href="./lecture02.html"><span class="num">02</span><span>面向构建者的大语言模型</span></a></li><li><a class="nav-item" data-doc="lecture03" href="./lecture03.html"><span class="num">03</span><span>检索增强生成（RAG）</span></a></li><li><a class="nav-item" data-doc="lecture04" href="./lecture04.html"><span class="num">04</span><span>工具使用与函数调用</span></a></li></ul>
+    </details><details class="nav-group" data-group="lecture05" open>
+      <summary class="nav-label"><span>架构、记忆与优化</span><small class="nav-range">05–09</small></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lecture05" href="./lecture05.html"><span class="num">05</span><span>框架与持久编排</span></a></li><li><a class="nav-item" data-doc="lecture06" href="./lecture06.html" aria-current="page"><span class="num">06</span><span>Agent 设计模式与上下文管理</span></a></li><li><a class="nav-item" data-doc="lecture07" href="./lecture07.html"><span class="num">07</span><span>Agent 记忆架构</span></a></li><li><a class="nav-item" data-doc="lecture08" href="./lecture08.html"><span class="num">08</span><span>多 Agent 系统</span></a></li><li><a class="nav-item" data-doc="lecture09" href="./lecture09.html"><span class="num">09</span><span>Agent 系统优化</span></a></li></ul>
+    </details><details class="nav-group" data-group="lecture10">
+      <summary class="nav-label"><span>数据飞轮与评测工程</span><small class="nav-range">10–14</small></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lecture10" href="./lecture10.html"><span class="num">10</span><span>Terminal-Bench 与评测工程</span></a></li><li><a class="nav-item" data-doc="lecture11" href="./lecture11.html"><span class="num">11</span><span>Agent 需要什么数据</span></a></li><li><a class="nav-item" data-doc="lecture12" href="./lecture12.html"><span class="num">12</span><span>数据选择与质量</span></a></li><li><a class="nav-item" data-doc="lecture13" href="./lecture13.html"><span class="num">13</span><span>评测基础与基准设计</span></a></li><li><a class="nav-item" data-doc="lecture14" href="./lecture14.html"><span class="num">14</span><span>LLM 裁判与评测基础设施</span></a></li></ul>
+    </details><details class="nav-group" data-group="lecture15">
+      <summary class="nav-label"><span>安全防护与前沿应用</span><small class="nav-range">15–19</small></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lecture15" href="./lecture15.html"><span class="num">15</span><span>Agent 安全与防护</span></a></li><li><a class="nav-item" data-doc="lecture16" href="./lecture16.html"><span class="num">16</span><span>专题研讨：复合 Agent 系统架构复盘</span></a></li><li><a class="nav-item" data-doc="lecture17" href="./lecture17.html"><span class="num">17</span><span>编程与软件 Agent</span></a></li><li><a class="nav-item" data-doc="lecture18" href="./lecture18.html"><span class="num">18</span><span>主动式 Agent</span></a></li><li><a class="nav-item" data-doc="lecture19" href="./lecture19.html"><span class="num">19</span><span>前沿与开放问题</span></a></li></ul>
+    </details><details class="nav-group" data-group="lab20">
+      <summary class="nav-label"><span>工程实践与代码指南</span></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lab20" href="./lab20.html"><span>HW1：从零搭建 Agent Harness</span></a></li><li><a class="nav-item" data-doc="lab21" href="./lab21.html"><span>HW2：构建 Agent 评测体系</span></a></li><li><a class="nav-item" data-doc="lab22" href="./lab22.html"><span>学期项目：设计、构建与评测</span></a></li><li><a class="nav-item" data-doc="lab23" href="./lab23.html"><span>论文精读与复现扩展</span></a></li><li><a class="nav-item" data-doc="lab24" href="./lab24.html"><span>配套代码架构导读</span></a></li></ul>
+    </details><details class="nav-group" data-group="lab25">
+      <summary class="nav-label"><span>阅读说明</span></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lab25" href="./lab25.html"><span>课程目录与学习路径</span></a></li><li><a class="nav-item" data-doc="lab26" href="./lab26.html"><span>阅读说明与版本来源</span></a></li></ul>
+    </details></nav>
   </aside>
 
   <div class="shade" id="shade"></div>
@@ -48,11 +69,10 @@
   <div class="workspace">
     <header class="topbar">
       <div class="topbar-left">
-        <button type="button" id="menu" class="mobile-only" aria-label="打开课程目录" aria-expanded="false" aria-controls="sidebar">目录</button>
+        <button type="button" id="menu" class="rail-control" hidden aria-label="打开课程目录" aria-expanded="false" aria-controls="sidebar"><span class="panel-icon" aria-hidden="true"></span>目录</button>
         <div id="breadcrumb" class="breadcrumb">Agent 设计模式与上下文管理</div>
       </div>
       <div class="reading-tools">
-        <a class="marginroom-top" href="https://marginroom.app/?utm_source=cs329z&amp;utm_medium=tutorial&amp;utm_campaign=marginroom_v1&amp;utm_content=topbar" target="_blank" rel="noopener">在阅间边读边问 ↗</a>
         <button type="button" id="mobile-search" class="mobile-only" aria-label="打开搜索">搜索</button>
         <button type="button" id="theme-toggle" aria-label="切换深浅色主题">深色模式</button>
         <button type="button" id="font-size" aria-label="切换阅读字号">字号 A+</button>
@@ -69,20 +89,38 @@
         <div class="chapter-meta" id="chapter-meta"></div>
 
         <section class="home-intro" id="home-intro" hidden>
-          <p class="eyebrow">CS329Z 中文教程 · ENGINEERING AI AGENTS</p>
-          <h1>从理解语言模型，<br>到构建可靠的 <em>AI Agent</em> 系统。</h1>
-          <p class="hero-lead">面向 Python 开发者的中文自学教程，包含 19 讲、4 项实践和配套代码导读。从 RAG、工具调用开始，逐步学习记忆、协作、评测与安全。</p>
-          <div class="hero-bottom">
-            <div class="hero-stats">
-              <span><strong>19</strong> 讲核心课程</span>
-              <span><strong>4</strong> 项工程实践</span>
-              <span><strong>2</strong> 套配套源码解析</span>
-            </div>
+          <div class="home-copy">
+            <p class="eyebrow">CS329Z <span>／</span> 智能体工程</p>
+            <h1>从一个决定，<br>读懂 <em>AI Agent</em>。</h1>
+            <p class="hero-lead">先替助手做一个选择，再拆开它的工作过程。19 讲课程与 4 项实践，每次可以只学一小节。</p>
             <div class="hero-actions">
-              <a class="start-link" href="./lecture01.html">开始第 01 讲 <span>→</span></a>
-              <a class="secondary-link" href="./lab20.html">进入 HW1 实战</a>
+              <a class="start-link" id="start-study" href="./lecture01.html">开始第 01 讲 →</a>
+              <a class="home-guide" id="book-link" href="./offline.html">打开单文件版</a>
+              <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
+            <p id="resume-caption" class="resume-caption" hidden></p>
           </div>
+          <figure class="home-figure">
+            <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
+              <title id="planner-title">日程示意图。周四 14:00 有课，助手根据反馈寻找另一个空档。</title>
+              <defs><pattern id="planner-grid" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#8fa99d"/></pattern></defs>
+              <rect x="0" y="0" width="304" height="196" rx="16" fill="#dae9dd"/>
+              <rect x="0" y="0" width="304" height="196" rx="16" fill="url(#planner-grid)" opacity=".5"/>
+              <g transform="rotate(-5 140 100)">
+                <rect x="38" y="35" width="197" height="130" rx="10" fill="#a3bbad"/>
+                <rect x="33" y="30" width="197" height="130" rx="10" fill="#fffcf1" stroke="#245647" stroke-width="2"/>
+                <path d="M34 61h195" stroke="#245647" stroke-width="2"/>
+                <path d="M55 22v18m19-18v18m115-18v18m19-18v18" stroke="#245647" stroke-width="4" stroke-linecap="round"/>
+                <text x="48" y="53" font-size="13" font-weight="700" fill="#245647">周四 · 我的日历</text>
+                <text x="47" y="88" fill="#39594d" font-size="13">14:00</text><rect x="96" y="72" width="109" height="24" rx="5" fill="#f3d19f"/><text x="106" y="89" font-size="13" fill="#563b20">课程</text>
+                <path d="M47 106h163" stroke="#d8ded1"/>
+                <text x="47" y="131" fill="#39594d" font-size="13">15:00</text><rect x="96" y="115" width="109" height="24" rx="5" fill="none" stroke="#467862" stroke-width="1.5" stroke-dasharray="4 3"/>
+              </g>
+              <path d="M255 109q14 31-38 26m7-7-9 7 8 7" fill="none" stroke="#285a48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+              <g transform="rotate(6 243 89)"><rect x="204" y="72" width="89" height="34" rx="8" fill="#235a49"/><text x="248" y="94" text-anchor="middle" font-size="13" fill="white">再查一格</text></g>
+            </svg>
+            <figcaption>第 01 讲 <span>／</span> 让日程助手根据反馈行动</figcaption>
+          </figure>
         </section>
 
         <article id="article"><h1 id="第-06-讲agent-设计模式与上下文管理">第 06 讲｜Agent 设计模式与上下文管理</h1>
@@ -94,11 +132,11 @@
 <h3 id="1-模式与五类-workflow">1. 模式与五类 workflow</h3>
 <h4 id="模式是可组合的选择">模式是可组合的选择</h4>
 <p>在设计复合 AI 系统时，第一道架构选择题永远是：<strong>控制流（Control Flow）应该放在哪里？</strong></p>
-<div class="table-scroll" tabindex="0"><table><thead><tr><th>维度</th><th>工作流（Workflows）</th><th>自主智能体（Agents）</th></tr></thead><tbody><tr><td><strong>控制流主导者</strong></td><td><strong>程序代码（Code）</strong></td><td><strong>大语言模型（LLM）</strong></td></tr><tr><td><strong>动态适应方式</strong></td><td>沿着预先编程写好的分支、路由与固定循环执行</td><td>根据每一步的环境观测（Observations）自主决定下一步动作</td></tr><tr><td><strong>最佳适用场景</strong></td><td>结构清晰、步骤可重复、需要高度可预测性的任务</td><td>路径无法预先穷举、需要多轮探索与灵活应变的开放任务</td></tr><tr><td><strong>典型实例</strong></td><td>客服工单分类 <span class="math-inline">&rarr;</span> 检索对应政策 <span class="math-inline">&rarr;</span> 生成回复草稿</td><td>使用终端与搜索工具自主排查并修复未知线上 Bug</td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0"><table><thead><tr><th>维度</th><th>工作流（Workflows）</th><th>自主智能体（Agents）</th></tr></thead><tbody><tr><td><strong>控制流主导者</strong></td><td><strong>程序代码（Code）</strong></td><td><strong>大语言模型（LLM）</strong></td></tr><tr><td><strong>动态适应方式</strong></td><td>沿着预先编程写好的分支、路由与固定循环执行</td><td>根据每一步的环境观测（Observations）自主决定下一步动作</td></tr><tr><td><strong>最佳适用场景</strong></td><td>结构清晰、步骤可重复、需要高度可预测性的任务</td><td>路径无法预先穷举、需要多轮探索与灵活应变的开放任务</td></tr><tr><td><strong>典型实例</strong></td><td>客服工单分类 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 检索对应政策 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 生成回复草稿</td><td>使用终端与搜索工具自主排查并修复未知线上 Bug</td></tr></tbody></table></div>
 <p>在真实生产系统中，Workflow 与 Agent 并非非此即彼，而是像乐高积木一样相互嵌套组合。Anthropic（Schluntz &amp; Zhang, 2024）将最核心的复合工作流归纳为五种基础设计模式。</p>
 <h4 id="prompt-chaining">Prompt chaining</h4>
-<p><strong>提示链（Prompt Chaining）</strong> 将一个复杂的宏大任务拆解为一系列按固定顺序执行的子步骤（<span class="math-inline"><span class="m-text">LLM</span><sub>1</sub> &rarr; <span class="m-text">Gate</span> &rarr; <span class="m-text">LLM</span><sub>2</sub> &rarr; <span class="m-text">LLM</span><sub>3</sub></span>），每一步只专注于一件清晰的小事，并在步骤之间插入确定性的<strong>程序校验门（Programmatic Gate）</strong>。</p>
-<ul><li><strong>典型场景</strong>：先生成技术文档大纲 <span class="math-inline">&rarr;</span> 检查大纲是否覆盖必选章节 <span class="math-inline">&rarr;</span> 按大纲逐节撰写正文 <span class="math-inline">&rarr;</span> 将正文翻译为目标语言。</li><li><strong>工程权衡</strong>：通过增加串行调用的延迟（Latency），换取了每一步更高的准确率与可检查性；但若缺乏有效的中间校验门，前一步的错误会直接向下游传递。</li></ul>
+<p><strong>提示链（Prompt Chaining）</strong> 将一个复杂的宏大任务拆解为一系列按固定顺序执行的子步骤（<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext>LLM</mtext><mn>1</mn></msub><mo>→</mo><mtext>Gate</mtext><mo>→</mo><msub><mtext>LLM</mtext><mn>2</mn></msub><mo>→</mo><msub><mtext>LLM</mtext><mn>3</mn></msub></mrow></semantics></math></span></span>），每一步只专注于一件清晰的小事，并在步骤之间插入确定性的<strong>程序校验门（Programmatic Gate）</strong>。</p>
+<ul><li><strong>典型场景</strong>：先生成技术文档大纲 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 检查大纲是否覆盖必选章节 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 按大纲逐节撰写正文 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 将正文翻译为目标语言。</li><li><strong>工程权衡</strong>：通过增加串行调用的延迟（Latency），换取了每一步更高的准确率与可检查性；但若缺乏有效的中间校验门，前一步的错误会直接向下游传递。</li></ul>
 <h4 id="routing">Routing</h4>
 <p><strong>路由模式（Routing）</strong> 先用一个分类器或轻量级模型判断输入请求的类型，再将其分发到专门定制的下游处理分支（不同的提示词、不同的工具集或不同尺寸的模型）。</p>
 <ul><li><strong>典型场景</strong>：将客户咨询路由到“退款售后”、“技术故障排查”或“常见 FAQ”三个不同分支；或者将简单问题路由给便宜快速的轻量级模型，将困难的数学/编程问题路由给高阶推理模型。</li><li><strong>工程权衡</strong>：实现了关注点分离（Separation of Concerns）并显著优化整体成本，防止单一提示词在兼顾几十种不同规则时顾此失彼。</li></ul>
@@ -172,12 +210,6 @@
 <ul><li><a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener noreferrer">Yao et al. &quot;ReAct: Synergizing Reasoning and Acting in Language Models.&quot; ICLR (2023).</a> 导读：对比 Reason-only、Act-only 与 ReAct 在知识密集型问答（HotpotQA）与决策环境（ALFWorld）上的表现差异，理解微调对固化 ReAct 模式的作用。</li><li><a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener noreferrer">Schluntz &amp; Zhang. &quot;Building Effective AI Agents.&quot; Anthropic (2024).</a> 导读：重点阅读五种工作流模式（Prompt Chaining、Routing、Parallelization、Orchestrator-Workers、Evaluator-Optimizer）的适用准则，体会“尽可能保持设计简单，仅在必要时增加自主度”的工程原则。</li><li><a href="https://www.langchain.com/blog/context-engineering-for-agents" target="_blank" rel="noopener noreferrer">LangChain. &quot;Context Engineering.&quot; LangChain Blog (2025).</a> 导读：系统梳理写入上下文（Write）、筛选上下文（Select）、压缩上下文（Compress）与隔离上下文（Isolate）的四维分类框架。</li><li><strong>拓展阅读</strong>：<a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener noreferrer">Shinn et al. &quot;Reflexion: Language Agents with Verbal Reinforcement Learning.&quot; NeurIPS (2023).</a> 导读：分析 Actor、Evaluator 与 Self-Reflection 三组件的协作流程，注意外部环境反馈信号在防止盲目自省中的关键角色。</li><li><strong>拓展阅读</strong>：<a href="https://arxiv.org/abs/2402.01030" target="_blank" rel="noopener noreferrer">Wang et al. &quot;Executable Code Actions Elicit Better LLM Agents.&quot; ICML (2024).</a> 导读：对比 CodeAct 与传统 JSON / 文本动作格式在多工具组合控制流、交互轮数及任务成功率上的定量差异。</li></ul>
 <h2 id="动手练习">动手练习</h2>
 <ol><li><strong>工作流与 Agent 架构选型</strong>：针对“读取用户提交的报销单 PDF，核对公司差旅制度，计算各项汇率转换，并生成审批结论与财务入账条目”这一需求，设计一套结合 <strong>Routing + Parallelization + Evaluator-Optimizer / CodeAct</strong> 的混合系统图，说明每一步为什么选择固定工作流或动态 Agent。</li><li><strong>Observation Masking 与 Compaction 对比实现</strong>：构造一段包含 15 轮工具调用的模拟长轨迹（其中第 2 轮和第 5 轮包含长达 20,000 字符的文件列表输出，第 1 轮包含用户的预算硬约束）。编写一个上下文投影函数，结合“保留最近 3 轮完整输出 + 对更早的超大工具输出执行 Observation Masking + 超出 4,000 Tokens 时触发摘要 Compaction”，验证最终生成的 <code>messages</code> 既严格满足 Token 预算，又不丢失第 1 轮的预算约束（直接衔接 HW1 第 10–11 题）。</li></ol></article>
-        <section id="marginroom-referral" class="marginroom-referral" hidden aria-label="阅间阅读伙伴">
-          <h2>这一讲有读不懂的地方？</h2>
-          <p>我做了一个 AI 阅读伙伴「阅间」，已内置这套课，读不懂的地方可以结合原文直接提问。</p>
-          <a id="marginroom-referral-link" href="https://marginroom.app/" target="_blank" rel="noopener">在阅间边读边问 →</a>
-          <p class="marginroom-allowance">注册后，每天可免费提问 50 次。</p>
-        </section>
         <nav id="chapter-footer" aria-label="章节翻页"><a href="./lecture05.html"><small>← 上一节</small>框架与持久编排</a><a href="./lecture07.html"><small>下一节 →</small>Agent 记忆架构</a></nav>
       </main>
 
@@ -185,18 +217,18 @@
         <div class="toc-card">
           <div class="toc-label">本讲目录</div>
           <nav id="toc-links"><a class="depth-2" href="./lecture06.html#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87" data-anchor="学习目标">学习目标</a><a class="depth-2" href="./lecture06.html#%E7%9F%A5%E8%AF%86%E8%AE%B2%E8%A7%A3" data-anchor="知识讲解">知识讲解</a><a class="depth-3" href="./lecture06.html#1-%E6%A8%A1%E5%BC%8F%E4%B8%8E%E4%BA%94%E7%B1%BB-workflow" data-anchor="1-模式与五类-workflow">1. 模式与五类 workflow</a><a class="depth-3" href="./lecture06.html#2-%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%E4%B8%8E%E6%8E%A8%E7%90%86%E8%A1%8C%E5%8A%A8" data-anchor="2-组合模式与推理行动">2. 组合模式与推理行动</a><a class="depth-3" href="./lecture06.html#3-%E8%AE%A1%E5%88%92%E4%B8%8E%E6%89%A7%E8%A1%8C%E5%88%86%E7%A6%BB" data-anchor="3-计划与执行分离">3. 计划与执行分离</a><a class="depth-3" href="./lecture06.html#4-%E9%95%BF%E4%BB%BB%E5%8A%A1%E7%9A%84-context-patterns" data-anchor="4-长任务的-context-patterns">4. 长任务的 context patterns</a><a class="depth-3" href="./lecture06.html#5-pi-%E6%A1%88%E4%BE%8B" data-anchor="5-pi-案例">5. Pi 案例</a><a class="depth-2" href="./lecture06.html#%E5%8E%9F%E8%AF%BE%E7%A8%8B%E9%98%85%E8%AF%BB%E6%B8%85%E5%8D%95%E4%B8%8E%E5%AF%BC%E8%AF%BB" data-anchor="原课程阅读清单与导读">原课程阅读清单与导读</a><a class="depth-2" href="./lecture06.html#%E5%8A%A8%E6%89%8B%E7%BB%83%E4%B9%A0" data-anchor="动手练习">动手练习</a></nav>
-          <a class="source-link" id="source-link" href="https://github.com/wanghao-SunSky/cs329z-chinese/blob/main/06-Agent%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86.md">查看 Markdown 源文件 ↗</a>
+          <a class="source-link" id="source-link" href="https://github.com/xuchen-cloud/cs329z-study/blob/main/06-Agent%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%8E%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86.md">查看 Markdown 源文件 ↗</a>
         </div>
       </aside>
     </div>
 
     <footer class="page-footer">
-      <span>CS329Z · AI Agent 系统工程（Engineering AI Agents）</span>
-      <a href="https://github.com/wanghao-SunSky/cs329z-chinese">GitHub · Markdown 与 HTML</a>
+      <a href="./lab26.html">阅读说明与版本来源</a>
+      <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>
   </div>
 
-  <dialog id="search-dialog">
+  <dialog id="search-dialog" aria-label="搜索课程">
     <form method="dialog" class="search-head">
       <label for="search-input">搜索</label>
       <input id="search-input" type="search" placeholder="输入概念、算法、论文或练习关键词（如 ReAct, BM25, GRPO, MCP）…" autocomplete="off">
@@ -208,6 +240,6 @@
 
   <noscript><p>正文和目录可直接阅读。启用 JavaScript 后可使用全文搜索和阅读设置。</p></noscript>
   <script src="./assets/course-data.js"></script>
-  <script src="./assets/reader.js"></script>
+  <script src="./assets/study-reader.js"></script><script src="./assets/reader.js"></script>
 </body>
 </html>

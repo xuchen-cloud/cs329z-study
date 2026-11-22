@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'html'
-ORIGIN = 'https://cs329z-course-review-20261029.wanghao162263.chatgpt.site'
+ORIGIN = 'https://xuchen-cloud.github.io/cs329z-study'
 
 
 class Page(HTMLParser):
@@ -55,6 +55,25 @@ docs = data['docs']
 assert len(docs) == 27
 assert len(list(ROOT.glob('[0-9][0-9]-*.md'))) == 19
 assert len(list((ROOT / 'exercises').glob('*.md'))) == 4
+cases = [d for d in docs if d.get('study')]
+assert {d['id'] for d in cases} == {
+    d['id'] for d in docs if d['num'] or d['file'].startswith('exercises/')
+}
+for d in cases:
+    case = d['study']
+    assert 0 <= case['correct'] < len(case['choices']), d['id']
+    assert all(label and feedback for label, feedback in case['choices']), d['id']
+    assert all(label and example and explanation for label, example, explanation in case['steps']), d['id']
+    assert case['steps'] and case['recall'] and case['comparison'], d['id']
+for d in docs:
+    if d['id'] == 'overview':
+        continue
+    levels = (3,) if d['num'] else (2, 3)
+    guided = {h['id'] for h in d['headings'] if h['depth'] in levels}
+    assert guided == d['questions'].keys(), f'check section questions against headings: {d["id"]}'
+    if d['num']:
+        assert all(cue['question'] and cue['bridge'] for cue in d['questions'].values()), d['id']
+
 pages = {}
 titles = set()
 canonicals = set()
@@ -69,7 +88,7 @@ for d in docs:
     title = re.search(r'<title>(.*?)</title>', html)[1]
     assert title not in titles, f'duplicate title: {name}'
     titles.add(title)
-    expected = ORIGIN + ('/' if name == 'index.html' else '/' + name.removesuffix('.html'))
+    expected = ORIGIN + ('/' if name == 'index.html' else '/' + name)
     assert page.canonical == expected
     canonicals.add(expected)
     assert page.meta.get('description')
@@ -92,8 +111,20 @@ for name, page in pages.items():
             assert unquote(url.fragment) in pages[p.name].ids, f'broken anchor: {name} -> {target}'
         links += 1
 
+formula_count = 0
 for doc in docs:
     text = (ROOT / doc['file']).read_text()
+    # Count the authored math independently of the Markdown-to-HTML converter.
+    prose = re.sub(r'^[ \t]*\x60{3}[^\x60\n]*\n.*?^[ \t]*\x60{3}[ \t]*$', '', text, flags=re.M | re.S)
+    prose = re.sub(r'\x60[^\x60\n]*\x60', '', prose)
+    authored = re.findall(r'\$\$.+?\$\$|\$[^\n$]+\$', prose, re.S)
+    formulas = re.findall(r'<math\b[^>]*>.*?</math>', doc['html'], re.S)
+    assert len(formulas) == len(authored), f'missing typeset formula: {doc["file"]}'
+    for formula in formulas:
+        math = ET.fromstring(formula)
+        assert math.tag == '{http://www.w3.org/1998/Math/MathML}math'
+        assert not re.search(r'\\[A-Za-z]+', ''.join(math.itertext())), doc['file']
+    formula_count += len(formulas)
     assert '/Users/' not in text
     for href in re.findall(r'\]\(([^\s)]+)\)', text):
         u = urlsplit(href)
@@ -103,9 +134,22 @@ for doc in docs:
 offline = (OUT / 'offline.html').read_text()
 offline_data = json.loads(re.search(r'<script id="course-data" type="application/json">(.*?)</script>', offline, re.S)[1])
 assert offline_data == data, 'offline and online content differ'
-assert Page(offline).meta.get('robots') == 'noindex,follow'
+offline_page = Page(offline)
+assert offline_page.meta.get('robots') == 'noindex,follow'
+assert not offline_page.resources, 'standalone reader requires a separate resource'
+sources = json.loads(re.search(r'<script id="course-sources" type="application/json">(.*?)</script>', offline, re.S)[1])
+for d in docs:
+    assert sources[d['id']] == (ROOT / d['file']).read_text()
+    for href in Page(d['html']).links:
+        assert href.startswith(('#/', 'https://', 'http://')), f'file dependency in standalone reader: {href}'
+rag = next(d for d in docs if d['id'] == 'lecture03')
+retriever = re.search(r'<strong>检索器（Retriever）.*?(<math\b.*?</math>)', rag['html'], re.S)
+math = ET.fromstring(retriever[1])
+ns = {'m': 'http://www.w3.org/1998/Math/MathML'}
+assert [n.text for n in math.find('.//m:msub', ns)] == ['p', 'η']
+assert '∣' in [n.text for n in math.findall('.//m:mo', ns)]
 sitemap = ET.parse(OUT / 'sitemap.xml')
 locations = {e.text for e in sitemap.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')}
 assert locations == canonicals
 assert f'Sitemap: {ORIGIN}/sitemap.xml' in (OUT / 'robots.txt').read_text()
-print(json.dumps({'status': 'PASS', 'chapters': 19, 'exercises': 4, 'static_pages': len(pages), 'local_links_and_assets': links, 'sitemap_urls': len(locations), 'offline_content_matches': True}, ensure_ascii=False))
+print(json.dumps({'status': 'PASS', 'chapters': 19, 'exercises': 4, 'static_pages': len(pages), 'study_cases': len(cases), 'guided_sections': sum(len(d.get('questions', {})) for d in docs), 'local_links_and_assets': links, 'sitemap_urls': len(locations), 'typeset_formulas': formula_count, 'offline_content_matches': True}, ensure_ascii=False))

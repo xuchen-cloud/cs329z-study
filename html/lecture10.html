@@ -6,18 +6,17 @@
   <title>Terminal-Bench 与评测工程 | CS329Z 中文教程</title>
 <meta name="description" content="了解 Terminal-Bench 与 Harbor 的终端任务评测，学习设计任务和验证器、隔离执行环境、审查质量及管理基准版本。">
   <meta name="robots" content="index,follow">
-  
-  <link rel="canonical" href="https://cs329z-course-review-20261029.wanghao162263.chatgpt.site/lecture10">
+  <link rel="canonical" href="https://xuchen-cloud.github.io/cs329z-study/lecture10.html">
   <meta property="og:type" content="article">
   <meta property="og:locale" content="zh_CN">
   <meta property="og:site_name" content="CS329Z 中文教程">
   <meta property="og:title" content="Terminal-Bench 与评测工程 | CS329Z 中文教程">
   <meta property="og:description" content="了解 Terminal-Bench 与 Harbor 的终端任务评测，学习设计任务和验证器、隔离执行环境、审查质量及管理基准版本。">
-  <meta property="og:url" content="https://cs329z-course-review-20261029.wanghao162263.chatgpt.site/lecture10">
+  <meta property="og:url" content="https://xuchen-cloud.github.io/cs329z-study/lecture10.html">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="Terminal-Bench 与评测工程 | CS329Z 中文教程">
   <meta name="twitter:description" content="了解 Terminal-Bench 与 Harbor 的终端任务评测，学习设计任务和验证器、隔离执行环境、审查质量及管理基准版本。">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Terminal-Bench 与评测工程 | CS329Z 中文教程","description":"了解 Terminal-Bench 与 Harbor 的终端任务评测，学习设计任务和验证器、隔离执行环境、审查质量及管理基准版本。","inLanguage":"zh-CN","url":"https://cs329z-course-review-20261029.wanghao162263.chatgpt.site/lecture10","mainEntityOfPage":"https://cs329z-course-review-20261029.wanghao162263.chatgpt.site/lecture10","isAccessibleForFree":true,"isBasedOn":"https://cs329z.stanford.edu/","about":["AI Agent","人工智能体","Stanford CS329Z","大语言模型","Terminal-Bench 与评测工程"]}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Terminal-Bench 与评测工程 | CS329Z 中文教程","description":"了解 Terminal-Bench 与 Harbor 的终端任务评测，学习设计任务和验证器、隔离执行环境、审查质量及管理基准版本。","inLanguage":"zh-CN","url":"https://xuchen-cloud.github.io/cs329z-study/lecture10.html","mainEntityOfPage":"https://xuchen-cloud.github.io/cs329z-study/lecture10.html","isAccessibleForFree":true,"isBasedOn":"https://cs329z.stanford.edu/","about":["AI Agent","人工智能体","Stanford CS329Z","大语言模型","Terminal-Bench 与评测工程"]}</script>
   <link rel="stylesheet" href="./assets/reader.css">
 </head>
 <body data-static="true" data-initial-doc="lecture10" data-doc="lecture10">
@@ -25,22 +24,44 @@
 
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      <a class="brand" href="./index.html">
-        <span class="brand-code">CS329Z<span class="brand-dot">.</span></span>
-        <span class="brand-sub">ENGINEERING AI AGENTS</span>
-      </a>
-      <p class="edition">AI Agent 系统工程教程 <span>中文学习资料</span></p>
+      <div class="sidebar-masthead">
+        <a class="brand" href="./index.html">
+          <span class="brand-code">CS329Z <span>中文互动学习版</span></span>
+          <span class="brand-title" lang="zh-CN">AI Agent 系统工程</span>
+        </a>
+        <button id="menu-close" class="rail-control" type="button" aria-label="收起课程目录" title="收起课程目录" aria-controls="sidebar" aria-expanded="true" hidden><span class="panel-icon" aria-hidden="true"></span>收起</button>
+      </div>
       <button type="button" class="search-trigger" id="open-search">
         <span class="search-trigger-text">搜索课程、概念与算法…</span>
         <kbd>⌘K</kbd>
       </button>
     </div>
-    <nav id="course-nav" aria-label="课程章节导航"><div class="nav-group"><p class="nav-label">课程导览</p><a class="nav-item" data-doc="overview" href="./index.html"><span>课程总览与学习路径</span></a></div><div class="nav-group"><p class="nav-label">一 · 基础与核心组件</p><a class="nav-item" data-doc="lecture01" href="./lecture01.html"><span class="num">01</span><span>Agent 基础与全景</span></a><a class="nav-item" data-doc="lecture02" href="./lecture02.html"><span class="num">02</span><span>面向构建者的大语言模型</span></a><a class="nav-item" data-doc="lecture03" href="./lecture03.html"><span class="num">03</span><span>检索增强生成（RAG）</span></a><a class="nav-item" data-doc="lecture04" href="./lecture04.html"><span class="num">04</span><span>工具使用与函数调用</span></a></div><div class="nav-group"><p class="nav-label">二 · 架构、记忆与优化</p><a class="nav-item" data-doc="lecture05" href="./lecture05.html"><span class="num">05</span><span>框架与持久编排</span></a><a class="nav-item" data-doc="lecture06" href="./lecture06.html"><span class="num">06</span><span>Agent 设计模式与上下文管理</span></a><a class="nav-item" data-doc="lecture07" href="./lecture07.html"><span class="num">07</span><span>Agent 记忆架构</span></a><a class="nav-item" data-doc="lecture08" href="./lecture08.html"><span class="num">08</span><span>多 Agent 系统</span></a><a class="nav-item" data-doc="lecture09" href="./lecture09.html"><span class="num">09</span><span>Agent 系统优化</span></a></div><div class="nav-group"><p class="nav-label">三 · 数据飞轮与评测工程</p><a class="nav-item active" data-doc="lecture10" href="./lecture10.html" aria-current="page"><span class="num">10</span><span>Terminal-Bench 与评测工程</span></a><a class="nav-item" data-doc="lecture11" href="./lecture11.html"><span class="num">11</span><span>Agent 需要什么数据</span></a><a class="nav-item" data-doc="lecture12" href="./lecture12.html"><span class="num">12</span><span>数据选择与质量</span></a><a class="nav-item" data-doc="lecture13" href="./lecture13.html"><span class="num">13</span><span>评测基础与基准设计</span></a><a class="nav-item" data-doc="lecture14" href="./lecture14.html"><span class="num">14</span><span>LLM 裁判与评测基础设施</span></a></div><div class="nav-group"><p class="nav-label">四 · 安全防护与前沿应用</p><a class="nav-item" data-doc="lecture15" href="./lecture15.html"><span class="num">15</span><span>Agent 安全与防护</span></a><a class="nav-item" data-doc="lecture16" href="./lecture16.html"><span class="num">16</span><span>专题研讨：复合 Agent 系统架构复盘</span></a><a class="nav-item" data-doc="lecture17" href="./lecture17.html"><span class="num">17</span><span>编程与软件 Agent</span></a><a class="nav-item" data-doc="lecture18" href="./lecture18.html"><span class="num">18</span><span>主动式 Agent</span></a><a class="nav-item" data-doc="lecture19" href="./lecture19.html"><span class="num">19</span><span>前沿与开放问题</span></a></div><div class="nav-group"><p class="nav-label">工程实践与代码指南</p><a class="nav-item" data-doc="lab20" href="./lab20.html"><span>HW1：从零搭建 Agent Harness</span></a><a class="nav-item" data-doc="lab21" href="./lab21.html"><span>HW2：构建 Agent 评测体系</span></a><a class="nav-item" data-doc="lab22" href="./lab22.html"><span>学期项目：设计、构建与评测</span></a><a class="nav-item" data-doc="lab23" href="./lab23.html"><span>论文精读与复现扩展</span></a><a class="nav-item" data-doc="lab24" href="./lab24.html"><span>配套代码架构导读</span></a></div><div class="nav-group"><p class="nav-label">阅读说明</p><a class="nav-item" data-doc="lab25" href="./lab25.html"><span>课程目录与学习路径</span></a><a class="nav-item" data-doc="lab26" href="./lab26.html"><span>编写说明与待修订问题</span></a></div></nav>
-    <div class="sidebar-foot">
-      <a class="marginroom-mobile" href="https://marginroom.app/?utm_source=cs329z&amp;utm_medium=tutorial&amp;utm_campaign=marginroom_v1&amp;utm_content=sidebar" target="_blank" rel="noopener">在阅间边读边问 ↗</a>
-      <span>CS329Z · Engineering AI Agents</span>
-      <span>System · Data · Evals</span>
+    <div class="nav-caption">
+      <h2 id="nav-title">课程目录</h2>
+      <button id="toggle-groups" type="button" aria-expanded="false" aria-controls="course-nav" hidden>全部展开</button>
     </div>
+    <nav id="course-nav" aria-labelledby="nav-title"><details class="nav-group" data-group="overview">
+      <summary class="nav-label"><span>课程导览</span></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="overview" href="./index.html"><span>课程总览与学习路径</span></a></li></ul>
+    </details><details class="nav-group" data-group="lecture01">
+      <summary class="nav-label"><span>基础与核心组件</span><small class="nav-range">01–04</small></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lecture01" href="./lecture01.html"><span class="num">01</span><span>Agent 基础与全景</span></a></li><li><a class="nav-item" data-doc="lecture02" href="./lecture02.html"><span class="num">02</span><span>面向构建者的大语言模型</span></a></li><li><a class="nav-item" data-doc="lecture03" href="./lecture03.html"><span class="num">03</span><span>检索增强生成（RAG）</span></a></li><li><a class="nav-item" data-doc="lecture04" href="./lecture04.html"><span class="num">04</span><span>工具使用与函数调用</span></a></li></ul>
+    </details><details class="nav-group" data-group="lecture05">
+      <summary class="nav-label"><span>架构、记忆与优化</span><small class="nav-range">05–09</small></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lecture05" href="./lecture05.html"><span class="num">05</span><span>框架与持久编排</span></a></li><li><a class="nav-item" data-doc="lecture06" href="./lecture06.html"><span class="num">06</span><span>Agent 设计模式与上下文管理</span></a></li><li><a class="nav-item" data-doc="lecture07" href="./lecture07.html"><span class="num">07</span><span>Agent 记忆架构</span></a></li><li><a class="nav-item" data-doc="lecture08" href="./lecture08.html"><span class="num">08</span><span>多 Agent 系统</span></a></li><li><a class="nav-item" data-doc="lecture09" href="./lecture09.html"><span class="num">09</span><span>Agent 系统优化</span></a></li></ul>
+    </details><details class="nav-group" data-group="lecture10" open>
+      <summary class="nav-label"><span>数据飞轮与评测工程</span><small class="nav-range">10–14</small></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lecture10" href="./lecture10.html" aria-current="page"><span class="num">10</span><span>Terminal-Bench 与评测工程</span></a></li><li><a class="nav-item" data-doc="lecture11" href="./lecture11.html"><span class="num">11</span><span>Agent 需要什么数据</span></a></li><li><a class="nav-item" data-doc="lecture12" href="./lecture12.html"><span class="num">12</span><span>数据选择与质量</span></a></li><li><a class="nav-item" data-doc="lecture13" href="./lecture13.html"><span class="num">13</span><span>评测基础与基准设计</span></a></li><li><a class="nav-item" data-doc="lecture14" href="./lecture14.html"><span class="num">14</span><span>LLM 裁判与评测基础设施</span></a></li></ul>
+    </details><details class="nav-group" data-group="lecture15">
+      <summary class="nav-label"><span>安全防护与前沿应用</span><small class="nav-range">15–19</small></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lecture15" href="./lecture15.html"><span class="num">15</span><span>Agent 安全与防护</span></a></li><li><a class="nav-item" data-doc="lecture16" href="./lecture16.html"><span class="num">16</span><span>专题研讨：复合 Agent 系统架构复盘</span></a></li><li><a class="nav-item" data-doc="lecture17" href="./lecture17.html"><span class="num">17</span><span>编程与软件 Agent</span></a></li><li><a class="nav-item" data-doc="lecture18" href="./lecture18.html"><span class="num">18</span><span>主动式 Agent</span></a></li><li><a class="nav-item" data-doc="lecture19" href="./lecture19.html"><span class="num">19</span><span>前沿与开放问题</span></a></li></ul>
+    </details><details class="nav-group" data-group="lab20">
+      <summary class="nav-label"><span>工程实践与代码指南</span></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lab20" href="./lab20.html"><span>HW1：从零搭建 Agent Harness</span></a></li><li><a class="nav-item" data-doc="lab21" href="./lab21.html"><span>HW2：构建 Agent 评测体系</span></a></li><li><a class="nav-item" data-doc="lab22" href="./lab22.html"><span>学期项目：设计、构建与评测</span></a></li><li><a class="nav-item" data-doc="lab23" href="./lab23.html"><span>论文精读与复现扩展</span></a></li><li><a class="nav-item" data-doc="lab24" href="./lab24.html"><span>配套代码架构导读</span></a></li></ul>
+    </details><details class="nav-group" data-group="lab25">
+      <summary class="nav-label"><span>阅读说明</span></summary>
+      <ul class="nav-chapters"><li><a class="nav-item" data-doc="lab25" href="./lab25.html"><span>课程目录与学习路径</span></a></li><li><a class="nav-item" data-doc="lab26" href="./lab26.html"><span>阅读说明与版本来源</span></a></li></ul>
+    </details></nav>
   </aside>
 
   <div class="shade" id="shade"></div>
@@ -48,11 +69,10 @@
   <div class="workspace">
     <header class="topbar">
       <div class="topbar-left">
-        <button type="button" id="menu" class="mobile-only" aria-label="打开课程目录" aria-expanded="false" aria-controls="sidebar">目录</button>
+        <button type="button" id="menu" class="rail-control" hidden aria-label="打开课程目录" aria-expanded="false" aria-controls="sidebar"><span class="panel-icon" aria-hidden="true"></span>目录</button>
         <div id="breadcrumb" class="breadcrumb">Terminal-Bench 与评测工程</div>
       </div>
       <div class="reading-tools">
-        <a class="marginroom-top" href="https://marginroom.app/?utm_source=cs329z&amp;utm_medium=tutorial&amp;utm_campaign=marginroom_v1&amp;utm_content=topbar" target="_blank" rel="noopener">在阅间边读边问 ↗</a>
         <button type="button" id="mobile-search" class="mobile-only" aria-label="打开搜索">搜索</button>
         <button type="button" id="theme-toggle" aria-label="切换深浅色主题">深色模式</button>
         <button type="button" id="font-size" aria-label="切换阅读字号">字号 A+</button>
@@ -69,28 +89,46 @@
         <div class="chapter-meta" id="chapter-meta"></div>
 
         <section class="home-intro" id="home-intro" hidden>
-          <p class="eyebrow">CS329Z 中文教程 · ENGINEERING AI AGENTS</p>
-          <h1>从理解语言模型，<br>到构建可靠的 <em>AI Agent</em> 系统。</h1>
-          <p class="hero-lead">面向 Python 开发者的中文自学教程，包含 19 讲、4 项实践和配套代码导读。从 RAG、工具调用开始，逐步学习记忆、协作、评测与安全。</p>
-          <div class="hero-bottom">
-            <div class="hero-stats">
-              <span><strong>19</strong> 讲核心课程</span>
-              <span><strong>4</strong> 项工程实践</span>
-              <span><strong>2</strong> 套配套源码解析</span>
-            </div>
+          <div class="home-copy">
+            <p class="eyebrow">CS329Z <span>／</span> 智能体工程</p>
+            <h1>从一个决定，<br>读懂 <em>AI Agent</em>。</h1>
+            <p class="hero-lead">先替助手做一个选择，再拆开它的工作过程。19 讲课程与 4 项实践，每次可以只学一小节。</p>
             <div class="hero-actions">
-              <a class="start-link" href="./lecture01.html">开始第 01 讲 <span>→</span></a>
-              <a class="secondary-link" href="./lab20.html">进入 HW1 实战</a>
+              <a class="start-link" id="start-study" href="./lecture01.html">开始第 01 讲 →</a>
+              <a class="home-guide" id="book-link" href="./offline.html">打开单文件版</a>
+              <a class="home-guide" href="./lab25.html">查看学习路线</a>
             </div>
+            <p id="resume-caption" class="resume-caption" hidden></p>
           </div>
+          <figure class="home-figure">
+            <svg viewBox="0 0 304 196" role="img" aria-labelledby="planner-title" xmlns="http://www.w3.org/2000/svg">
+              <title id="planner-title">日程示意图。周四 14:00 有课，助手根据反馈寻找另一个空档。</title>
+              <defs><pattern id="planner-grid" width="14" height="14" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#8fa99d"/></pattern></defs>
+              <rect x="0" y="0" width="304" height="196" rx="16" fill="#dae9dd"/>
+              <rect x="0" y="0" width="304" height="196" rx="16" fill="url(#planner-grid)" opacity=".5"/>
+              <g transform="rotate(-5 140 100)">
+                <rect x="38" y="35" width="197" height="130" rx="10" fill="#a3bbad"/>
+                <rect x="33" y="30" width="197" height="130" rx="10" fill="#fffcf1" stroke="#245647" stroke-width="2"/>
+                <path d="M34 61h195" stroke="#245647" stroke-width="2"/>
+                <path d="M55 22v18m19-18v18m115-18v18m19-18v18" stroke="#245647" stroke-width="4" stroke-linecap="round"/>
+                <text x="48" y="53" font-size="13" font-weight="700" fill="#245647">周四 · 我的日历</text>
+                <text x="47" y="88" fill="#39594d" font-size="13">14:00</text><rect x="96" y="72" width="109" height="24" rx="5" fill="#f3d19f"/><text x="106" y="89" font-size="13" fill="#563b20">课程</text>
+                <path d="M47 106h163" stroke="#d8ded1"/>
+                <text x="47" y="131" fill="#39594d" font-size="13">15:00</text><rect x="96" y="115" width="109" height="24" rx="5" fill="none" stroke="#467862" stroke-width="1.5" stroke-dasharray="4 3"/>
+              </g>
+              <path d="M255 109q14 31-38 26m7-7-9 7 8 7" fill="none" stroke="#285a48" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"/>
+              <g transform="rotate(6 243 89)"><rect x="204" y="72" width="89" height="34" rx="8" fill="#235a49"/><text x="248" y="94" text-anchor="middle" font-size="13" fill="white">再查一格</text></g>
+            </svg>
+            <figcaption>第 01 讲 <span>／</span> 让日程助手根据反馈行动</figcaption>
+          </figure>
         </section>
 
         <article id="article"><h1 id="第-10-讲terminal-bench-与评测工程">第 10 讲｜Terminal-Bench 与评测工程</h1>
-<p>回顾计算机软件工程八十年的演进史：20 世纪 40 年代，程序员直接用十六进制机器码（如 <code>48 83 C0 05</code>）为 CPU 编写指令；50 年代初演进到汇编语言（<code>add rax, 5</code>）；50 年代末 FORTRAN 等高级语言的诞生（<code>x += 5</code>），将人类从繁琐的寄存器管理中解放出来。图灵奖得主 Tony Hoare 在 1969 年曾总结道：传统计算机编程是一门<strong>演绎科学（Deductive Science）</strong>——人类亲手编写确定性的规则（Code），程序将规则作用于输入从而推导出输出（<span class="math-inline"><span class="m-text">Rules</span> + <span class="m-text">Inputs</span> &rarr; <span class="m-text">Outputs</span></span>），代码本身就是唯一的真相之源（Source of Truth）。</p>
-<p>然而，从机器学习（ML）到大语言模型（LLMs）再到自主智能体（Agents），整个数字技术开发正在经历一场深刻的范式迁移——从<strong>演绎式（Deductive）</strong>全面转向<strong>归纳式（Inductive）</strong>：人类提供输入与期望的结果评判标准（<span class="math-inline"><span class="m-text">Inputs</span> + <span class="m-text">Outputs</span> &rarr; <span class="m-text">Rules</span></span>），由模型习得策略并由 Agent 自动生成或操作软件。在这个新世界里，<strong>代码不再是唯一的真相之源，评测（Evaluations / Evals）成为了新的真相之源；软件工程师的核心职责正在演变为“规格定义者与评测构建者（Specifier &amp; Evaluator）”</strong>。</p>
+<p>回顾计算机软件工程八十年的演进史：20 世纪 40 年代，程序员直接用十六进制机器码（如 <code>48 83 C0 05</code>）为 CPU 编写指令；50 年代初演进到汇编语言（<code>add rax, 5</code>）；50 年代末 FORTRAN 等高级语言的诞生（<code>x += 5</code>），将人类从繁琐的寄存器管理中解放出来。图灵奖得主 Tony Hoare 在 1969 年曾总结道：传统计算机编程是一门<strong>演绎科学（Deductive Science）</strong>——人类亲手编写确定性的规则（Code），程序将规则作用于输入从而推导出输出（<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>Rules</mtext><mo>+</mo><mtext>Inputs</mtext><mo>→</mo><mtext>Outputs</mtext></mrow></semantics></math></span></span>），代码本身就是唯一的真相之源（Source of Truth）。</p>
+<p>然而，从机器学习（ML）到大语言模型（LLMs）再到自主智能体（Agents），整个数字技术开发正在经历一场深刻的范式迁移——从<strong>演绎式（Deductive）</strong>全面转向<strong>归纳式（Inductive）</strong>：人类提供输入与期望的结果评判标准（<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>Inputs</mtext><mo>+</mo><mtext>Outputs</mtext><mo>→</mo><mtext>Rules</mtext></mrow></semantics></math></span></span>），由模型习得策略并由 Agent 自动生成或操作软件。在这个新世界里，<strong>代码不再是唯一的真相之源，评测（Evaluations / Evals）成为了新的真相之源；软件工程师的核心职责正在演变为“规格定义者与评测构建者（Specifier &amp; Evaluator）”</strong>。</p>
 <p>本讲由 Terminal-Bench 与 Harbor 框架的联合创建者 Ryan Marten 和 Alex Shaw（Laude Institute）主讲，深入探讨为什么命令行终端（Terminal / Bash）是评测通用 Agent 最理想的试金石，并系统拆解如何通过 <strong>Terminal-Bench</strong> 与 <strong>Harbor</strong> 设计防作弊的真实评测任务、构建隔离的验证基础设施、执行多层级任务质量审查（Task QA），以及通过 CI/CD 与语义化版本控制维护演进中的基准测试。</p>
 <h2 id="学习目标">学习目标</h2>
-<ul><li>从演绎式编程（Deductive）向归纳式开发（Inductive）的范式转移理解“规格即评测（Specification <span class="math-inline">&rarr;</span> Evaluation）”的核心思想。</li><li>理解为什么 Bash 终端是训练与评测真实世界 Agent 的通用接口，掌握 Task、Trial、Benchmark、Verifier（Grader）、Trajectory、Agent Harness 与 Evaluation Harness 的标准定义。</li><li>掌握 Terminal-Bench / Harbor 任务目录的五元组结构（<code>instruction.md</code>、<code>task.toml</code>、<code>environment/</code>、<code>solution/</code>、<code>tests/</code>），学会编写指令与验证器严密对齐、防止奖励篡改（Reward Hacking）的高质量任务。</li><li>掌握评测环境的构建取舍、四分类混淆矩阵（TP/TN/FP/FN）验证器分析、信任域隔离架构以及六层任务质量保障（Task QA）流水线。</li><li>掌握基准测试的持续集成（CI/CD）与三段式版本管理法则（Major <code>x+1</code> 重跑、Minor <code>y+1</code> 重评、Patch <code>z+1</code> 复用）及完整结果存证（Full Receipts）规范。</li></ul>
+<ul><li>从演绎式编程（Deductive）向归纳式开发（Inductive）的范式转移理解“规格即评测（Specification <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> Evaluation）”的核心思想。</li><li>理解为什么 Bash 终端是训练与评测真实世界 Agent 的通用接口，掌握 Task、Trial、Benchmark、Verifier（Grader）、Trajectory、Agent Harness 与 Evaluation Harness 的标准定义。</li><li>掌握 Terminal-Bench / Harbor 任务目录的五元组结构（<code>instruction.md</code>、<code>task.toml</code>、<code>environment/</code>、<code>solution/</code>、<code>tests/</code>），学会编写指令与验证器严密对齐、防止奖励篡改（Reward Hacking）的高质量任务。</li><li>掌握评测环境的构建取舍、四分类混淆矩阵（TP/TN/FP/FN）验证器分析、信任域隔离架构以及六层任务质量保障（Task QA）流水线。</li><li>掌握基准测试的持续集成（CI/CD）与三段式版本管理法则（Major <code>x+1</code> 重跑、Minor <code>y+1</code> 重评、Patch <code>z+1</code> 复用）及完整结果存证（Full Receipts）规范。</li></ul>
 <h2 id="知识讲解">知识讲解</h2>
 <h3 id="1-从软件历史到评测">1. 从软件历史到评测</h3>
 <h4 id="机器码汇编与高级语言">机器码、汇编与高级语言</h4>
@@ -98,7 +136,7 @@
 <p>历史当然证明了调试（Debugging）并未消失——每当抽象层级提高一层，人类的工作重心只是从“纠结底层语法细节”上移到了“定义更高层的系统逻辑与验证程序行为是否正确”。</p>
 <h4 id="deductive-与-inductive">Deductive 与 inductive</h4>
 <p>将传统软件工程与现代 AI Agent 工程放在一起对比，两者的底层逻辑发生了根本反转：</p>
-<div class="table-scroll" tabindex="0"><table><thead><tr><th>维度</th><th>传统软件开发（Traditional Software）</th><th>智能体时代开发（Agentic World）</th></tr></thead><tbody><tr><td><strong>推理范式</strong></td><td><strong>演绎式（Deductive）</strong>：<span class="math-inline"><span class="m-text">规则（代码）</span> + <span class="m-text">输入</span> &rarr; <span class="m-text">输出</span></span></td><td><strong>归纳式（Inductive / Empirical）</strong>：<span class="math-inline"><span class="m-text">输入</span> + <span class="m-text">输出验证标准</span> &rarr; <span class="m-text">习得策略与软件</span></span></td></tr><tr><td><strong>系统行为性质</strong></td><td>确定性（Deterministic）</td><td>随机性（Stochastic）</td></tr><tr><td><strong>软件生产方式</strong></td><td>由人类逐行手工编写（Handcrafted）</td><td>由模型与 Agent 从数据与评测反馈中习得或生成（Learned）</td></tr><tr><td><strong>真相之源（Source of Truth）</strong></td><td><strong>源代码（Code）</strong></td><td><strong>评测套件（Evals）</strong></td></tr></tbody></table></div>
+<div class="table-scroll" tabindex="0"><table><thead><tr><th>维度</th><th>传统软件开发（Traditional Software）</th><th>智能体时代开发（Agentic World）</th></tr></thead><tbody><tr><td><strong>推理范式</strong></td><td><strong>演绎式（Deductive）</strong>：<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>规则（代码）</mtext><mo>+</mo><mtext>输入</mtext><mo>→</mo><mtext>输出</mtext></mrow></semantics></math></span></span></td><td><strong>归纳式（Inductive / Empirical）</strong>：<span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>输入</mtext><mo>+</mo><mtext>输出验证标准</mtext><mo>→</mo><mtext>习得策略与软件</mtext></mrow></semantics></math></span></span></td></tr><tr><td><strong>系统行为性质</strong></td><td>确定性（Deterministic）</td><td>随机性（Stochastic）</td></tr><tr><td><strong>软件生产方式</strong></td><td>由人类逐行手工编写（Handcrafted）</td><td>由模型与 Agent 从数据与评测反馈中习得或生成（Learned）</td></tr><tr><td><strong>真相之源（Source of Truth）</strong></td><td><strong>源代码（Code）</strong></td><td><strong>评测套件（Evals）</strong></td></tr></tbody></table></div>
 <h4 id="规格变成评测">规格变成评测</h4>
 <p>在 Agent 时代：</p>
 <ol><li><strong>模型（Models）</strong> 是从海量数据与奖励信号中训练出来的；</li><li><strong>智能体（Agents）</strong> 是围绕评测指标（Evaluation）迭代开发出来的；</li><li><strong>最终软件与操作结果（Software &amp; Artifacts）</strong> 是由智能体自主生成的。</li></ol>
@@ -173,28 +211,22 @@ assert correct_mean_curvature()</code></pre></div></li></ul>
 <ol><li><strong>高可靠与容错（Reliable &amp; Fault Tolerant）</strong>：能够区分“Agent 自身能力不足导致的任务失败”与“云主机断网、容器守护进程崩溃或 API 限流导致的基础设施故障”；</li><li><strong>严格可复现（Reproducible）</strong>：容器镜像、依赖与评分脚本全部锁定；</li><li><strong>高并发快速执行（Fast）</strong>：支持同时启动成百上千个相互独立的沙箱容器并行跑完整个基准；</li><li><strong>跨平台可移植（Portable）</strong>：同一套任务定义既能在开发者笔记本的本地 Docker 上跑，也能一键调度到云端集群执行，同时服务于离线测试（Test）、强化学习训练采样（Train）与生产监控（Prod）。</li></ol>
 <h4 id="多层-task-qa">多层 task QA</h4>
 <p>俗话说“任务也是软件，是软件就会有 Bug”。在将一个新设计的任务合入 Terminal-Bench 之前，必须经过严密的<strong>六层任务质量审查流水线（Multi-layer Task QA）</strong>：</p>
-<ol><li><strong>静态检查（Static Checks）</strong>：自动检查目录结构、<code>task.toml</code> 字段、Dockerfile 规范与脚本可执行权限；</li><li><strong>智能体审查（Agent Judge on Task Spec）</strong>：让审查 Agent 检查 <code>instruction.md</code> 与 <code>tests/</code> 是否存在要求不一致或表述歧义；</li><li><strong>Oracle 验证（Oracle Agent Run）</strong>：在全新容器中运行 <code>solution/solve.sh</code>，必须 <span class="math-inline">100%</span> 通过所有测试断言；</li><li><strong>空操作与作弊代理测试（Nop &amp; Cheat Agents）</strong>：运行一个什么都不干的空 Agent，以及一个专门尝试搜索测试文件、伪造空文件或钻漏洞的“作弊 Agent（Cheat Agent）”，确保它们 <span class="math-inline">100%</span> 被判 <code>FAIL</code>；</li><li><strong>前沿模型试跑（Frontier Agents）</strong>：用当前最顶尖的数个前沿 Agent 实际跑几轮；</li><li><strong>轨迹人工与智能体复盘（Trajectory Inspection）</strong>：当发现所有前沿模型在某道题上全军覆没时，不要急着庆祝“我出了一道超难的好题”——打开轨迹一看，十有八九是因为题目指令漏写了一个格式要求，或者容器里少装了一个依赖导致假阴性！</li></ol>
+<ol><li><strong>静态检查（Static Checks）</strong>：自动检查目录结构、<code>task.toml</code> 字段、Dockerfile 规范与脚本可执行权限；</li><li><strong>智能体审查（Agent Judge on Task Spec）</strong>：让审查 Agent 检查 <code>instruction.md</code> 与 <code>tests/</code> 是否存在要求不一致或表述歧义；</li><li><strong>Oracle 验证（Oracle Agent Run）</strong>：在全新容器中运行 <code>solution/solve.sh</code>，必须 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mi mathvariant="normal">%</mi></mrow></semantics></math></span></span> 通过所有测试断言；</li><li><strong>空操作与作弊代理测试（Nop &amp; Cheat Agents）</strong>：运行一个什么都不干的空 Agent，以及一个专门尝试搜索测试文件、伪造空文件或钻漏洞的“作弊 Agent（Cheat Agent）”，确保它们 <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100</mn><mi mathvariant="normal">%</mi></mrow></semantics></math></span></span> 被判 <code>FAIL</code>；</li><li><strong>前沿模型试跑（Frontier Agents）</strong>：用当前最顶尖的数个前沿 Agent 实际跑几轮；</li><li><strong>轨迹人工与智能体复盘（Trajectory Inspection）</strong>：当发现所有前沿模型在某道题上全军覆没时，不要急着庆祝“我出了一道超难的好题”——打开轨迹一看，十有八九是因为题目指令漏写了一个格式要求，或者容器里少装了一个依赖导致假阴性！</li></ol>
 <h3 id="6-维护与版本管理">6. 维护与版本管理</h3>
 <h4 id="基准也需要-ci">基准也需要 CI</h4>
 <p>许多学术基准在论文发表之日就停止了维护，久而久之因外部依赖失效或漏洞百出而无法使用。真实的评测基准必须像现代开源软件一样建立 <strong>持续集成与持续演进机制（Continuous Benchmarks / CI/CD）</strong>：随着社区百万次的运行，不断收集关于任务抖动（Flakiness）、新型模型展现出的意外合法解法（暴露出旧测试的假阴性）以及新型奖励作弊手法的 Bug Reports，持续修复并发布新版本。</p>
 <h4 id="majoragent-环境变化">Major：Agent 环境变化</h4>
 <p>一旦修改了基准中的任务，以前跑出来的模型排行榜分数还算不算数？要不要花几万美元把所有模型全部重跑一遍？Terminal-Bench / Harbor 为此制定了一套清晰的<strong>评测语义化版本控制准则（Semantic Versioning for Benchmarks：<code>x.y.z</code>）</strong>：</p>
-<ul><li><strong>主版本号升级（Major <code>(x+1, y, z)</code> <span class="math-inline">&rarr;</span> 必须重新运行 Agent：<code>Rerun</code>）</strong>： 只要改动影响了 <strong>Agent 在运行时所看到的环境、输入或交互过程</strong>，就必须升级主版本号并重新运行 Trial。具体包括：新增或删除了任务、修复了原本指代不清或过度指定的 <code>instruction.md</code>、修改了容器内的初始数据或工具版本、或者调整了分配给 Agent 的 CPU/内存/超时资源。因为此时 Agent 面对的问题已经变了，旧轨迹不再有效。</li></ul>
+<ul><li><strong>主版本号升级（Major <code>(x+1, y, z)</code> <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 必须重新运行 Agent：<code>Rerun</code>）</strong>： 只要改动影响了 <strong>Agent 在运行时所看到的环境、输入或交互过程</strong>，就必须升级主版本号并重新运行 Trial。具体包括：新增或删除了任务、修复了原本指代不清或过度指定的 <code>instruction.md</code>、修改了容器内的初始数据或工具版本、或者调整了分配给 Agent 的 CPU/内存/超时资源。因为此时 Agent 面对的问题已经变了，旧轨迹不再有效。</li></ul>
 <h4 id="minorverifier-变化">Minor：verifier 变化</h4>
-<ul><li><strong>次版本号升级（Minor <code>(x, y+1, z)</code> <span class="math-inline">&rarr;</span> 只需对已有产物重新打分：<code>Regrade</code>）</strong>： 如果 Agent 运行时看到的提示词和环境<strong>完全没变</strong>，仅仅修改了事后的<strong>验证器（Verifier）或计分逻辑</strong>——例如修复了过于死板的正则断言（消除假阴性）、封堵了评分漏洞、微调了 Judge 提示词或增加了新的统计指标。此时无需重新花钱调用大模型跑 Agent，只需直接拿之前保存下来的 Trial 产出工件（Artifacts）与轨迹，在新版 Verifier 上<strong>重新运行一次打分（Regrade）</strong>即可！</li></ul>
+<ul><li><strong>次版本号升级（Minor <code>(x, y+1, z)</code> <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 只需对已有产物重新打分：<code>Regrade</code>）</strong>： 如果 Agent 运行时看到的提示词和环境<strong>完全没变</strong>，仅仅修改了事后的<strong>验证器（Verifier）或计分逻辑</strong>——例如修复了过于死板的正则断言（消除假阴性）、封堵了评分漏洞、微调了 Judge 提示词或增加了新的统计指标。此时无需重新花钱调用大模型跑 Agent，只需直接拿之前保存下来的 Trial 产出工件（Artifacts）与轨迹，在新版 Verifier 上<strong>重新运行一次打分（Regrade）</strong>即可！</li></ul>
 <h4 id="patch不改变评测含义的修正">Patch：不改变评测含义的修正</h4>
-<ul><li><strong>补丁版本号升级（Patch <code>(x, y, z+1)</code> <span class="math-inline">&rarr;</span> 直接复用已有分数：<code>Reuse</code>）</strong>： 如果改动既不影响 Agent 的行为，也不改变评分结果——例如更新了外部 README 文档、修复了 <code>solution/solve.sh</code> 参考脚本的偶发问题、锁死了某个原本浮动的镜像依赖版本，或修正了提示词里一个完全不影响理解的拼写错误，则可以直接复用已有评测成绩。</li></ul>
+<ul><li><strong>补丁版本号升级（Patch <code>(x, y, z+1)</code> <span class="math-inline"><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow></semantics></math></span></span> 直接复用已有分数：<code>Reuse</code>）</strong>： 如果改动既不影响 Agent 的行为，也不改变评分结果——例如更新了外部 README 文档、修复了 <code>solution/solve.sh</code> 参考脚本的偶发问题、锁死了某个原本浮动的镜像依赖版本，或修正了提示词里一个完全不影响理解的拼写错误，则可以直接复用已有评测成绩。</li></ul>
 <p>为了支撑这套版本演进与科学审计，排行榜上的每一个分数都必须附带<strong>完整的原始凭证（Full Receipts for Every Row）</strong>——公开每一次 Trial 的完整交互轨迹（Trajectory）、容器日志（Logs）、最终产出文件（Artifacts）与逐项得分明细（Rewards），让任何人都能随时核查与重评。</p>
 <h2 id="原课程阅读清单与导读">原课程阅读清单与导读</h2>
 <ul><li><a href="https://www.tbench.ai/" target="_blank" rel="noopener noreferrer">Terminal-Bench project site (leaderboard, tasks, and harness).</a> 导读：浏览任务库与排行榜，观察每道终端任务的目录结构以及排行榜如何公开每次运行的完整轨迹凭证（Receipts）。</li><li><a href="https://arxiv.org/abs/2601.11868" target="_blank" rel="noopener noreferrer">Merrill et al. &quot;Terminal-Bench: Benchmarking Agents on Hard, Realistic Tasks in Command Line Interfaces.&quot; ICLR (2026).</a> 导读：重点阅读任务构建原则、Harbor 沙箱隔离架构、多阶段任务质量审查流程以及对主流模型与 Agent 底座的错误模式分析。</li></ul>
 <h2 id="动手练习">动手练习</h2>
 <ol><li><strong>构建一个完整的 Harbor 风格终端评测任务</strong>：围绕“清洗一份包含缺失值与异常时区时间戳的服务器访问日志 <code>/app/access.log</code>，按小时统计独立 IP 数与 5xx 错误率并输出至 <code>/app/hourly_report.json</code>”这一场景，编写完整的任务四件套：（a）完全指定且自然简洁的 <code>instruction.md</code>；（b）<code>environment/Dockerfile</code>；（c）真实调用 Python/Awk 处理日志的参考解 <code>solution/solve.sh</code>；（d）检查输出 JSON 结构与精确数值的 <code>tests/test_outputs.py</code>。</li><li><strong>假阴性与作弊防御演练</strong>：针对你编写的 <code>test_outputs.py</code>，构造（a）一个“数值完全正确、但 JSON 键顺序不同或浮点数保留了 4 位小数”的合理解法，检查你的 Verifier 是否会误判为 <code>FAIL</code>（假阴性）；（b）一个试图在 <code>/app/</code> 下搜寻测试脚本的作弊命令，说明如何通过容器信任域隔离彻底阻断该行为，并判断修复 <code>test_outputs.py</code> 的浮点数容差属于 Major、Minor 还是 Patch 版本更新。</li></ol></article>
-        <section id="marginroom-referral" class="marginroom-referral" hidden aria-label="阅间阅读伙伴">
-          <h2>这一讲有读不懂的地方？</h2>
-          <p>我做了一个 AI 阅读伙伴「阅间」，已内置这套课，读不懂的地方可以结合原文直接提问。</p>
-          <a id="marginroom-referral-link" href="https://marginroom.app/" target="_blank" rel="noopener">在阅间边读边问 →</a>
-          <p class="marginroom-allowance">注册后，每天可免费提问 50 次。</p>
-        </section>
         <nav id="chapter-footer" aria-label="章节翻页"><a href="./lecture09.html"><small>← 上一节</small>Agent 系统优化</a><a href="./lecture11.html"><small>下一节 →</small>Agent 需要什么数据</a></nav>
       </main>
 
@@ -202,18 +234,18 @@ assert correct_mean_curvature()</code></pre></div></li></ul>
         <div class="toc-card">
           <div class="toc-label">本讲目录</div>
           <nav id="toc-links"><a class="depth-2" href="./lecture10.html#%E5%AD%A6%E4%B9%A0%E7%9B%AE%E6%A0%87" data-anchor="学习目标">学习目标</a><a class="depth-2" href="./lecture10.html#%E7%9F%A5%E8%AF%86%E8%AE%B2%E8%A7%A3" data-anchor="知识讲解">知识讲解</a><a class="depth-3" href="./lecture10.html#1-%E4%BB%8E%E8%BD%AF%E4%BB%B6%E5%8E%86%E5%8F%B2%E5%88%B0%E8%AF%84%E6%B5%8B" data-anchor="1-从软件历史到评测">1. 从软件历史到评测</a><a class="depth-3" href="./lecture10.html#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E7%BB%88%E7%AB%AF%E6%98%AF%E6%9C%89%E7%94%A8%E7%8E%AF%E5%A2%83" data-anchor="2-为什么终端是有用环境">2. 为什么终端是有用环境</a><a class="depth-3" href="./lecture10.html#3-terminal-bench-%E4%B8%8E-harbor" data-anchor="3-terminal-bench-与-harbor">3. Terminal-Bench 与 Harbor</a><a class="depth-3" href="./lecture10.html#4-%E4%BB%BB%E5%8A%A1%E8%AE%BE%E8%AE%A1%E4%B8%8E-verifier" data-anchor="4-任务设计与-verifier">4. 任务设计与 verifier</a><a class="depth-3" href="./lecture10.html#5-%E9%9A%94%E7%A6%BB%E5%8F%AF%E9%9D%A0%E6%80%A7%E4%B8%8E%E8%B4%A8%E9%87%8F%E5%AE%A1%E6%9F%A5" data-anchor="5-隔离可靠性与质量审查">5. 隔离、可靠性与质量审查</a><a class="depth-3" href="./lecture10.html#6-%E7%BB%B4%E6%8A%A4%E4%B8%8E%E7%89%88%E6%9C%AC%E7%AE%A1%E7%90%86" data-anchor="6-维护与版本管理">6. 维护与版本管理</a><a class="depth-2" href="./lecture10.html#%E5%8E%9F%E8%AF%BE%E7%A8%8B%E9%98%85%E8%AF%BB%E6%B8%85%E5%8D%95%E4%B8%8E%E5%AF%BC%E8%AF%BB" data-anchor="原课程阅读清单与导读">原课程阅读清单与导读</a><a class="depth-2" href="./lecture10.html#%E5%8A%A8%E6%89%8B%E7%BB%83%E4%B9%A0" data-anchor="动手练习">动手练习</a></nav>
-          <a class="source-link" id="source-link" href="https://github.com/wanghao-SunSky/cs329z-chinese/blob/main/10-Terminal-Bench%E4%B8%8E%E8%AF%84%E6%B5%8B%E5%B7%A5%E7%A8%8B.md">查看 Markdown 源文件 ↗</a>
+          <a class="source-link" id="source-link" href="https://github.com/xuchen-cloud/cs329z-study/blob/main/10-Terminal-Bench%E4%B8%8E%E8%AF%84%E6%B5%8B%E5%B7%A5%E7%A8%8B.md">查看 Markdown 源文件 ↗</a>
         </div>
       </aside>
     </div>
 
     <footer class="page-footer">
-      <span>CS329Z · AI Agent 系统工程（Engineering AI Agents）</span>
-      <a href="https://github.com/wanghao-SunSky/cs329z-chinese">GitHub · Markdown 与 HTML</a>
+      <a href="./lab26.html">阅读说明与版本来源</a>
+      <a href="https://github.com/xuchen-cloud/cs329z-study">本版 GitHub 仓库</a>
     </footer>
   </div>
 
-  <dialog id="search-dialog">
+  <dialog id="search-dialog" aria-label="搜索课程">
     <form method="dialog" class="search-head">
       <label for="search-input">搜索</label>
       <input id="search-input" type="search" placeholder="输入概念、算法、论文或练习关键词（如 ReAct, BM25, GRPO, MCP）…" autocomplete="off">
@@ -225,6 +257,6 @@ assert correct_mean_curvature()</code></pre></div></li></ul>
 
   <noscript><p>正文和目录可直接阅读。启用 JavaScript 后可使用全文搜索和阅读设置。</p></noscript>
   <script src="./assets/course-data.js"></script>
-  <script src="./assets/reader.js"></script>
+  <script src="./assets/study-reader.js"></script><script src="./assets/reader.js"></script>
 </body>
 </html>

@@ -6,13 +6,13 @@
 
 ## 在线阅读与构建
 
-课程提供完整的交互式网页阅读版：直接用浏览器打开 [HTML 课程文档 (`html/index.html`)](html/index.html)，即可使用章节导航、全文检索（快捷键 `⌘K` / `Ctrl+K`）、页内目录、深浅阅读主题、字号调节与排版打印功能。
+本版基于 wanghao-SunSky 的 `cs329z-chinese` 项目整理修改，加入情境练习、图解、学习笔记及分段阅读。打开 [HTML 课程文档 (`html/index.html`)](html/index.html)，即可使用章节导航、全文检索（快捷键 `⌘K` / `Ctrl+K`）、页内目录、深浅阅读主题、字号调节与排版打印功能。
 
 若对 Markdown 文档进行了修改，可在课程目录下运行以下命令重新生成并校验 HTML 文档：
 
 ```bash
-node tools/build_html.mjs
-python3 tools/verify_html.py
+node tools/build_site.mjs
+python3 tools/verify_publication.py
 ```
 
 ## 先修要求与学习路径

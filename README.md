@@ -4,11 +4,9 @@
 
 Chinese study guide for Stanford CS329Z: Engineering AI Agents. Includes 19 lessons, 4 hands-on exercises, Markdown sources and an offline HTML reader.
 
-**[在线阅读完整教程](https://cs329z-course-review-20261029.wanghao162263.chatgpt.site)** · **[课程目录与学习路径](course-guide.md)** · **[下载完整仓库](https://github.com/wanghao-SunSky/cs329z-chinese/archive/refs/heads/main.zip)**
+本互动学习版基于 wanghao-SunSky 整理的中文教程 `cs329z-chinese`。本版增加了分段阅读、情境题、三步图解和学习笔记，并重新排版了公式。
 
-> 我做了一个 AI 阅读伙伴「阅间 MarginRoom」，已内置本教程。读不懂的地方可以结合原文直接提问；本教程照常免费阅读。
->
-> **[在阅间边读边问 →](https://marginroom.app/?utm_source=cs329z&utm_medium=github&utm_campaign=marginroom_v1&utm_content=readme)** · 注册后，每天可免费提问 50 次。
+[在线学习](https://xuchen-cloud.github.io/cs329z-study/) · [单文件课程](https://xuchen-cloud.github.io/cs329z-study/offline.html) · [课程目录与学习路径](course-guide.md) · [下载本版仓库](https://github.com/xuchen-cloud/cs329z-study/archive/refs/heads/main.zip)
 
 ## 包含什么
 
@@ -34,4 +32,4 @@ python3 tools/verify_publication.py
 
 ## 来源与修订
 
-本项目是独立整理的中文学习资料，并非 Stanford 官方中文版。原课程、论文和配套代码的权利归各自作者；来源入口、未公开材料及当前待修订问题见 [编写说明](docs/editorial-notes.md)。欢迎通过 [Issues](https://github.com/wanghao-SunSky/cs329z-chinese/issues) 反馈错误，注明章节和具体段落。
+Stanford CS329Z 提供原课程材料，wanghao-SunSky 编写了原中文教程，xuchen-cloud 在其项目基础上整理了本互动学习版。课程、论文与配套代码的权利归各自作者。整理范围及待核对的内容见[阅读说明与版本来源](docs/editorial-notes.md)。本版问题可提交到[本仓库 Issues](https://github.com/xuchen-cloud/cs329z-study/issues)。
